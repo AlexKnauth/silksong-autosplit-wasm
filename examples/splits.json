@@ -63,5 +63,15 @@
     "description": "Fourth Chorus (Boss)",
     "key": "FourthChorus",
     "tooltip": "Splits when killing Fourth Chorus"
+  },
+  {
+    "description": "Float to Greymoor (Scene)",
+    "key": "FloatToGreymoor",
+    "tooltip": "Splits when entering Greymoor from Far Fields"
+  }
+    {
+    "description": "Moorwing (Boss)",
+    "key": "Moorwing",
+    "tooltip": "Splits when killing Moorwing"
   }
 ]

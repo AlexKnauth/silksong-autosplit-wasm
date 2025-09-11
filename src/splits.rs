@@ -82,6 +82,17 @@ pub enum Split {
     /// Splits when killing Fourth Chorus
     FourthChorus,
     // endregion: FarFields
+
+    // region: Greymoor
+    /// Float to Greymoor (Scene)
+    ///
+    /// Splits when entering Greymoor from Far Fields
+    FloatToGreymoor,
+    /// Moorwing (Boss)
+    ///
+    /// Splits when killing Moorwing
+    Moorwing,
+    // endregion: Greymoor
 }
 
 impl StoreWidget for Split {
@@ -116,6 +127,11 @@ pub fn transition_splits(
             scenes.current != scenes.old && !(is_menu(scenes.old) || is_menu(scenes.current)),
         ),
         // endregion: Start, End, and Menu
+
+        // region: Greymoor
+        Split::EnterGreymoor => should_split(scenes.current == "Greymoor_01"),
+        // region: Greymoor
+
         // else
         _ => should_split(false),
     }
@@ -155,6 +171,10 @@ pub fn continuous_splits(
         Split::DriftersCloak => should_split(mem.deref(&pd.has_brolly).unwrap_or_default()),
         Split::FourthChorus => should_split(mem.deref(&pd.defeated_song_golem).unwrap_or_default()),
         // endregion: FarFields
+
+        // region: Greymoor
+        Split::Moorwing => should_split(mem.deref(&pd.defeated_vampire_gnat_boss).unwrap_or_default()),
+        // endregion: Greymoor
 
         // else
         _ => should_split(false),

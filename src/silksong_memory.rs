@@ -182,6 +182,7 @@ declare_pointers!(PlayerDataPointers {
     defeated_lace1: UnityPointer<3> = UnityPointer::new("GameManager", 0, &["_instance", "playerData", "defeatedLace1"]),
     has_brolly: UnityPointer<3> = UnityPointer::new("GameManager", 0, &["_instance", "playerData", "hasBrolly"]),
     defeated_song_golem: UnityPointer<3> = UnityPointer::new("GameManager", 0, &["_instance", "playerData", "defeatedSongGolem"]),
+    defeated_vampire_gnat_boss: UnityPointer<3> = UnityPointer::new("GameManager", 0, &["_instance", "playerData", "defeatedVampireGnatBoss"]),
 });
 
 // --------------------------------------------------------
