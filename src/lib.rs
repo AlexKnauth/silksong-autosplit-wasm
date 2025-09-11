@@ -207,7 +207,7 @@ fn default_splits_init() -> asr::settings::Map {
     }
     let l = asr::settings::List::new();
     l.push(options_str(&splits::Split::StartNewGame));
-    l.push(options_str(&splits::Split::ManualSplit));
+    l.push(options_str(&splits::Split::EndingSplit));
     loop {
         let old = asr::settings::Map::load();
         let new = old.clone();

@@ -25,6 +25,10 @@ pub enum Split {
     ///
     /// Splits when starting a new save file
     StartNewGame,
+    /// Credits Roll (Ending)
+    ///
+    /// Splits on any credits rolling, any ending
+    EndingSplit,
     /// Main Menu (Menu)
     ///
     /// Splits on the main menu
@@ -106,6 +110,7 @@ pub fn transition_splits(
         Split::StartNewGame => {
             should_split(OPENING_SCENES.contains(&scenes.old) && scenes.current == "Tut_01")
         }
+        Split::EndingSplit => should_split(scenes.current.starts_with("Cinematic_Ending")),
         Split::Menu => should_split(scenes.current == MENU_TITLE),
         Split::AnyTransition => should_split(
             scenes.current != scenes.old && !(is_menu(scenes.old) || is_menu(scenes.current)),

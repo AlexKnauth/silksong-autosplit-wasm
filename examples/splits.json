@@ -10,6 +10,11 @@
     "tooltip": "Splits when starting a new save file"
   },
   {
+    "description": "Credits Roll (Ending)",
+    "key": "EndingSplit",
+    "tooltip": "Splits on any credits rolling, any ending"
+  },
+  {
     "description": "Main Menu (Menu)",
     "key": "Menu",
     "tooltip": "Splits on the main menu"
