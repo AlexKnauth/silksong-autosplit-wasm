@@ -68,7 +68,7 @@
     "description": "Float to Greymoor (Scene)",
     "key": "FloatToGreymoor",
     "tooltip": "Splits when entering Greymoor from Far Fields"
-  }
+  },
     {
     "description": "Moorwing (Boss)",
     "key": "Moorwing",
