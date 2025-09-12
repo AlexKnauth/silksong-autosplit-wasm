@@ -131,6 +131,7 @@ pub enum Split {
     ///
     /// Splits when starting Act 2
     Act2Started,
+    // endregion: Acts
 }
 
 impl StoreWidget for Split {
