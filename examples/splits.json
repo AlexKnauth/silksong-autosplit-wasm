@@ -100,7 +100,7 @@
     "tooltip": "Splits when killing Phantom"
   },
   {
-    "description": "Act 2 Started (Misc)",
+    "description": "Act 2 Started (Event)",
     "key": "Act2Started",
     "tooltip": "Splits when starting Act 2"
   }

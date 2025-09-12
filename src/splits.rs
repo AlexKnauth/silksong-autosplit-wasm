@@ -127,7 +127,7 @@ pub enum Split {
     // endregion: Bilewater
 
     // region: Acts
-    /// Act 2 Started (Misc)
+    /// Act 2 Started (Event)
     ///
     /// Splits when starting Act 2
     Act2Started,
@@ -168,14 +168,19 @@ pub fn transition_splits(
         // endregion: Start, End, and Menu
 
         // region: Greymoor
-        Split::EnterGreymoor => should_split(!scenes.old.starts_with("Greymoor") && 
-            scenes.current.starts_with("Greymoor")),
+        Split::EnterGreymoor => should_split(
+            !scenes.old.starts_with("Greymoor") && scenes.current.starts_with("Greymoor"),
+        ),
         // region: Greymoor
 
         // region: TheMist
-        Split::EnterMist => should_split((scenes.old == "Dust_05" || scenes.old == "Shadow_04") &&
-            scenes.current == "Dust_Maze_09_entrance"),
-        Split::LeaveMist => should_split(scenes.old == "Dust_Maze_Last_Hall" && scenes.current == "Dust_09"),
+        Split::EnterMist => should_split(
+            (scenes.old == "Dust_05" || scenes.old == "Shadow_04")
+                && scenes.current == "Dust_Maze_09_entrance",
+        ),
+        Split::LeaveMist => {
+            should_split(scenes.old == "Dust_Maze_Last_Hall" && scenes.current == "Dust_09")
+        }
         // region: TheMist
 
         // else
@@ -219,7 +224,10 @@ pub fn continuous_splits(
         // endregion: FarFields
 
         // region: Greymoor
-        Split::Moorwing => should_split(mem.deref(&pd.defeated_vampire_gnat_boss).unwrap_or_default()),
+        Split::Moorwing => should_split(
+            mem.deref(&pd.defeated_vampire_gnat_boss)
+                .unwrap_or_default(),
+        ),
         // endregion: Greymoor
 
         // region: Shellwood
