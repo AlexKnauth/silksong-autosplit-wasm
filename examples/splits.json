@@ -65,14 +65,9 @@
     "tooltip": "Splits when killing Fourth Chorus"
   },
   {
-    "description": "Float to Greymoor (Transition)",
-    "key": "FloatToGreymoor",
-    "tooltip": "Splits when entering Greymoor from Far Fields"
-  },
-  {
-    "description": "Greymoor 04 Gauntlet (Gauntlet)",
-    "key": "Greymoor04Gauntlet",
-    "tooltip": "Splits when completing Greymoor_04 Gauntlet"
+    "description": "Enter Greymoor (Transition)",
+    "key": "EnterGreymoor",
+    "tooltip": "Splits when entering Greymoor"
   },
   {
     "description": "Moorwing (Boss)",
@@ -90,14 +85,14 @@
     "tooltip": "Splits when killing Widow"
   },
   {
-    "description": "Enter Mist from Sinner's Road (Transition)",
-    "key": "EnterMistFromSinnersRoad",
-    "tooltip": "Splits when entering The Mist from Sinners Road"
+    "description": "Enter The Mist (Transition)",
+    "key": "EnterMist",
+    "tooltip": "Splits when entering The Mist"
   },
   {
-    "description": "Leave Mist from Sinner's Road (Transition)",
-    "key": "LeaveMistFromSinnersRoad",
-    "tooltip": "Splits when leaving The Mist from Sinners Road"
+    "description": "Leave The Mist (Transition)",
+    "key": "LeaveMist",
+    "tooltip": "Splits when leaving The Mist"
   },
   {
     "description": "Phantom (Boss)",

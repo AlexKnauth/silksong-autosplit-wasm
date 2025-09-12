@@ -84,14 +84,10 @@ pub enum Split {
     // endregion: FarFields
 
     // region: Greymoor
-    /// Float to Greymoor (Transition)
+    /// Enter Greymoor (Transition)
     ///
-    /// Splits when entering Greymoor from Far Fields
-    FloatToGreymoor,
-    /// Greymoor 04 Gauntlet (Gauntlet)
-    ///
-    /// Splits when completing Greymoor_04 Gauntlet
-    Greymoor04Gauntlet,
+    /// Splits when entering Greymoor
+    EnterGreymoor,
     /// Moorwing (Boss)
     ///
     /// Splits when killing Moorwing
@@ -112,16 +108,16 @@ pub enum Split {
     Widow,
     // endregion: Bellhart
 
-    // region: SinnersRoad
-    /// Enter Mist From Sinners Road (Transition)
+    // region: TheMist
+    /// Enter The Mist (Transition)
     ///
-    /// Splits when entering The Mist from Sinners Road
-    EnterMistFromSinnersRoad,
-    /// Leave Mist From Sinners Road (Transition)
+    /// Splits when entering The Mist
+    EnterMist,
+    /// Leave The Mist (Transition)
     ///
-    /// Splits when leaving The Mist from Sinners Road
-    LeaveMistFromSinnersRoad,
-    // endregion: SinnersRoad
+    /// Splits when leaving The Mist
+    LeaveMist,
+    // endregion: TheMist
 
     // region: Bilewater
     /// Phantom (Boss)
@@ -165,13 +161,13 @@ pub fn transition_splits(
         // endregion: Start, End, and Menu
 
         // region: Greymoor
-        Split::FloatToGreymoor => should_split(scenes.old == "Bone_East_11" && scenes.current == "Greymoor_01"),
+        Split::EnterGreymoor => should_split(scenes.current.starts_with("Greymoor")),
         // region: Greymoor
 
-        // region: SinnersRoad
-        Split::EnterMistFromSinnersRoad => should_split(scenes.old == "Dust_05" && scenes.current == "Dust_Maze_09_entrance"),
-        Split::LeaveMistFromSinnersRoad => should_split(scenes.old == "Dust_Maze_Last_Hall" && scenes.current == "Dust_09"),
-        // region: SinnersRoad
+        // region: TheMist
+        Split::EnterMist => should_split(scenes.current == "Dust_Maze_09_entrance"),
+        Split::LeaveMist => should_split(scenes.old == "Dust_Maze_Last_Hall" && scenes.current == "Dust_09"),
+        // region: TheMist
 
         // else
         _ => should_split(false),
@@ -214,7 +210,6 @@ pub fn continuous_splits(
         // endregion: FarFields
 
         // region: Greymoor
-        Split::Greymoor04Gauntlet => should_split(mem.deref(&pd.greymoor_04_battle_completed).unwrap_or_default()),
         Split::Moorwing => should_split(mem.deref(&pd.defeated_vampire_gnat_boss).unwrap_or_default()),
         // endregion: Greymoor
 
