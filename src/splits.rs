@@ -254,24 +254,25 @@ pub fn transition_splits(
         // endregion: Start, End, and Menu
 
         // region: Greymoor
-        Split::EnterGreymoor => {
-            should_split(!scenes.old.starts_with("Greymoor") && scenes.current.starts_with("Greymoor"))
-        },
+        Split::EnterGreymoor => should_split(
+            !scenes.old.starts_with("Greymoor") && scenes.current.starts_with("Greymoor"),
+        ),
         // region: Greymoor
 
         // region: TheMist
-        Split::EnterMist => {
-            should_split((scenes.old == "Dust_05" || scenes.old == "Shadow_04") && scenes.current == "Dust_Maze_09_entrance")
-        },
+        Split::EnterMist => should_split(
+            (scenes.old == "Dust_05" || scenes.old == "Shadow_04")
+                && scenes.current == "Dust_Maze_09_entrance",
+        ),
         Split::LeaveMist => {
             should_split(scenes.old == "Dust_Maze_Last_Hall" && scenes.current == "Dust_09")
-        },
+        }
         // region: TheMist
 
         // region: HighHalls
         Split::EnterHighHalls => {
             should_split(scenes.old == "Hang_01" && scenes.current == "Hang_02")
-        },
+        }
         Split::EnterHighHallsGauntlet => {
             should_split(scenes.old == "Hang_06" && scenes.current == "Hang_04")
         }
@@ -341,7 +342,9 @@ pub fn continuous_splits(
         // endregion: Acts
 
         // region: CogworkCore
-        Split::CogworkDancers => should_split(mem.deref(&pd.defeated_cogwork_dancers).unwrap_or_default()),
+        Split::CogworkDancers => {
+            should_split(mem.deref(&pd.defeated_cogwork_dancers).unwrap_or_default())
+        }
         // endregion: CogworkCore
 
         // region: ChoralChambers
@@ -361,17 +364,33 @@ pub fn continuous_splits(
         // endregion: TheCradle
 
         // region: ThreefoldMelody
-        Split::VaultkeepersMelody => should_split(mem.deref(&pd.has_melody_librarian).unwrap_or_default()),
-        Split::ArchitectsMelody => should_split(mem.deref(&pd.has_melody_architect).unwrap_or_default()),
-        Split::ConductorsMelody => should_split(mem.deref(&pd.has_melody_conductor).unwrap_or_default()),
-        Split::UnlockedMelodyLift => should_split(mem.deref(&pd.unlocked_melody_lift).unwrap_or_default()),
+        Split::VaultkeepersMelody => {
+            should_split(mem.deref(&pd.has_melody_librarian).unwrap_or_default())
+        }
+        Split::ArchitectsMelody => {
+            should_split(mem.deref(&pd.has_melody_architect).unwrap_or_default())
+        }
+        Split::ConductorsMelody => {
+            should_split(mem.deref(&pd.has_melody_conductor).unwrap_or_default())
+        }
+        Split::UnlockedMelodyLift => {
+            should_split(mem.deref(&pd.unlocked_melody_lift).unwrap_or_default())
+        }
         //endregion: ThreefoldMelody
 
         // region: NeedleUpgrade
-        Split::NeedleUpgrade1 => should_split(mem.deref(&pd.nail_upgrades).is_ok_and(|n: i32| n >= 1)),
-        Split::NeedleUpgrade2 => should_split(mem.deref(&pd.nail_upgrades).is_ok_and(|n: i32| n >= 2)),
-        Split::NeedleUpgrade3 => should_split(mem.deref(&pd.nail_upgrades).is_ok_and(|n: i32| n >= 3)),
-        Split::NeedleUpgrade4 => should_split(mem.deref(&pd.nail_upgrades).is_ok_and(|n: i32| n >= 4)),
+        Split::NeedleUpgrade1 => {
+            should_split(mem.deref(&pd.nail_upgrades).is_ok_and(|n: i32| n >= 1))
+        }
+        Split::NeedleUpgrade2 => {
+            should_split(mem.deref(&pd.nail_upgrades).is_ok_and(|n: i32| n >= 2))
+        }
+        Split::NeedleUpgrade3 => {
+            should_split(mem.deref(&pd.nail_upgrades).is_ok_and(|n: i32| n >= 3))
+        }
+        Split::NeedleUpgrade4 => {
+            should_split(mem.deref(&pd.nail_upgrades).is_ok_and(|n: i32| n >= 4))
+        }
         // endregion: NeedleUpgrade
 
         // else
