@@ -15,6 +15,11 @@
     "tooltip": "Splits on any credits rolling, any ending"
   },
   {
+    "description": "Weaver Queen (Ending)",
+    "key": "EndingA",
+    "tooltip": "Splits on Weaver Queen ending"
+  },
+  {
     "description": "Main Menu (Menu)",
     "key": "Menu",
     "tooltip": "Splits on the main menu"
@@ -103,5 +108,80 @@
     "description": "Act 2 Started (Event)",
     "key": "Act2Started",
     "tooltip": "Splits when starting Act 2"
+  },
+  {
+    "description": "Cogwork Dancers (Boss)",
+    "key": "CogworkDancers",
+    "tooltip": "Splits when killing Cogwork Dancers"
+  },
+  {
+    "description": "Trobbio (Boss)",
+    "key": "Trobbio",
+    "tooltip": "Splits when killing Trobbio"
+  },
+  {
+    "description": "Clawline (Skill)",
+    "key": "Clawline",
+    "tooltip": "Splits when obtaining Clawline (Harpoon Dash)"
+  },
+  {
+    "description": "Enter High Halls (Transition)",
+    "key": "EnterHighHalls",
+    "tooltip": "Splits when entering High Halls"
+  },
+  {
+    "description": "Enter High Halls Gauntlet (Transition)",
+    "key": "EnterHighHallsGauntlet",
+    "tooltip": "Splits when entering the High Halls Gauntlet room"
+  },
+  {
+    "description": "High Halls Gauntlet (Mini Boss)",
+    "key": "HighHallsGauntlet",
+    "tooltip": "Splits when completing the High Halls Gauntlet"
+  },
+  {
+    "description": "Lace 2 (Boss)",
+    "key": "Lace2",
+    "tooltip": "Splits when defeating Lace 2 in TheCradle"
+  },
+  {
+    "description": "Vaultkeepers Melody (Melody)",
+    "key": "VaultkeepersMelody",
+    "tooltip": "Splits when learning Vaultkeepers Melody"
+  },
+  {
+    "description": "Architects Melody (Melody)",
+    "key": "ArchitectsMelody",
+    "tooltip": "Splits when learning Architects Melody"
+  },
+  {
+    "description": "Conductors Melody (Melody)",
+    "key": "ConductorsMelody",
+    "tooltip": "Splits when learning Conductors Melody"
+  },
+  {
+    "description": "Unlock Threefold Melody Lift (Event)",
+    "key": "UnlockedMelodyLift",
+    "tooltip": "Splits when unlocking the Threefold Melody Lift"
+  },
+  {
+    "description": "Needle 1 (Upgrade)",
+    "key": "NeedleUpgrade1",
+    "tooltip": "Splits when upgrading to Sharpened Needle"
+  },
+  {
+    "description": "Needle 2 (Upgrade)",
+    "key": "NeedleUpgrade2",
+    "tooltip": "Splits when upgrading to Shining Needle"
+  },
+  {
+    "description": "Needle 3 (Upgrade)",
+    "key": "NeedleUpgrade3",
+    "tooltip": "Splits when upgrading to Hivesteel Needle"
+  },
+  {
+    "description": "Needle 4 (Upgrade)",
+    "key": "NeedleUpgrade4",
+    "tooltip": "Splits when upgrading to Pale Steel Needle"
   }
 ]

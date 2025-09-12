@@ -187,6 +187,16 @@ declare_pointers!(PlayerDataPointers {
     spinner_defeated: UnityPointer<3> = UnityPointer::new("GameManager", 0, &["_instance", "playerData", "spinnerDefeated"]),
     defeated_phantom: UnityPointer<3> = UnityPointer::new("GameManager", 0, &["_instance", "playerData", "defeatedPhantom"]),
     act2_started: UnityPointer<3> = UnityPointer::new("GameManager", 0, &["_instance", "playerData", "act2Started"]),
+    defeated_cogwork_dancers: UnityPointer<3> = UnityPointer::new("GameManager", 0, &["_instance", "playerData", "defeatedCogworkDancers"]),
+    defeated_trobbio: UnityPointer<3> = UnityPointer::new("GameManager", 0, &["_instance", "playerData", "defeatedTrobbio"]),
+    has_harpoon_dash: UnityPointer<3> = UnityPointer::new("GameManager", 0, &["_instance", "playerData", "hasHarpoonDash"]),
+    hang04_battle: UnityPointer<3> = UnityPointer::new("GameManager", 0, &["_instance", "playerData", "hang04Battle"]),
+    defeated_lace_tower: UnityPointer<3> = UnityPointer::new("GameManager", 0, &["_instance", "playerData", "defeatedLaceTower"]),
+    has_melody_librarian: UnityPointer<3> = UnityPointer::new("GameManager", 0, &["_instance", "playerData", "HasMelodyLibrarian"]),
+    has_melody_conductor: UnityPointer<3> = UnityPointer::new("GameManager", 0, &["_instance", "playerData", "HasMelodyConductor"]),
+    has_melody_architect: UnityPointer<3> = UnityPointer::new("GameManager", 0, &["_instance", "playerData", "HasMelodyArchitect"]),
+    unlocked_melody_lift: UnityPointer<3> = UnityPointer::new("GameManager", 0, &["_instance", "playerData", "UnlockedMelodyLift"]),
+    nail_upgrades: UnityPointer<3> = UnityPointer::new("GameManager", 0, &["_instance", "playerData", "nailUpgrades"]),
 });
 
 // --------------------------------------------------------

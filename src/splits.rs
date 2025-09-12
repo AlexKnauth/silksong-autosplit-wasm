@@ -29,6 +29,10 @@ pub enum Split {
     ///
     /// Splits on any credits rolling, any ending
     EndingSplit,
+    /// Weaver Queen (Ending)
+    ///
+    /// Splits on Weaver Queen ending
+    EndingA,
     /// Main Menu (Menu)
     ///
     /// Splits on the main menu
@@ -132,6 +136,87 @@ pub enum Split {
     /// Splits when starting Act 2
     Act2Started,
     // endregion: Acts
+
+    // region: CogworkCore
+    /// Cogwork Dancers (Boss)
+    ///
+    /// Splits when killing Cogwork Dancers
+    CogworkDancers,
+    // endregion: CogworkCore
+
+    // region: ChoralChambers
+    /// Trobbio (Boss)
+    ///
+    /// Splits when killing Trobbio
+    Trobbio,
+    // endregion: ChoralChambers
+
+    // region: Underworks
+    /// Clawline (Skill)
+    ///
+    /// Splits when obtaining Clawline (Harpoon Dash)
+    Clawline,
+    // endregion: Underworks
+
+    // region: HighHalls
+    /// Enter High Halls (Transition)
+    ///
+    /// Splits when entering High Halls
+    EnterHighHalls,
+    /// Enter High Halls Gauntlet (Transition)
+    ///
+    /// Splits when entering the High Halls Gauntlet room
+    EnterHighHallsGauntlet,
+    /// High Halls Gauntlet (Mini Boss)
+    ///
+    /// Splits when completing the High Halls Gauntlet
+    HighHallsGauntlet,
+    // endregion: HighHalls
+
+    // region: TheCradle
+    /// Lace 2 (Boss)
+    ///
+    /// Splits when defeating Lace 2 in TheCradle
+    Lace2,
+    // endregion: TheCradle
+
+    // region: ThreefoldMelody
+    /// Vaultkeepers Melody (Melody)
+    ///
+    /// Splits when learning Vaultkeepers Melody
+    VaultkeepersMelody,
+    /// Architects Melody (Melody)
+    ///
+    /// Splits when learning Architects Melody
+    ArchitectsMelody,
+    /// Conductors Melody (Melody)
+    ///
+    /// Splits when learning Conductors Melody
+    ConductorsMelody,
+    /// Unlock Threefold Melody Lift (Event)
+    ///
+    /// Splits when unlocking the Threefold Melody Lift
+    UnlockedMelodyLift,
+    // endregion: ThreefoldMelody
+
+    // region: NeedleUpgrade
+    /// Needle 1 (Upgrade)
+    ///
+    /// Splits when upgrading to Sharpened Needle
+    NeedleUpgrade1,
+    /// Needle 2 (Upgrade)
+    ///
+    /// Splits when upgrading to Shining Needle
+    NeedleUpgrade2,
+    /// Needle 3 (Upgrade)
+    ///
+    /// Splits when upgrading to Hivesteel Needle
+    NeedleUpgrade3,
+    /// Needle 4 (Upgrade)
+    ///
+    /// Splits when upgrading to Pale Steel Needle
+    NeedleUpgrade4,
+    // endregion: NeedleUpgrade
 }
 
 impl StoreWidget for Split {
@@ -161,6 +246,7 @@ pub fn transition_splits(
             should_split(OPENING_SCENES.contains(&scenes.old) && scenes.current == "Tut_01")
         }
         Split::EndingSplit => should_split(scenes.current.starts_with("Cinematic_Ending")),
+        Split::EndingA => should_split(scenes.current == "Cinematic_Ending_A"),
         Split::Menu => should_split(scenes.current == MENU_TITLE),
         Split::AnyTransition => should_split(
             scenes.current != scenes.old && !(is_menu(scenes.old) || is_menu(scenes.current)),
@@ -168,20 +254,28 @@ pub fn transition_splits(
         // endregion: Start, End, and Menu
 
         // region: Greymoor
-        Split::EnterGreymoor => should_split(
-            !scenes.old.starts_with("Greymoor") && scenes.current.starts_with("Greymoor"),
-        ),
+        Split::EnterGreymoor => {
+            should_split(!scenes.old.starts_with("Greymoor") && scenes.current.starts_with("Greymoor"))
+        },
         // region: Greymoor
 
         // region: TheMist
-        Split::EnterMist => should_split(
-            (scenes.old == "Dust_05" || scenes.old == "Shadow_04")
-                && scenes.current == "Dust_Maze_09_entrance",
-        ),
+        Split::EnterMist => {
+            should_split((scenes.old == "Dust_05" || scenes.old == "Shadow_04") && scenes.current == "Dust_Maze_09_entrance")
+        },
         Split::LeaveMist => {
             should_split(scenes.old == "Dust_Maze_Last_Hall" && scenes.current == "Dust_09")
-        }
+        },
         // region: TheMist
+
+        // region: HighHalls
+        Split::EnterHighHalls => {
+            should_split(scenes.old == "Hang_01" && scenes.current == "Hang_02")
+        },
+        Split::EnterHighHallsGauntlet => {
+            should_split(scenes.old == "Hang_06" && scenes.current == "Hang_04")
+        }
+        // region: HighHalls
 
         // else
         _ => should_split(false),
@@ -245,6 +339,40 @@ pub fn continuous_splits(
         // region: Acts
         Split::Act2Started => should_split(mem.deref(&pd.act2_started).unwrap_or_default()),
         // endregion: Acts
+
+        // region: CogworkCore
+        Split::CogworkDancers => should_split(mem.deref(&pd.defeated_cogwork_dancers).unwrap_or_default()),
+        // endregion: CogworkCore
+
+        // region: ChoralChambers
+        Split::Trobbio => should_split(mem.deref(&pd.defeated_trobbio).unwrap_or_default()),
+        //endregion: ChoralChambers
+
+        // region: Underworks
+        Split::Clawline => should_split(mem.deref(&pd.has_harpoon_dash).unwrap_or_default()),
+        //endregion: Underworks
+
+        // region: HighHalls
+        Split::HighHallsGauntlet => should_split(mem.deref(&pd.hang04_battle).unwrap_or_default()),
+        //endregion: HighHalls
+
+        // region: TheCradle
+        Split::Lace2 => should_split(mem.deref(&pd.defeated_lace_tower).unwrap_or_default()),
+        // endregion: TheCradle
+
+        // region: ThreefoldMelody
+        Split::VaultkeepersMelody => should_split(mem.deref(&pd.has_melody_librarian).unwrap_or_default()),
+        Split::ArchitectsMelody => should_split(mem.deref(&pd.has_melody_architect).unwrap_or_default()),
+        Split::ConductorsMelody => should_split(mem.deref(&pd.has_melody_conductor).unwrap_or_default()),
+        Split::UnlockedMelodyLift => should_split(mem.deref(&pd.unlocked_melody_lift).unwrap_or_default()),
+        //endregion: ThreefoldMelody
+
+        // region: NeedleUpgrade
+        Split::NeedleUpgrade1 => should_split(mem.deref(&pd.nail_upgrades).is_ok_and(|n: i32| n >= 1)),
+        Split::NeedleUpgrade2 => should_split(mem.deref(&pd.nail_upgrades).is_ok_and(|n: i32| n >= 2)),
+        Split::NeedleUpgrade3 => should_split(mem.deref(&pd.nail_upgrades).is_ok_and(|n: i32| n >= 3)),
+        Split::NeedleUpgrade4 => should_split(mem.deref(&pd.nail_upgrades).is_ok_and(|n: i32| n >= 4)),
+        // endregion: NeedleUpgrade
 
         // else
         _ => should_split(false),
