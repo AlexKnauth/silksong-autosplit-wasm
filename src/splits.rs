@@ -125,6 +125,12 @@ pub enum Split {
     /// Splits when killing Phantom
     Phantom,
     // endregion: Bilewater
+
+    // region: Acts
+    /// Act 2 Started (Misc)
+    ///
+    /// Splits when starting Act 2
+    Act2Started,
 }
 
 impl StoreWidget for Split {
@@ -161,11 +167,13 @@ pub fn transition_splits(
         // endregion: Start, End, and Menu
 
         // region: Greymoor
-        Split::EnterGreymoor => should_split(scenes.current.starts_with("Greymoor")),
+        Split::EnterGreymoor => should_split(!scenes.old.starts_with("Greymoor") && 
+            scenes.current.starts_with("Greymoor")),
         // region: Greymoor
 
         // region: TheMist
-        Split::EnterMist => should_split(scenes.current == "Dust_Maze_09_entrance"),
+        Split::EnterMist => should_split((scenes.old == "Dust_05" || scenes.old == "Shadow_04") &&
+            scenes.current == "Dust_Maze_09_entrance"),
         Split::LeaveMist => should_split(scenes.old == "Dust_Maze_Last_Hall" && scenes.current == "Dust_09"),
         // region: TheMist
 
@@ -224,6 +232,10 @@ pub fn continuous_splits(
         // region: Bilewater
         Split::Phantom => should_split(mem.deref(&pd.defeated_phantom).unwrap_or_default()),
         // endregion: Bilewater
+
+        // region: Acts
+        Split::Act2Started => should_split(mem.deref(&pd.act2_started).unwrap_or_default()),
+        // endregion: Acts
 
         // else
         _ => should_split(false),

@@ -186,6 +186,7 @@ declare_pointers!(PlayerDataPointers {
     has_wall_jump: UnityPointer<3> = UnityPointer::new("GameManager", 0, &["_instance", "playerData", "hasWalljump"]),
     spinner_defeated: UnityPointer<3> = UnityPointer::new("GameManager", 0, &["_instance", "playerData", "spinnerDefeated"]),
     defeated_phantom: UnityPointer<3> = UnityPointer::new("GameManager", 0, &["_instance", "playerData", "defeatedPhantom"]),
+    act2_started: UnityPointer<3> = UnityPointer::new("GameManager", 0, &["_instance", "playerData", "act2Started"]),
 });
 
 // --------------------------------------------------------

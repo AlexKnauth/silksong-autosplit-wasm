@@ -98,5 +98,10 @@
     "description": "Phantom (Boss)",
     "key": "Phantom",
     "tooltip": "Splits when killing Phantom"
+  },
+  {
+    "description": "Act 2 Started (Misc)",
+    "key": "Act2Started",
+    "tooltip": "Splits when starting Act 2"
   }
 ]
