@@ -84,15 +84,51 @@ pub enum Split {
     // endregion: FarFields
 
     // region: Greymoor
-    /// Float to Greymoor (Scene)
+    /// Float to Greymoor (Transition)
     ///
     /// Splits when entering Greymoor from Far Fields
     FloatToGreymoor,
+    /// Greymoor 04 Gauntlet (Gauntlet)
+    ///
+    /// Splits when completing Greymoor_04 Gauntlet
+    Greymoor04Gauntlet,
     /// Moorwing (Boss)
     ///
     /// Splits when killing Moorwing
     Moorwing,
     // endregion: Greymoor
+
+    // region: Shellwood
+    /// Cling Grip (Skill)
+    ///
+    /// Splits when obtaining Cling Grip (Wall Jump)
+    ClingGrip,
+    // endregion: Shellwood
+
+    // region: Bellhart
+    /// Widow (Boss)
+    ///
+    /// Splits when killing Widow
+    Widow,
+    // endregion: Bellhart
+
+    // region: SinnersRoad
+    /// Enter Mist From Sinners Road (Transition)
+    ///
+    /// Splits when entering The Mist from Sinners Road
+    EnterMistFromSinnersRoad,
+    /// Leave Mist From Sinners Road (Transition)
+    ///
+    /// Splits when leaving The Mist from Sinners Road
+    LeaveMistFromSinnersRoad,
+    // endregion: SinnersRoad
+
+    // region: Bilewater
+    /// Phantom (Boss)
+    ///
+    /// Splits when killing Phantom
+    Phantom,
+    // endregion: Bilewater
 }
 
 impl StoreWidget for Split {
@@ -129,8 +165,13 @@ pub fn transition_splits(
         // endregion: Start, End, and Menu
 
         // region: Greymoor
-        Split::EnterGreymoor => should_split(scenes.current == "Greymoor_01"),
+        Split::FloatToGreymoor => should_split(scenes.old == "Bone_East_11" && scenes.current == "Greymoor_01"),
         // region: Greymoor
+
+        // region: SinnersRoad
+        Split::EnterMistFromSinnersRoad => should_split(scenes.old == "Dust_05" && scenes.current == "Dust_Maze_09_entrance"),
+        Split::LeaveMistFromSinnersRoad => should_split(scenes.old == "Dust_Maze_Last_Hall" && scenes.current == "Dust_09"),
+        // region: SinnersRoad
 
         // else
         _ => should_split(false),
@@ -173,8 +214,21 @@ pub fn continuous_splits(
         // endregion: FarFields
 
         // region: Greymoor
+        Split::Greymoor04Gauntlet => should_split(mem.deref(&pd.greymoor_04_battle_completed).unwrap_or_default()),
         Split::Moorwing => should_split(mem.deref(&pd.defeated_vampire_gnat_boss).unwrap_or_default()),
         // endregion: Greymoor
+
+        // region: Shellwood
+        Split::ClingGrip => should_split(mem.deref(&pd.has_wall_jump).unwrap_or_default()),
+        // endregion: Shellwood
+
+        // region: Bellhart
+        Split::Widow => should_split(mem.deref(&pd.spinner_defeated).unwrap_or_default()),
+        // endregion: Bellhart
+
+        // region: Bilewater
+        Split::Phantom => should_split(mem.deref(&pd.defeated_phantom).unwrap_or_default()),
+        // endregion: Bilewater
 
         // else
         _ => should_split(false),
