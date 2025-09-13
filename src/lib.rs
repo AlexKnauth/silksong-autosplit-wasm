@@ -55,6 +55,8 @@ struct AutoSplitterState {
     last_health: Option<i32>,
     #[cfg(debug_assertions)]
     last_paused: bool,
+    #[cfg(debug_assertions)]
+    last_reasons: Vec<&'static str>,
 }
 
 impl AutoSplitterState {
@@ -78,6 +80,8 @@ impl AutoSplitterState {
             last_health: None,
             #[cfg(debug_assertions)]
             last_paused: false,
+            #[cfg(debug_assertions)]
+            last_reasons: Vec::new(),
         }
     }
 
@@ -106,6 +110,7 @@ impl AutoSplitterState {
                 #[cfg(debug_assertions)]
                 {
                     self.last_paused = false;
+                    self.last_reasons = Vec::new();
                 }
             }
             TimerState::Running if is_timer_state_between_runs(self.timer_state) => {
@@ -329,6 +334,7 @@ async fn handle_splits(
                         #[cfg(debug_assertions)]
                         {
                             state.last_paused = false;
+                            state.last_reasons = Vec::new();
                         }
                         // no break, allow other actions after a skip or reset
                     }
@@ -436,6 +442,39 @@ fn load_removal(state: &mut AutoSplitterState, mem: &Memory, gm: &GameManagerPoi
             asr::print_message(&format!("is_game_time_paused: {}", is_game_time_paused));
         }
         state.last_paused = is_game_time_paused;
+        let mut reasons = Vec::new();
+        if state.look_for_teleporting {
+            reasons.push("look_for_teleporting");
+        }
+        if (game_state == GAME_STATE_PLAYING || game_state == GAME_STATE_ENTERING_LEVEL)
+            && ui_state != UI_STATE_PLAYING
+        {
+            reasons.push("ui_state");
+        }
+        if game_state != GAME_STATE_PLAYING && !accepting_input {
+            reasons.push("accepting_input");
+        }
+        if game_state == GAME_STATE_EXITING_LEVEL || game_state == GAME_STATE_LOADING {
+            reasons.push("game_state");
+        }
+        if hero_transition_state == HERO_TRANSITION_STATE_WAITING_TO_ENTER_LEVEL {
+            reasons.push("hero_transition_state");
+        }
+        if ui_state != UI_STATE_PLAYING && (loading_menu) && next_scene != scene_name {
+            reasons.push("next_scene_loading_menu");
+        }
+        if ui_state != UI_STATE_PLAYING
+            && (ui_state != UI_STATE_PAUSED
+                && ui_state != UI_STATE_CUTSCENE
+                && (!next_scene.is_empty()))
+            && next_scene != scene_name
+        {
+            reasons.push("next_scene_ui_state");
+        }
+        if reasons != state.last_reasons {
+            asr::print_message(&format!("reasons: {:?}", reasons));
+        }
+        state.last_reasons = reasons;
     }
 }
 
