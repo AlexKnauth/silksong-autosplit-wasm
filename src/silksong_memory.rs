@@ -57,6 +57,7 @@ pub const GAME_STATE_CUTSCENE: i32 = 7;
 pub static NON_MENU_GAME_STATES: [i32; 2] = [GAME_STATE_PLAYING, GAME_STATE_CUTSCENE];
 
 // UI_STATE 1: Main Menu
+pub const UI_STATE_CUTSCENE: i32 = 3;
 pub const UI_STATE_PLAYING: i32 = 4;
 pub const UI_STATE_PAUSED: i32 = 5;
 

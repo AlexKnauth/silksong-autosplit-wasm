@@ -27,8 +27,8 @@ use crate::{
         attach_silksong, GameManagerPointers, Memory, PlayerDataPointers, SceneStore,
         GAME_STATE_ENTERING_LEVEL, GAME_STATE_EXITING_LEVEL, GAME_STATE_INACTIVE,
         GAME_STATE_LOADING, GAME_STATE_MAIN_MENU, GAME_STATE_PLAYING,
-        HERO_TRANSITION_STATE_WAITING_TO_ENTER_LEVEL, MENU_TITLE, QUIT_TO_MENU, UI_STATE_PAUSED,
-        UI_STATE_PLAYING,
+        HERO_TRANSITION_STATE_WAITING_TO_ENTER_LEVEL, MENU_TITLE, QUIT_TO_MENU, UI_STATE_CUTSCENE,
+        UI_STATE_PAUSED, UI_STATE_PLAYING,
     },
     timer::SplitterAction,
 };
@@ -396,7 +396,10 @@ fn load_removal(state: &mut AutoSplitterState, mem: &Memory, gm: &GameManagerPoi
         || (game_state == GAME_STATE_EXITING_LEVEL || game_state == GAME_STATE_LOADING)
         || (hero_transition_state == HERO_TRANSITION_STATE_WAITING_TO_ENTER_LEVEL)
         || (ui_state != UI_STATE_PLAYING
-            && (loading_menu || (ui_state != UI_STATE_PAUSED && (!next_scene.is_empty())))
+            && (loading_menu
+                || (ui_state != UI_STATE_PAUSED
+                    && ui_state != UI_STATE_CUTSCENE
+                    && (!next_scene.is_empty())))
             && next_scene != scene_name);
     if is_game_time_paused {
         asr::timer::pause_game_time();
