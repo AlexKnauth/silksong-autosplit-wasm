@@ -16,6 +16,7 @@ use asr::{
     timer::TimerState,
     Address64, Process,
 };
+use core::cmp;
 use ugly_widget::{
     radio_button::options_str,
     store::{StoreGui, StoreWidget},
@@ -38,9 +39,15 @@ asr::panic_handler!();
 
 // --------------------------------------------------------
 
+/// The dash symbol to use for generic dashes in text.
+pub const DASH: &str = "—";
+
+// --------------------------------------------------------
+
 struct AutoSplitterState {
     timer_state: TimerState,
     split_index: Option<u64>,
+    segments_splitted: Vec<bool>,
     look_for_teleporting: bool,
     #[cfg(debug_assertions)]
     last_ui_state: i32,
@@ -48,6 +55,9 @@ struct AutoSplitterState {
     #[cfg(debug_assertions)]
     last_hero_transition_state: i32,
     hits: i64,
+    segment_hits: Vec<i64>,
+    cumulative_hits: Vec<i64>,
+    comparison_hits: Vec<i64>,
     last_recoil: bool,
     last_hazard: bool,
     last_health_0: bool,
@@ -61,9 +71,13 @@ impl AutoSplitterState {
     fn new() -> AutoSplitterState {
         let timer_state = asr::timer::state();
         let split_index = unstable::timer_current_split_index();
+        let mut segments_splitted = Vec::new();
+        segments_splitted.resize(split_index.unwrap_or_default() as usize, false);
+        let comparison_hits = Settings::get_comparison_hits().unwrap_or_default();
         AutoSplitterState {
             timer_state,
             split_index,
+            segments_splitted,
             look_for_teleporting: false,
             #[cfg(debug_assertions)]
             last_ui_state: 0,
@@ -71,6 +85,9 @@ impl AutoSplitterState {
             #[cfg(debug_assertions)]
             last_hero_transition_state: 0,
             hits: 0,
+            segment_hits: Vec::new(),
+            cumulative_hits: Vec::new(),
+            comparison_hits,
             last_recoil: false,
             last_hazard: false,
             last_health_0: false,
@@ -95,12 +112,22 @@ impl AutoSplitterState {
                     || self.timer_state == TimerState::Ended =>
             {
                 // Reset
+                Settings::update_comparison_hits(&mut self.comparison_hits, &self.cumulative_hits);
+                if self.timer_state == TimerState::Ended {
+                    if let Some(pb_hits) = self.comparison_hits.last() {
+                        asr::timer::set_variable_int("pb hits", *pb_hits);
+                    }
+                }
                 #[cfg(not(feature = "unstable"))]
                 {
                     self.split_index = None;
                 }
+                self.segments_splitted.clear();
                 self.hits = 0;
+                self.segment_hits.clear();
+                self.cumulative_hits.clear();
                 asr::timer::set_variable_int("hits", self.hits);
+                asr::timer::set_variable_int("segment hits", 0);
                 self.look_for_teleporting = false;
                 self.last_game_state = GAME_STATE_INACTIVE;
                 #[cfg(debug_assertions)]
@@ -130,13 +157,48 @@ impl AutoSplitterState {
             _ => {
                 #[cfg(feature = "unstable")]
                 if let (Some(new_index), Some(old_index)) = (&new_index, &self.split_index) {
+                    let new_i = *new_index as usize;
                     if new_index < old_index {
                         // Undo
+                        self.segment_hits[new_i] +=
+                            self.segment_hits.drain((new_i + 1)..).sum::<i64>();
+                        if new_i < self.cumulative_hits.len() {
+                            let mut i = new_i;
+                            // go back through skipped splits
+                            while 1 <= i && !self.segments_splitted[i - 1] {
+                                i -= 1;
+                            }
+                            // segment [i - 1] was not skipped, but segment [i] was skipped or undone,
+                            // so remove cumulative_hits from there on
+                            self.cumulative_hits.truncate(i);
+                        }
+                        self.segments_splitted.truncate(new_i);
                     } else if new_index > old_index {
-                        if unstable::timer_segment_splitted(new_index - 1).unwrap_or_default() {
-                            // Split
+                        for old_idx in (*old_index)..(*new_index) {
+                            let o_i = old_idx as usize;
+                            let n_i = o_i + 1;
+                            let splitted =
+                                unstable::timer_segment_splitted(old_idx).unwrap_or_default();
+                            self.segments_splitted.push(splitted);
+                            if splitted {
+                                // Split
+                                self.segment_hits.push(0);
+                                self.cumulative_hits.resize(n_i, self.hits);
+                            } else {
+                                // Skip
+                                self.segment_hits.insert(o_i, 0);
+                            }
+                        }
+                    }
+
+                    if new_index != old_index {
+                        asr::timer::set_variable_int("segment hits", self.segment_hits[new_i]);
+                        if let Some(c) = self.comparison_hits.get(new_i) {
+                            asr::timer::set_variable_int("comparison hits", *c);
+                            asr::timer::set_variable_int("delta hits", self.hits - c);
                         } else {
-                            // Skip
+                            asr::timer::set_variable("comparison hits", DASH);
+                            asr::timer::set_variable("delta hits", DASH);
                         }
                     }
                 }
@@ -177,6 +239,9 @@ impl Settings {
     pub fn get_hit_counter(&self) -> bool {
         self.hit_counter
     }
+    pub fn get_splits_len(&self) -> usize {
+        self.splits.get_list().len()
+    }
     pub fn get_splits(&self) -> Vec<splits::Split> {
         self.splits.get_list().into_iter().cloned().collect()
     }
@@ -194,6 +259,38 @@ impl Settings {
         let mut gui = Settings::register();
         gui.loop_load_update_store();
         gui
+    }
+
+    pub fn get_comparison_hits() -> Option<Vec<i64>> {
+        let c = asr::settings::Map::load().get("comparison_hits")?;
+        Some(c.get_list()?.iter().filter_map(|i| i.get_i64()).collect())
+    }
+
+    pub fn update_comparison_hits(comparison_hits: &mut Vec<i64>, cumulative_hits: &[i64]) {
+        // save cumulative_hits to comparison_hits
+        for i in 0..cumulative_hits.len() {
+            if i < comparison_hits.len() {
+                comparison_hits[i] = cmp::min(comparison_hits[i], cumulative_hits[i]);
+            } else {
+                comparison_hits.push(cumulative_hits[i]);
+            }
+        }
+        Settings::set_comparison_hits(&comparison_hits);
+    }
+
+    fn set_comparison_hits(comparison_hits: &[i64]) {
+        let l = asr::settings::List::new();
+        for i in comparison_hits {
+            l.push(*i);
+        }
+        loop {
+            let old = asr::settings::Map::load();
+            let new = old.clone();
+            new.insert("comparison_hits", &l);
+            if new.store_if_unchanged(&old) {
+                return;
+            }
+        }
     }
 }
 
@@ -225,6 +322,10 @@ fn default_splits_init() -> asr::settings::Map {
 async fn main() {
     // register the variables on start
     asr::timer::set_variable_int("hits", 0);
+    asr::timer::set_variable_int("segment hits", 0);
+    asr::timer::set_variable("pb hits", DASH);
+    asr::timer::set_variable("comparison hits", DASH);
+    asr::timer::set_variable("delta hits", DASH);
 
     asr::print_message("Hello, World!");
 
@@ -234,6 +335,14 @@ async fn main() {
     asr::print_message(&format!("splits: {:?}", settings.get_splits()));
 
     let mut state = AutoSplitterState::new();
+
+    if !state.comparison_hits.is_empty()
+        && (state.comparison_hits.len() + 1 == settings.get_splits_len())
+    {
+        if let Some(pb_hits) = state.comparison_hits.last() {
+            asr::timer::set_variable_int("pb hits", *pb_hits);
+        }
+    }
 
     loop {
         // TODO: replace this placeholder with the actual executables
@@ -327,11 +436,19 @@ async fn handle_splits(
                 let a = splits::splits(&split, mem, gm, pd, trans_now, ss);
                 match a {
                     SplitterAction::Reset => {
+                        Settings::update_comparison_hits(
+                            &mut state.comparison_hits,
+                            &state.cumulative_hits,
+                        );
                         asr::timer::reset();
                         state.timer_state = TimerState::NotRunning;
                         state.split_index = None;
+                        state.segments_splitted.clear();
                         state.hits = 0;
+                        state.segment_hits.clear();
+                        state.cumulative_hits.clear();
                         asr::timer::set_variable_int("hits", state.hits);
+                        asr::timer::set_variable_int("segment hits", 0);
                         state.look_for_teleporting = false;
                         state.last_game_state = GAME_STATE_INACTIVE;
                         #[cfg(debug_assertions)]
@@ -341,19 +458,57 @@ async fn handle_splits(
                         // no break, allow other actions after a skip or reset
                     }
                     SplitterAction::Skip => {
+                        let old_index = state.split_index.unwrap_or_default();
+                        let old_i = old_index as usize;
                         asr::timer::skip_split();
-                        state.split_index = Some(state.split_index.unwrap_or_default() + 1);
+                        let new_i = old_i + 1;
+                        state.split_index = Some(old_index + 1);
+                        state.segments_splitted.push(false);
+                        state.segment_hits.insert(old_i, 0);
+                        asr::timer::set_variable_int("segment hits", state.segment_hits[new_i]);
+                        if let Some(c) = state.comparison_hits.get(new_i) {
+                            asr::timer::set_variable_int("comparison hits", *c);
+                            asr::timer::set_variable_int("delta hits", state.hits - c);
+                        } else {
+                            asr::timer::set_variable("comparison hits", DASH);
+                            asr::timer::set_variable("delta hits", DASH);
+                        }
                         // no break, allow other actions after a skip or reset
                     }
                     SplitterAction::Split => {
+                        let old_index = state.split_index.unwrap_or_default();
                         asr::timer::split();
-                        state.split_index = Some(state.split_index.unwrap_or_default() + 1);
+                        let new_i = old_index as usize + 1;
+                        state.split_index = Some(old_index + 1);
+                        state.segments_splitted.push(true);
+                        state.segment_hits.push(0);
+                        asr::timer::set_variable_int("segment hits", state.segment_hits[new_i]);
+                        if let Some(c) = state.comparison_hits.get(new_i) {
+                            asr::timer::set_variable_int("comparison hits", *c);
+                            asr::timer::set_variable_int("delta hits", state.hits - c);
+                        } else {
+                            asr::timer::set_variable("comparison hits", DASH);
+                            asr::timer::set_variable("delta hits", DASH);
+                        }
                         break;
                     }
                     SplitterAction::ManualSplit => {
                         #[cfg(not(feature = "unstable"))]
                         {
-                            state.split_index = Some(state.split_index.unwrap_or_default() + 1);
+                            let old_index = state.split_index.unwrap_or_default();
+                            let old_i = old_index as usize;
+                            let new_i = old_i + 1;
+                            state.split_index = Some(old_index + 1);
+                            state.segments_splitted.push(false);
+                            state.segment_hits.insert(old_i, 0);
+                            asr::timer::set_variable_int("segment hits", state.segment_hits[new_i]);
+                            if let Some(c) = state.comparison_hits.get(new_i) {
+                                asr::timer::set_variable_int("comparison hits", *c);
+                                asr::timer::set_variable_int("delta hits", state.hits - c);
+                            } else {
+                                asr::timer::set_variable("comparison hits", DASH);
+                                asr::timer::set_variable("delta hits", DASH);
+                            }
                         }
                         break;
                     }
