@@ -25,8 +25,8 @@ use ugly_widget::{
 use crate::{
     silksong_memory::{
         attach_silksong, GameManagerPointers, Memory, PlayerDataPointers, SceneStore,
-        GAME_STATE_ENTERING_LEVEL, GAME_STATE_EXITING_LEVEL, GAME_STATE_INACTIVE,
-        GAME_STATE_LOADING, GAME_STATE_MAIN_MENU, GAME_STATE_PLAYING,
+        GAME_STATE_CUTSCENE, GAME_STATE_ENTERING_LEVEL, GAME_STATE_EXITING_LEVEL,
+        GAME_STATE_INACTIVE, GAME_STATE_LOADING, GAME_STATE_MAIN_MENU, GAME_STATE_PLAYING,
         HERO_TRANSITION_STATE_WAITING_TO_ENTER_LEVEL, MENU_TITLE, QUIT_TO_MENU, UI_STATE_CUTSCENE,
         UI_STATE_PAUSED, UI_STATE_PLAYING,
     },
@@ -392,7 +392,9 @@ fn load_removal(state: &mut AutoSplitterState, mem: &Memory, gm: &GameManagerPoi
     let is_game_time_paused = (state.look_for_teleporting)
         || ((game_state == GAME_STATE_PLAYING || game_state == GAME_STATE_ENTERING_LEVEL)
             && ui_state != UI_STATE_PLAYING)
-        || (game_state != GAME_STATE_PLAYING && !accepting_input)
+        || (game_state != GAME_STATE_PLAYING
+            && game_state != GAME_STATE_CUTSCENE
+            && !accepting_input)
         || (game_state == GAME_STATE_EXITING_LEVEL || game_state == GAME_STATE_LOADING)
         || (hero_transition_state == HERO_TRANSITION_STATE_WAITING_TO_ENTER_LEVEL)
         || (ui_state != UI_STATE_PLAYING
