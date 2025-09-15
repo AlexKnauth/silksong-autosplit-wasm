@@ -46,6 +46,8 @@ struct AutoSplitterState {
     last_ui_state: i32,
     last_game_state: i32,
     #[cfg(debug_assertions)]
+    last_accepting_input: bool,
+    #[cfg(debug_assertions)]
     last_hero_transition_state: i32,
     hits: i64,
     last_recoil: bool,
@@ -70,6 +72,8 @@ impl AutoSplitterState {
             #[cfg(debug_assertions)]
             last_ui_state: 0,
             last_game_state: GAME_STATE_INACTIVE,
+            #[cfg(debug_assertions)]
+            last_accepting_input: false,
             #[cfg(debug_assertions)]
             last_hero_transition_state: 0,
             hits: 0,
@@ -427,6 +431,14 @@ fn load_removal(state: &mut AutoSplitterState, mem: &Memory, gm: &GameManagerPoi
         asr::print_message(&format!("game_state: {}", game_state));
     }
     state.last_game_state = game_state;
+
+    #[cfg(debug_assertions)]
+    {
+        if accepting_input != state.last_accepting_input {
+            asr::print_message(&format!("accepting_input: {}", accepting_input));
+        }
+        state.last_accepting_input = accepting_input;
+    }
 
     #[cfg(debug_assertions)]
     {
