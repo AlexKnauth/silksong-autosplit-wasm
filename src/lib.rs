@@ -451,7 +451,8 @@ fn load_removal(state: &mut AutoSplitterState, mem: &Memory, gm: &GameManagerPoi
         {
             reasons.push("ui_state");
         }
-        if game_state != GAME_STATE_PLAYING && !accepting_input {
+        if game_state != GAME_STATE_PLAYING && game_state != GAME_STATE_CUTSCENE && !accepting_input
+        {
             reasons.push("accepting_input");
         }
         if game_state == GAME_STATE_EXITING_LEVEL || game_state == GAME_STATE_LOADING {
