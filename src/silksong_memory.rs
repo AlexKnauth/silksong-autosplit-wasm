@@ -200,6 +200,7 @@ declare_pointers!(PlayerDataPointers {
     defeated_phantom: UnityPointer<3> = UnityPointer::new("GameManager", 0, &["_instance", "playerData", "defeatedPhantom"]),
     act2_started: UnityPointer<3> = UnityPointer::new("GameManager", 0, &["_instance", "playerData", "act2Started"]),
     defeated_cogwork_dancers: UnityPointer<3> = UnityPointer::new("GameManager", 0, &["_instance", "playerData", "defeatedCogworkDancers"]),
+    completed_library_entry_battle: UnityPointer<3> = UnityPointer::new("GameManager", 0, &["_instance", "playerData", "completedLibraryEntryBattle"]),
     defeated_trobbio: UnityPointer<3> = UnityPointer::new("GameManager", 0, &["_instance", "playerData", "defeatedTrobbio"]),
     has_harpoon_dash: UnityPointer<3> = UnityPointer::new("GameManager", 0, &["_instance", "playerData", "hasHarpoonDash"]),
     hang04_battle: UnityPointer<3> = UnityPointer::new("GameManager", 0, &["_instance", "playerData", "hang04Battle"]),

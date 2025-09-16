@@ -145,6 +145,11 @@
     "tooltip": "Splits when killing Cogwork Dancers"
   },
   {
+    "description": "Whispering Vaults Gauntlet (Mini Boss)",
+    "key": "WhisperingVaultsGauntlet",
+    "tooltip": "Splits when completing the Whispering Vaults Gauntlet"
+  },
+  {
     "description": "Trobbio (Boss)",
     "key": "Trobbio",
     "tooltip": "Splits when killing Trobbio"

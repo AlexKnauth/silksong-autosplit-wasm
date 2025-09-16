@@ -171,6 +171,13 @@ pub enum Split {
     CogworkDancers,
     // endregion: CogworkCore
 
+    // region: WhisperingVaults
+    /// Whispering Vaults Gauntlet (Mini Boss)
+    ///
+    /// Splits when completing the Whispering Vaults Gauntlet
+    WhisperingVaultsGauntlet,
+    // endregion: WhisperingVaults
+
     // region: ChoralChambers
     /// Trobbio (Boss)
     ///
@@ -390,6 +397,10 @@ pub fn continuous_splits(
             should_split(mem.deref(&pd.defeated_cogwork_dancers).unwrap_or_default())
         }
         // endregion: CogworkCore
+
+        // region: WhisperingVaults
+        Split::WhisperingVaultsGauntlet => should_split(mem.deref(&pd.completed_library_entry_battle).unwrap_or_default()),
+        // endregion: WhisperingValuts
 
         // region: ChoralChambers
         Split::Trobbio => should_split(mem.deref(&pd.defeated_trobbio).unwrap_or_default()),
