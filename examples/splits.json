@@ -45,6 +45,11 @@
     "tooltip": "Splits when obtaining Silk Spear"
   },
   {
+    "description": "Marrow Bell (Event)",
+    "key": "MarrowBell",
+    "tooltip": "Splits when ringing the Marrow Bell Shrine"
+  },
+  {
     "description": "Bell Beast (Boss)",
     "key": "BellBeast",
     "tooltip": "Splits when defeating the Bell Beast"
@@ -58,6 +63,11 @@
     "description": "Lace 1 (Boss)",
     "key": "Lace1",
     "tooltip": "Splits when defeating Lace 1 in DeepDocks"
+  },
+  {
+    "description": "Deep Docks Bell (Event)",
+    "key": "DeepDocksBell",
+    "tooltip": "Splits when ringing the Deep Docks Bell Shrine"
   },
   {
     "description": "Drifter's Cloak (Skill)",
@@ -75,6 +85,11 @@
     "tooltip": "Splits when entering Greymoor"
   },
   {
+    "description": "Greymoor Bell (Event)",
+    "key": "GreymoorBell",
+    "tooltip": "Splits when ringing the Greymoor Bell Shrine"
+  },
+  {
     "description": "Moorwing (Boss)",
     "key": "Moorwing",
     "tooltip": "Splits when killing Moorwing"
@@ -88,6 +103,21 @@
     "description": "Widow (Boss)",
     "key": "Widow",
     "tooltip": "Splits when killing Widow"
+  },
+  {
+    "description": "Bellhart Bell (Event)",
+    "key": "BellhartBell",
+    "tooltip": "Splits when ringing the Bellhart Bell Shrine"
+  },
+  {
+    "description": "Shellwood Bell (Event)",
+    "key": "ShellwoodBell",
+    "tooltip": "Splits when ringing the Shellwood Bell Shrine"
+  },
+  {
+    "description": "Last Judge (Boss)",
+    "key": "LastJudge",
+    "tooltip": "Splits when killing Last Judge"
   },
   {
     "description": "Enter The Mist (Transition)",

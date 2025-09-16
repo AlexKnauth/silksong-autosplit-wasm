@@ -63,6 +63,10 @@ pub enum Split {
     ///
     /// Splits when defeating the Bell Beast
     BellBeast,
+    /// Marrow Bell (Event)
+    ///
+    /// Splits when ringing the Marrow Bell Shrine
+    MarrowBell,
     // endregion: Marrow
 
     // region: DeepDocks
@@ -74,6 +78,10 @@ pub enum Split {
     ///
     /// Splits when defeating Lace 1 in DeepDocks
     Lace1,
+    /// Deep Docks Bell (Event)
+    ///
+    /// Splits when ringing the Deep Docks Bell Shrine
+    DeepDocksBell,
     // endregion: DeepDocks
 
     // region: FarFields
@@ -92,6 +100,10 @@ pub enum Split {
     ///
     /// Splits when entering Greymoor
     EnterGreymoor,
+    /// Greymoor Bell (Event)
+    ///
+    /// Splits when ringing the Greymoor Bell Shrine
+    GreymoorBell,
     /// Moorwing (Boss)
     ///
     /// Splits when killing Moorwing
@@ -103,6 +115,10 @@ pub enum Split {
     ///
     /// Splits when obtaining Cling Grip (Wall Jump)
     ClingGrip,
+    /// Shellwood Bell (Event)
+    ///
+    /// Splits when ringing the Shellwood Bell Shrine
+    ShellwoodBell,
     // endregion: Shellwood
 
     // region: Bellhart
@@ -110,7 +126,18 @@ pub enum Split {
     ///
     /// Splits when killing Widow
     Widow,
+    /// Bellhart Bell (Event)
+    ///
+    /// Splits when ringing the Bellhart Bell Shrine
+    BellhartBell,
     // endregion: Bellhart
+
+    // region: BlastedSteps
+    /// Last Judge (Boss)
+    ///
+    /// Splits when killing Last Judge
+    LastJudge,
+    // endregion: BlastedSteps
 
     // region: TheMist
     /// Enter The Mist (Transition)
@@ -306,11 +333,15 @@ pub fn continuous_splits(
 
         // region: Marrow
         Split::BellBeast => should_split(mem.deref(&pd.defeated_bell_beast).unwrap_or_default()),
+        Split::MarrowBell => {
+            should_split(mem.deref(&pd.bell_shrine_bone_forest).unwrap_or_default())
+        }
         // endregion: Marrow
 
         // region: DeepDocks
         Split::SwiftStep => should_split(mem.deref(&pd.has_dash).unwrap_or_default()),
         Split::Lace1 => should_split(mem.deref(&pd.defeated_lace1).unwrap_or_default()),
+        Split::DeepDocksBell => should_split(mem.deref(&pd.bell_shrine_wilds).unwrap_or_default()),
         // endregion: DeepDocks
 
         // region: FarFields
@@ -319,6 +350,9 @@ pub fn continuous_splits(
         // endregion: FarFields
 
         // region: Greymoor
+        Split::GreymoorBell => {
+            should_split(mem.deref(&pd.bell_shrine_greymoor).unwrap_or_default())
+        }
         Split::Moorwing => should_split(
             mem.deref(&pd.defeated_vampire_gnat_boss)
                 .unwrap_or_default(),
@@ -327,11 +361,21 @@ pub fn continuous_splits(
 
         // region: Shellwood
         Split::ClingGrip => should_split(mem.deref(&pd.has_wall_jump).unwrap_or_default()),
+        Split::ShellwoodBell => {
+            should_split(mem.deref(&pd.bell_shrine_shellwood).unwrap_or_default())
+        }
         // endregion: Shellwood
 
         // region: Bellhart
         Split::Widow => should_split(mem.deref(&pd.spinner_defeated).unwrap_or_default()),
+        Split::BellhartBell => {
+            should_split(mem.deref(&pd.bell_shrine_bellhart).unwrap_or_default())
+        }
         // endregion: Bellhart
+
+        // region: BlastedSteps
+        Split::LastJudge => should_split(mem.deref(&pd.defeated_last_judge).unwrap_or_default()),
+        // endregion: BlastedSteps
 
         // region: Bilewater
         Split::Phantom => should_split(mem.deref(&pd.defeated_phantom).unwrap_or_default()),
