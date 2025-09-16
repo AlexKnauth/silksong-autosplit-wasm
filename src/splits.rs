@@ -399,7 +399,10 @@ pub fn continuous_splits(
         // endregion: CogworkCore
 
         // region: WhisperingVaults
-        Split::WhisperingVaultsGauntlet => should_split(mem.deref(&pd.completed_library_entry_battle).unwrap_or_default()),
+        Split::WhisperingVaultsGauntlet => should_split(
+            mem.deref(&pd.completed_library_entry_battle)
+                .unwrap_or_default(),
+        ),
         // endregion: WhisperingValuts
 
         // region: ChoralChambers
