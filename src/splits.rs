@@ -403,7 +403,7 @@ pub fn continuous_splits(
             mem.deref(&pd.completed_library_entry_battle)
                 .unwrap_or_default(),
         ),
-        // endregion: WhisperingValuts
+        // endregion: WhisperingVaults
 
         // region: ChoralChambers
         Split::Trobbio => should_split(mem.deref(&pd.defeated_trobbio).unwrap_or_default()),
