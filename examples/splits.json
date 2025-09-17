@@ -45,14 +45,14 @@
     "tooltip": "Splits when obtaining Silk Spear"
   },
   {
-    "description": "Marrow Bell (Event)",
-    "key": "MarrowBell",
-    "tooltip": "Splits when ringing the Marrow Bell Shrine"
-  },
-  {
     "description": "Bell Beast (Boss)",
     "key": "BellBeast",
     "tooltip": "Splits when defeating the Bell Beast"
+  },
+  {
+    "description": "Marrow Bell (Event)",
+    "key": "MarrowBell",
+    "tooltip": "Splits when ringing the Marrow Bell Shrine"
   },
   {
     "description": "Swift Step (Skill)",
@@ -100,6 +100,11 @@
     "tooltip": "Splits when obtaining Cling Grip (Wall Jump)"
   },
   {
+    "description": "Shellwood Bell (Event)",
+    "key": "ShellwoodBell",
+    "tooltip": "Splits when ringing the Shellwood Bell Shrine"
+  },
+  {
     "description": "Widow (Boss)",
     "key": "Widow",
     "tooltip": "Splits when killing Widow"
@@ -108,11 +113,6 @@
     "description": "Bellhart Bell (Event)",
     "key": "BellhartBell",
     "tooltip": "Splits when ringing the Bellhart Bell Shrine"
-  },
-  {
-    "description": "Shellwood Bell (Event)",
-    "key": "ShellwoodBell",
-    "tooltip": "Splits when ringing the Shellwood Bell Shrine"
   },
   {
     "description": "Last Judge (Boss)",
