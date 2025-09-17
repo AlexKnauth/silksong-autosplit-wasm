@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Run version="1.8.0">
+  <GameIcon />
+  <GameName>Hollow Knight: Silksong</GameName>
+  <CategoryName>Room Timer</CategoryName>
+  <Metadata>
+    <Run id="" />
+    <Platform usesEmulator="False" />
+    <Region />
+    <SpeedrunComVariables />
+    <CustomVariables />
+  </Metadata>
+  <LayoutPath />
+  <Offset>00:00:00.000000000</Offset>
+  <AttemptCount>0</AttemptCount>
+  <AttemptHistory />
+  <Segments>
+    <Segment>
+      <Name>Exit Room</Name>
+      <Icon />
+      <SplitTimes>
+        <SplitTime name="Personal Best" />
+      </SplitTimes>
+      <BestSegmentTime />
+      <SegmentHistory />
+    </Segment>
+  </Segments>
+  <AutoSplitterSettings>
+    <Version>1.0.0.0</Version>
+    <ScriptPath />
+    <CustomSettings>
+      <Setting id="splits" type="list">
+        <Setting type="string" value="AnyTransition" />
+        <Setting type="string" value="AnyTransition" />
+      </Setting>
+      <Setting id="splits_0_item" type="string" value="AnyTransition" />
+      <Setting id="splits_1_item" type="string" value="AnyTransition" />
+      <Setting id="hit_counter" type="bool">True</Setting>
+      <Setting id="splits_insert_0" type="bool">False</Setting>
+      <Setting id="splits_0_action" type="string" value="None" />
+      <Setting id="splits_1_action" type="string" value="None" />
+    </CustomSettings>
+  </AutoSplitterSettings>
+</Run>
