@@ -405,7 +405,7 @@ fn load_removal(state: &mut AutoSplitterState, mem: &Memory, gm: &GameManagerPoi
         || (game_state != GAME_STATE_PLAYING
             && game_state != GAME_STATE_CUTSCENE
             && !accepting_input)
-        || (game_state == GAME_STATE_EXITING_LEVEL || game_state == GAME_STATE_LOADING)
+        || (game_state == GAME_STATE_LOADING)
         || (hero_transition_state == HERO_TRANSITION_STATE_WAITING_TO_ENTER_LEVEL)
         || (ui_state != UI_STATE_PLAYING
             && (loading_menu
@@ -467,7 +467,7 @@ fn load_removal(state: &mut AutoSplitterState, mem: &Memory, gm: &GameManagerPoi
         {
             reasons.push("accepting_input");
         }
-        if game_state == GAME_STATE_EXITING_LEVEL || game_state == GAME_STATE_LOADING {
+        if game_state == GAME_STATE_LOADING {
             reasons.push("game_state");
         }
         if hero_transition_state == HERO_TRANSITION_STATE_WAITING_TO_ENTER_LEVEL {
