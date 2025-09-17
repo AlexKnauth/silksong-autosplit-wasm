@@ -242,9 +242,6 @@ pub fn transition_splits(
 ) -> SplitterAction {
     match split {
         // region: Start, End, and Menu
-        Split::StartNewGame => {
-            should_split(OPENING_SCENES.contains(&scenes.old) && scenes.current == "Tut_01")
-        }
         Split::EndingSplit => should_split(scenes.current.starts_with("Cinematic_Ending")),
         Split::EndingA => should_split(scenes.current == "Cinematic_Ending_A"),
         Split::Menu => should_split(scenes.current == MENU_TITLE),
@@ -277,6 +274,24 @@ pub fn transition_splits(
             should_split(scenes.old == "Hang_06" && scenes.current == "Hang_04")
         }
         // region: HighHalls
+
+        // else
+        _ => should_split(false),
+    }
+}
+
+pub fn transition_once_splits(
+    split: &Split,
+    scenes: &Pair<&str>,
+    _mem: &Memory,
+    _gm: &GameManagerPointers,
+    _pd: &PlayerDataPointers,
+) -> SplitterAction {
+    match split {
+        // region: Start, End, and Menu
+        Split::StartNewGame => {
+            should_split(OPENING_SCENES.contains(&scenes.old) && scenes.current == "Tut_01")
+        }
 
         // else
         _ => should_split(false),
@@ -408,11 +423,18 @@ pub fn splits(
 ) -> SplitterAction {
     let a1 = continuous_splits(split, mem, gm, pd).or_else(|| {
         let scenes = ss.pair();
-        if trans_now {
-            transition_splits(split, &scenes, mem, gm, pd)
+        let a2 = if !ss.split_this_transition {
+            transition_once_splits(split, &scenes, mem, gm, pd)
         } else {
             SplitterAction::Pass
-        }
+        };
+        a2.or_else(|| {
+            if trans_now {
+                transition_splits(split, &scenes, mem, gm, pd)
+            } else {
+                SplitterAction::Pass
+            }
+        })
     });
     if a1 != SplitterAction::Pass {
         ss.split_this_transition = true;
