@@ -181,7 +181,8 @@ impl Settings {
         self.splits.get_list().into_iter().cloned().collect()
     }
     pub fn get_split(&self, i: u64) -> Option<splits::Split> {
-        self.splits.get_list().get(i as usize).cloned().cloned()
+        let splits = self.splits.get_list();
+        splits.get(i as usize).or_else(|| splits.last()).cloned().cloned()
     }
 
     pub fn default_init_register() -> Settings {
