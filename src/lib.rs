@@ -249,6 +249,9 @@ async fn main() {
                 let _: bool = mem.deref(&gm.hazard_respawning).unwrap_or_default();
                 let _: bool = mem.deref(&gm.hero_recoil_frozen).unwrap_or_default();
                 let _: i32 = mem.deref(&gm.hero_transition_state).unwrap_or_default();
+                let _: bool = mem
+                    .deref(&gm.scene_load_activation_allowed)
+                    .unwrap_or_default();
                 let _: Address64 = mem.deref(&gm.next_scene_name).unwrap_or_default();
                 let _: Address64 = mem.deref(&gm.scene_name).unwrap_or_default();
                 let _: i32 = mem.deref(&gm.ui_state_vanilla).unwrap_or_default();
@@ -388,6 +391,9 @@ fn load_removal(state: &mut AutoSplitterState, mem: &Memory, gm: &GameManagerPoi
     // TODO: hazard_respawning
     let accepting_input: bool = mem.deref(&gm.accepting_input).unwrap_or_default();
     let hero_transition_state: i32 = mem.deref(&gm.hero_transition_state).unwrap_or_default();
+    let scene_load_activation_allowed: bool = mem
+        .deref(&gm.scene_load_activation_allowed)
+        .unwrap_or_default();
     // TODO: tile_map_dirty, uses_scene_transition_routine
 
     let is_game_time_paused = (state.look_for_teleporting)
@@ -396,7 +402,8 @@ fn load_removal(state: &mut AutoSplitterState, mem: &Memory, gm: &GameManagerPoi
         || (game_state != GAME_STATE_PLAYING
             && game_state != GAME_STATE_CUTSCENE
             && !accepting_input)
-        || (game_state == GAME_STATE_EXITING_LEVEL || game_state == GAME_STATE_LOADING)
+        || ((game_state == GAME_STATE_EXITING_LEVEL && scene_load_activation_allowed)
+            || game_state == GAME_STATE_LOADING)
         || (hero_transition_state == HERO_TRANSITION_STATE_WAITING_TO_ENTER_LEVEL)
         || (ui_state != UI_STATE_PLAYING
             && (loading_menu

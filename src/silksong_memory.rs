@@ -178,6 +178,11 @@ declare_pointers!(GameManagerPointers {
         0,
         &["_instance", "<hero_ctrl>k__BackingField", "transitionState"],
     ),
+    scene_load_activation_allowed: UnityPointer<3> = UnityPointer::new(
+        "GameManager",
+        0,
+        &["_instance", "sceneLoad", "<IsActivationAllowed>k__BackingField"],
+    ),
 });
 
 declare_pointers!(PlayerDataPointers {
@@ -345,7 +350,12 @@ impl SceneStore {
 
     pub fn transition_now(&mut self, mem: &Memory, gm: &GameManagerPointers) -> bool {
         self.new_curr_scene_name(mem.read_string(&gm.scene_name).unwrap_or_default());
-        self.new_next_scene_name(mem.read_string(&gm.next_scene_name).unwrap_or_default());
+        if mem
+            .deref(&gm.scene_load_activation_allowed)
+            .unwrap_or_default()
+        {
+            self.new_next_scene_name(mem.read_string(&gm.next_scene_name).unwrap_or_default());
+        }
 
         if self.new_data_next {
             self.new_data_curr = false;
