@@ -51,7 +51,6 @@ pub enum Split {
     /// Moss Mother (Boss)
     ///
     /// Splits when killing Moss Mother
-
     MossMother,
     /// Moss Mother (Transition)
     ///
@@ -337,12 +336,16 @@ pub fn transition_splits(
         // endregion: Start, End, and Menu
 
         // region: MossLands
-        Split::MossMotherTrans => should_split(mem.deref(&pd.defeated_moss_mother).unwrap_or_default()),
+        Split::MossMotherTrans => {
+            should_split(mem.deref(&pd.defeated_moss_mother).unwrap_or_default())
+        }
         Split::SilkSpearTrans => should_split(mem.deref(&pd.has_needle_throw).unwrap_or_default()),
         // endregion: MossLands
 
         // region: Marrow
-        Split::BellBeastTrans => should_split(mem.deref(&pd.defeated_bell_beast).unwrap_or_default()),
+        Split::BellBeastTrans => {
+            should_split(mem.deref(&pd.defeated_bell_beast).unwrap_or_default())
+        }
         // endregion: Marrow
 
         // region: DeepDocks
@@ -353,7 +356,6 @@ pub fn transition_splits(
         // region: FarFields
         Split::DriftersCloakTrans => should_split(mem.deref(&pd.has_brolly).unwrap_or_default()),
         // endregion: FarFields
-
 
         // region: Greymoor
         Split::EnterGreymoor => should_split(
