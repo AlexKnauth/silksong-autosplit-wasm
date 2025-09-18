@@ -40,14 +40,29 @@
     "tooltip": "Splits when killing Moss Mother"
   },
   {
+    "description": "Moss Mother (Transition)",
+    "key": "MossMotherTrans",
+    "tooltip": "Splits on the transition after killing Moss Mother"
+  },
+  {
     "description": "Silk Spear (Skill)",
     "key": "SilkSpear",
     "tooltip": "Splits when obtaining Silk Spear"
   },
   {
+    "description": "Silk Spear (Transition)",
+    "key": "SilkSpearTrans",
+    "tooltip": "Splits on the transition after obtaining Silk Spear"
+  },
+  {
     "description": "Bell Beast (Boss)",
     "key": "BellBeast",
     "tooltip": "Splits when defeating the Bell Beast"
+  },
+  {
+    "description": "Bell Beast (Transition)",
+    "key": "BellBeastTrans",
+    "tooltip": "Splits on the transition after defeating the Bell Beast"
   },
   {
     "description": "Marrow Bell (Event)",
@@ -60,9 +75,19 @@
     "tooltip": "Splits when obtaining Swift Step (Dash/Sprint)"
   },
   {
+    "description": "Swift Step (Transition)",
+    "key": "SwiftStepTrans",
+    "tooltip": "Splits on the transition after obtaining Swift Step (Dash/Sprint)"
+  },
+  {
     "description": "Lace 1 (Boss)",
     "key": "Lace1",
     "tooltip": "Splits when defeating Lace 1 in DeepDocks"
+  },
+  {
+    "description": "Lace 1 (Transition)",
+    "key": "Lace1Trans",
+    "tooltip": "Splits on the transition after defeating Lace 1 in DeepDocks"
   },
   {
     "description": "Deep Docks Bell (Event)",
@@ -73,6 +98,11 @@
     "description": "Drifter's Cloak (Skill)",
     "key": "DriftersCloak",
     "tooltip": "Splits when obtaining Drifter's Cloak (Umbrella/Float)"
+  },
+  {
+    "description": "Drifter's Cloak (Transition)",
+    "key": "DriftersCloakTrans",
+    "tooltip": "Splits on the transition after obtaining Drifter's Cloak (Umbrella/Float)"
   },
   {
     "description": "Fourth Chorus (Boss)",
@@ -95,9 +125,19 @@
     "tooltip": "Splits when killing Moorwing"
   },
   {
+    "description": "Moorwing (Transition)",
+    "key": "MoorwingTrans",
+    "tooltip": "Splits on the transition after killing Moorwing"
+  },
+  {
     "description": "Cling Grip (Skill)",
     "key": "ClingGrip",
     "tooltip": "Splits when obtaining Cling Grip (Wall Jump)"
+  },
+  {
+    "description": "Cling Grip (Transition)",
+    "key": "ClingGripTrans",
+    "tooltip": "Splits on the transition after obtaining Cling Grip (Wall Jump)"
   },
   {
     "description": "Shellwood Bell (Event)",
@@ -155,6 +195,11 @@
     "tooltip": "Splits when killing Trobbio"
   },
   {
+    "description": "Trobbio (Transition)",
+    "key": "TrobbioTrans",
+    "tooltip": "Splits on the transition after killing Trobbio"
+  },
+  {
     "description": "Clawline (Skill)",
     "key": "Clawline",
     "tooltip": "Splits when obtaining Clawline (Harpoon Dash)"
@@ -185,14 +230,29 @@
     "tooltip": "Splits when learning Vaultkeepers Melody"
   },
   {
+    "description": "Vaultkeepers Melody (Transition)",
+    "key": "VaultkeepersMelodyTrans",
+    "tooltip": "Splits on the transition after learning Vaultkeepers Melody"
+  },
+  {
     "description": "Architects Melody (Melody)",
     "key": "ArchitectsMelody",
     "tooltip": "Splits when learning Architects Melody"
   },
   {
+    "description": "Architects Melody (Transition)",
+    "key": "ArchitectsMelodyTrans",
+    "tooltip": "Splits on the transition after learning Architects Melody"
+  },
+  {
     "description": "Conductors Melody (Melody)",
     "key": "ConductorsMelody",
     "tooltip": "Splits when learning Conductors Melody"
+  },
+  {
+    "description": "Conductors Melody (Transition)",
+    "key": "ConductorsMelodyTrans",
+    "tooltip": "Splits on the transition after learning Conductors Melody"
   },
   {
     "description": "Unlock Threefold Melody Lift (Event)",

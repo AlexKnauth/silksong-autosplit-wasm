@@ -51,11 +51,20 @@ pub enum Split {
     /// Moss Mother (Boss)
     ///
     /// Splits when killing Moss Mother
+
     MossMother,
+    /// Moss Mother (Transition)
+    ///
+    /// Splits on the transition after killing Moss Mother
+    MossMotherTrans,
     /// Silk Spear (Skill)
     ///
     /// Splits when obtaining Silk Spear
     SilkSpear,
+    /// Silk Spear (Transition)
+    ///
+    /// Splits on the transition after obtaining Silk Spear
+    SilkSpearTrans,
     // endregion: MossLands
 
     // region: Marrow
@@ -63,6 +72,10 @@ pub enum Split {
     ///
     /// Splits when defeating the Bell Beast
     BellBeast,
+    /// Bell Beast (Transition)
+    ///
+    /// Splits on the transition after defeating the Bell Beast
+    BellBeastTrans,
     /// Marrow Bell (Event)
     ///
     /// Splits when ringing the Marrow Bell Shrine
@@ -74,10 +87,18 @@ pub enum Split {
     ///
     /// Splits when obtaining Swift Step (Dash/Sprint)
     SwiftStep,
+    /// Swift Step (Transition)
+    ///
+    /// Splits on the transition after obtaining Swift Step (Dash/Sprint)
+    SwiftStepTrans,
     /// Lace 1 (Boss)
     ///
     /// Splits when defeating Lace 1 in DeepDocks
     Lace1,
+    /// Lace 1 (Transition)
+    ///
+    /// Splits on the transition after defeating Lace 1 in DeepDocks
+    Lace1Trans,
     /// Deep Docks Bell (Event)
     ///
     /// Splits when ringing the Deep Docks Bell Shrine
@@ -89,6 +110,10 @@ pub enum Split {
     ///
     /// Splits when obtaining Drifter's Cloak (Umbrella/Float)
     DriftersCloak,
+    /// Drifter's Cloak (Transition)
+    ///
+    /// Splits on the transition after obtaining Drifter's Cloak (Umbrella/Float)
+    DriftersCloakTrans,
     /// Fourth Chorus (Boss)
     ///
     /// Splits when killing Fourth Chorus
@@ -108,6 +133,10 @@ pub enum Split {
     ///
     /// Splits when killing Moorwing
     Moorwing,
+    /// Moorwing (Transition)
+    ///
+    /// Splits on the transition after killing Moorwing
+    MoorwingTrans,
     // endregion: Greymoor
 
     // region: Shellwood
@@ -115,6 +144,10 @@ pub enum Split {
     ///
     /// Splits when obtaining Cling Grip (Wall Jump)
     ClingGrip,
+    /// Cling Grip (Transition)
+    ///
+    /// Splits on the transition after obtaining Cling Grip (Wall Jump)
+    ClingGripTrans,
     /// Shellwood Bell (Event)
     ///
     /// Splits when ringing the Shellwood Bell Shrine
@@ -183,6 +216,10 @@ pub enum Split {
     ///
     /// Splits when killing Trobbio
     Trobbio,
+    /// Trobbio (Transition)
+    ///
+    /// Splits on the transition after killing Trobbio
+    TrobbioTrans,
     // endregion: ChoralChambers
 
     // region: Underworks
@@ -219,14 +256,26 @@ pub enum Split {
     ///
     /// Splits when learning Vaultkeepers Melody
     VaultkeepersMelody,
+    /// Vaultkeepers Melody (Transition)
+    ///
+    /// Splits on the transition after learning Vaultkeepers Melody
+    VaultkeepersMelodyTrans,
     /// Architects Melody (Melody)
     ///
     /// Splits when learning Architects Melody
     ArchitectsMelody,
+    /// Architects Melody (Transition)
+    ///
+    /// Splits on the transition after learning Architects Melody
+    ArchitectsMelodyTrans,
     /// Conductors Melody (Melody)
     ///
     /// Splits when learning Conductors Melody
     ConductorsMelody,
+    /// Conductors Melody (Transition)
+    ///
+    /// Splits on the transition after learning Conductors Melody
+    ConductorsMelodyTrans,
     /// Unlock Threefold Melody Lift (Event)
     ///
     /// Splits when unlocking the Threefold Melody Lift
@@ -270,9 +319,9 @@ impl StoreWidget for Split {
 pub fn transition_splits(
     split: &Split,
     scenes: &Pair<&str>,
-    _mem: &Memory,
+    mem: &Memory,
     _gm: &GameManagerPointers,
-    _pd: &PlayerDataPointers,
+    pd: &PlayerDataPointers,
 ) -> SplitterAction {
     match split {
         // region: Start, End, and Menu
@@ -287,11 +336,38 @@ pub fn transition_splits(
         ),
         // endregion: Start, End, and Menu
 
+        // region: MossLands
+        Split::MossMotherTrans => should_split(mem.deref(&pd.defeated_moss_mother).unwrap_or_default()),
+        Split::SilkSpearTrans => should_split(mem.deref(&pd.has_needle_throw).unwrap_or_default()),
+        // endregion: MossLands
+
+        // region: Marrow
+        Split::BellBeastTrans => should_split(mem.deref(&pd.defeated_bell_beast).unwrap_or_default()),
+        // endregion: Marrow
+
+        // region: DeepDocks
+        Split::SwiftStepTrans => should_split(mem.deref(&pd.has_dash).unwrap_or_default()),
+        Split::Lace1Trans => should_split(mem.deref(&pd.defeated_lace1).unwrap_or_default()),
+        // endregion: DeepDocks
+
+        // region: FarFields
+        Split::DriftersCloakTrans => should_split(mem.deref(&pd.has_brolly).unwrap_or_default()),
+        // endregion: FarFields
+
+
         // region: Greymoor
         Split::EnterGreymoor => should_split(
             !scenes.old.starts_with("Greymoor") && scenes.current.starts_with("Greymoor"),
         ),
-        // region: Greymoor
+        Split::MoorwingTrans => should_split(
+            mem.deref(&pd.defeated_vampire_gnat_boss)
+                .unwrap_or_default(),
+        ),
+        // endregion: Greymoor
+
+        // region: Shellwood
+        Split::ClingGripTrans => should_split(mem.deref(&pd.has_wall_jump).unwrap_or_default()),
+        // endregion: Shellwood
 
         // region: TheMist
         Split::EnterMist => should_split(
@@ -301,7 +377,11 @@ pub fn transition_splits(
         Split::LeaveMist => {
             should_split(scenes.old == "Dust_Maze_Last_Hall" && scenes.current == "Dust_09")
         }
-        // region: TheMist
+        // endregion: TheMist
+
+        // region: ChoralChambers
+        Split::TrobbioTrans => should_split(mem.deref(&pd.defeated_trobbio).unwrap_or_default()),
+        //endregion: ChoralChambers
 
         // region: HighHalls
         Split::EnterHighHalls => {
@@ -310,7 +390,19 @@ pub fn transition_splits(
         Split::EnterHighHallsGauntlet => {
             should_split(scenes.old == "Hang_06" && scenes.current == "Hang_04")
         }
-        // region: HighHalls
+        // endregion: HighHalls
+
+        // region: ThreefoldMelody
+        Split::VaultkeepersMelodyTrans => {
+            should_split(mem.deref(&pd.has_melody_librarian).unwrap_or_default())
+        }
+        Split::ArchitectsMelodyTrans => {
+            should_split(mem.deref(&pd.has_melody_architect).unwrap_or_default())
+        }
+        Split::ConductorsMelodyTrans => {
+            should_split(mem.deref(&pd.has_melody_conductor).unwrap_or_default())
+        }
+        // endregion: ThreefoldMelody
 
         // else
         _ => should_split(false),
@@ -434,7 +526,7 @@ pub fn continuous_splits(
         Split::UnlockedMelodyLift => {
             should_split(mem.deref(&pd.unlocked_melody_lift).unwrap_or_default())
         }
-        //endregion: ThreefoldMelody
+        // endregion: ThreefoldMelody
 
         // region: NeedleUpgrade
         Split::NeedleUpgrade1 => {
