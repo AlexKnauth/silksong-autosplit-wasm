@@ -137,7 +137,8 @@ impl AutoSplitterState {
             }
             TimerState::Running if is_timer_state_between_runs(self.timer_state) => {
                 // Start
-                self.segment_hits.resize(new_index.unwrap_or_default() as usize + 1, 0);
+                self.segment_hits
+                    .resize(new_index.unwrap_or_default() as usize + 1, 0);
             }
             TimerState::Paused if self.timer_state == TimerState::Running => {
                 // Pause
@@ -153,6 +154,18 @@ impl AutoSplitterState {
                 #[cfg(not(feature = "unstable"))]
                 {
                     self.split_index = Some(self.split_index.unwrap_or_default() + 1);
+                }
+                #[cfg(feature = "unstable")]
+                {
+                    self.split_index = new_index;
+                }
+                if let Some(index) = self.split_index {
+                    let i = index as usize;
+                    self.cumulative_hits.resize(i, self.hits);
+                    let cmp_len = self.comparison_hits.len();
+                    if i < cmp_len {
+                        self.comparison_hits.drain(0..(cmp_len - i));
+                    }
                 }
             }
             _ => {
@@ -484,6 +497,7 @@ async fn handle_splits(
                         state.split_index = Some(old_index + 1);
                         state.segments_splitted.push(true);
                         state.segment_hits.push(0);
+                        state.cumulative_hits.resize(new_i, state.hits);
                         asr::timer::set_variable_int("segment hits", state.segment_hits[new_i]);
                         if let Some(c) = state.comparison_hits.get(new_i) {
                             asr::timer::set_variable_int("comparison hits", *c);
