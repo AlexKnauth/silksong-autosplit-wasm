@@ -660,6 +660,15 @@ fn handle_hits(
 fn add_hit(state: &mut AutoSplitterState) {
     state.hits += 1;
     asr::timer::set_variable_int("hits", state.hits);
+    let i = state.split_index.unwrap_or_default() as usize;
+    state.segment_hits.resize(i + 1, 0);
+    state.segment_hits[i] += 1;
+    asr::timer::set_variable_int("segment hits", state.segment_hits[i]);
+    if let Some(c) = state.comparison_hits.get(i) {
+        asr::timer::set_variable_int("delta hits", state.hits - c);
+    } else {
+        asr::timer::set_variable("delta hits", DASH);
+    }
 }
 
 // --------------------------------------------------------
