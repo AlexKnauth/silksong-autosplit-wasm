@@ -137,6 +137,7 @@ impl AutoSplitterState {
             }
             TimerState::Running if is_timer_state_between_runs(self.timer_state) => {
                 // Start
+                self.segment_hits.resize(new_index.unwrap_or_default() as usize + 1, 0);
             }
             TimerState::Paused if self.timer_state == TimerState::Running => {
                 // Pause
@@ -422,6 +423,7 @@ async fn handle_splits(
                         asr::timer::start();
                         state.timer_state = TimerState::Running;
                         state.split_index = Some(0);
+                        state.segment_hits.resize(1, 0);
                         break;
                     }
                     _ => break,
