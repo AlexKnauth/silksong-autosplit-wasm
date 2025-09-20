@@ -2454,6 +2454,42 @@
 			methods
 			base class
 
+		1f185af3908 : ToolItemsData
+			static fields
+			fields
+			methods
+				1f1bdacae30 : .ctor ():System.Void
+			base class
+				1f1843e5560 : SerializableNamedList`2[ToolItemsData+Data,ToolItemsData+NamedData]
+					static fields
+					fields
+						10 : savedData (type: System.Collections.Generic.List<ToolItemsData.NamedData>)
+						18 : RuntimeData (type: System.Collections.Generic.Dictionary<System.String,ToolItemsData.Data>)
+					methods
+					base class
+		1f185af3a18 : ToolItemsData+Data
+			static fields
+			fields
+				10 : IsUnlocked (type: System.Boolean)
+				11 : IsHidden (type: System.Boolean)
+				12 : HasBeenSeen (type: System.Boolean)
+				13 : HasBeenSelected (type: System.Boolean)
+				14 : AmountLeft (type: System.Int32)
+			methods
+			base class
+		1f185af3c40 : ToolItemsData+NamedData
+			static fields
+			fields
+			methods
+			base class
+				1f1843e5420 : SerializableNamedData`1[ToolItemsData+Data]
+					static fields
+					fields
+						10 : Name (type: System.String)
+						18 : Data (type: ToolItemsData.Data)
+					methods
+					base class
+
 		2ac96d7bdb8 : UIManager
 			static fields
 				0 : _showProp (type: System.Int32)
@@ -2571,5 +2607,147 @@
 				319 : initBlackThreadComponents (type: System.Boolean)
 				31a : registeredSaveStoreChangedEvent (type: System.Boolean)
 				2e0 : lastSelectionBeforeFocusLoss (type: UnityEngine.GameObject)
+			methods
+			base class
+
+		1f185cbf810 : GlobalSettings.Gameplay
+			static fields
+			fields
+				298 : toolReplenishCost (type: System.Int32)
+				29c : toolPouchUpgradeIncrease (type: System.Single)
+				2a0 : toolKitDamageIncrease (type: System.Single)
+				2a4 : toolCameraDistanceBreak (type: System.Single)
+				18 : currencyCaps (type: System.Int32[])
+				2a8 : consumableItemCap (type: System.Int32)
+				20 : smallGeoValue (type: CostReference)
+				28 : mediumGeoValue (type: CostReference)
+				30 : largeGeoValue (type: CostReference)
+				38 : smallGeoPrefab (type: UnityEngine.GameObject)
+				40 : mediumGeoPrefab (type: UnityEngine.GameObject)
+				48 : largeGeoPrefab (type: UnityEngine.GameObject)
+				50 : largeSmoothGeoPrefab (type: UnityEngine.GameObject)
+				58 : shellShardPrefabs (type: System.Collections.Generic.List<UnityEngine.GameObject>)
+				60 : shellShardMidPrefab (type: UnityEngine.GameObject)
+				68 : maxCurrencyObjects (type: System.Int32[])
+				70 : collectableItemPickupPrefab (type: CollectableItemPickup)
+				78 : collectableItemPickupInstantPrefab (type: CollectableItemPickup)
+				80 : genericPickupPrefab (type: GenericPickup)
+				88 : collectableItemPickupMeatPrefab (type: CollectableItemPickup)
+				90 : reaperBundlePrefab (type: UnityEngine.GameObject)
+				98 : hornetMultiWounderFsmTemplate (type: FsmTemplate)
+				a0 : mementoList (type: CollectableItemMementoList)
+				a8 : hunterCrest (type: ToolCrest)
+				b0 : hunterCrest2 (type: ToolCrest)
+				2ac : hunterComboHits (type: System.Int32)
+				2b0 : hunterComboDamageMult (type: System.Single)
+				b8 : hunterCrest3 (type: ToolCrest)
+				2b4 : hunterCombo2Hits (type: System.Int32)
+				2b8 : hunterCombo2DamageMult (type: System.Single)
+				c0 : hunterComboDamageEffect (type: UnityEngine.GameObject)
+				2bc : hunterCombo2ExtraHits (type: System.Int32)
+				2c0 : hunterCombo2ExtraDamageMult (type: System.Single)
+				2c4 : hunterCombo2DamageExtraScale (type: UnityEngine.Vector2)
+				c8 : warriorCrest (type: ToolCrest)
+				2cc : warriorRageDuration (type: System.Single)
+				d0 : warriorRageHitAddTimePerHit (type: System.Single[])
+				2d0 : warriorDamageMultiplier (type: System.Single)
+				2d4 : warriorRageDamagedRemoveTime (type: System.Single)
+				d8 : reaperCrest (type: ToolCrest)
+				2d8 : reaperModeDuration (type: System.Single)
+				e0 : wandererCrest (type: ToolCrest)
+				2dc : wandererCritChance (type: System.Single)
+				2e0 : wandererCritMultiplier (type: System.Single)
+				2e4 : wandererCritMagnitudeMult (type: System.Single)
+				e8 : wandererCritEffect (type: UnityEngine.GameObject)
+				f0 : cursedCrest (type: ToolCrest)
+				f8 : witchCrest (type: ToolCrest)
+				2e8 : witchCrestRecoilSteps (type: System.Int32)
+				100 : toolmasterCrest (type: ToolCrest)
+				2ec : toolmasterQuickCraftNoneUsage (type: System.Int32)
+				108 : spellCrest (type: ToolCrest)
+				2f0 : spellCrestRuneDamageMult (type: System.Single)
+				110 : cloaklessCrest (type: ToolCrest)
+				118 : defaultSkillTool (type: ToolItem)
+				120 : luckyDiceTool (type: ToolItem)
+				128 : barbedWireTool (type: ToolItem)
+				2f4 : barbedWireDamageDealtMultiplier (type: System.Single)
+				2f8 : barbedWireDamageTakenMultiplier (type: System.Single)
+				130 : weightedAnkletTool (type: ToolItem)
+				2fc : weightedAnkletDmgKnockbackMult (type: System.Single)
+				300 : weightedAnkletDmgInvulnMult (type: System.Single)
+				304 : weightedAnkletRecoilSteps (type: System.Int32)
+				138 : boneNecklaceTool (type: ToolItem)
+				308 : boneNecklaceShellshardIncrease (type: System.Single)
+				140 : longNeedleTool (type: ToolItem)
+				30c : longNeedleMultiplier (type: UnityEngine.Vector2)
+				148 : deadPurseTool (type: ToolItem)
+				314 : deadPurseHoldPercent (type: System.Single)
+				150 : shellSatchelTool (type: ToolItem)
+				318 : shellSatchelToolIncrease (type: System.Single)
+				158 : spoolExtenderTool (type: ToolItem)
+				31c : spoolExtenderSilk (type: System.Int32)
+				160 : whiteRingTool (type: ToolItem)
+				320 : whiteRingSilkRegenTimeMultiplier (type: System.Single)
+				324 : whiteRingSilkRegenIncrease (type: System.Int32)
+				168 : lavaBellTool (type: ToolItem)
+				328 : lavaBellCooldownTime (type: System.Single)
+				170 : thiefCharmTool (type: ToolItem)
+				32c : thiefCharmGeoSmallIncrease (type: System.Single)
+				330 : thiefCharmGeoMedIncrease (type: System.Single)
+				334 : thiefCharmGeoLargeIncrease (type: System.Single)
+				338 : thiefCharmGeoLoss (type: TeamCherry.SharedUtils.MinMaxFloat)
+				340 : thiefCharmGeoLossCap (type: TeamCherry.SharedUtils.MinMaxInt)
+				348 : thiefCharmGeoLossLooseChance (type: System.Single)
+				34c : thiefCharmGeoLossLooseAmount (type: TeamCherry.SharedUtils.MinMaxInt)
+				178 : thiefCharmHeroHitPrefab (type: UnityEngine.GameObject)
+				180 : thiefCharmEnemyDeathAudio (type: AudioEvent)
+				1a0 : thiefPickTool (type: ToolItem)
+				354 : thiefPickGeoSteal (type: TeamCherry.SharedUtils.MinMaxFloat)
+				35c : thiefPickGeoStealMin (type: TeamCherry.SharedUtils.MinMaxInt)
+				364 : thiefPickShardSteal (type: TeamCherry.SharedUtils.MinMaxInt)
+				1a8 : thiefSnatchEffectPrefab (type: ThiefSnatchEffect)
+				36c : thiefPickLooseChance (type: System.Single)
+				370 : thiefPickGeoLoose (type: TeamCherry.SharedUtils.MinMaxInt)
+				378 : thiefPickShardLoose (type: TeamCherry.SharedUtils.MinMaxInt)
+				1b0 : maggotCharm (type: ToolItem)
+				380 : maggotCharmHealthLossTime (type: System.Single)
+				384 : maggotCharmEnterWaterAddTime (type: System.Single)
+				1b8 : maggotCharmHitSinglePrefab (type: UnityEngine.GameObject)
+				1c0 : poisonPouchTool (type: ToolItem)
+				1c8 : poisonPouchDamageTag (type: DamageTag)
+				388 : poisonPouchTintColour (type: UnityEngine.Color)
+				398 : poisonPouchHeroTintColour (type: UnityEngine.Color)
+				1d0 : zapImbuementTool (type: ToolItem)
+				1d8 : zapDamageTag (type: DamageTag)
+				3a8 : zapDamageTintColour (type: UnityEngine.Color)
+				3b8 : zapDamageMult (type: System.Single)
+				1e0 : musicianCharmTool (type: ToolItem)
+				3bc : musicianCharmSilkDrainTimeMult (type: System.Single)
+				3c0 : musicianCharmNeedolinRangeMult (type: System.Single)
+				3c4 : musicianCharmFovOffset (type: System.Single)
+				3c8 : musicianCharmFovStartDuration (type: System.Single)
+				1e8 : musicianCharmFovStartCurve (type: UnityEngine.AnimationCurve)
+				3cc : musicianCharmFovEndDuration (type: System.Single)
+				1f0 : musicianCharmFovEndCurve (type: UnityEngine.AnimationCurve)
+				1f8 : scuttleCharmTool (type: ToolItem)
+				200 : scuttleEvadeEffect (type: UnityEngine.GameObject)
+				208 : brollySpikeTool (type: ToolItem)
+				210 : brollySpikeObject_dj (type: UnityEngine.GameObject)
+				218 : compassTool (type: ToolItem)
+				220 : mossCreep1Tool (type: ToolItem)
+				228 : mossCreep2Tool (type: ToolItem)
+				230 : fracturedMaskTool (type: ToolItem)
+				238 : curveclawTool (type: ToolItem)
+				240 : curveclawUpgradedTool (type: ToolItem)
+				248 : sprintmasterTool (type: ToolItem)
+				250 : multibindTool (type: ToolItem)
+				258 : quickSlingTool (type: ToolItem)
+				260 : wallClingTool (type: ToolItem)
+				268 : wispLanternTool (type: ToolItem)
+				270 : fleaCharmTool (type: ToolItem)
+				278 : huntressQuest (type: FullQuestBase)
+				280 : mapperStock (type: ShopItemList)
+				288 : fleasCollectedCounter (type: QuestTargetPlayerDataBools)
+				290 : enclaveQuestBoard (type: QuestBoardList)
 			methods
 			base class
