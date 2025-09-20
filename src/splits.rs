@@ -7,7 +7,7 @@ use ugly_widget::{
 
 use crate::{
     silksong_memory::{
-        is_menu, GameManagerPointers, Memory, PlayerDataPointers, SceneStore, MENU_TITLE,
+        is_menu, GameManagerPointers, Memory, PlayerDataPointers, GameplayPointers, SceneStore, MENU_TITLE,
         NON_MENU_GAME_STATES, OPENING_SCENES,
     },
     timer::{should_split, SplitterAction},
@@ -299,6 +299,318 @@ pub enum Split {
     /// Splits when upgrading to Pale Steel Needle
     NeedleUpgrade4,
     // endregion: NeedleUpgrade
+
+    // region: FleaSpecific
+    /// Rescued Flea Hunter's March (Flea)
+    ///
+    /// Splits after rescuing flea in Ant_03
+    SavedFleaAnt03,
+    /// Rescued Flea Bellhart (Flea)
+    ///
+    /// Splits after rescuing flea in Belltown_04
+    SavedFleaBelltown04,
+    /// Rescued Flea Marrow (Flea)
+    ///
+    /// Splits after rescuing flea in Bone_06
+    SavedFleaBone06,
+    /// Rescued Flea Deep Docks Sprint (Flea)
+    ///
+    /// Splits after rescuing flea in Bone_East_05
+    SavedFleaBoneEast05,
+    /// Rescued Flea Far Fields Pilgrim's Rest (Flea)
+    ///
+    /// Splits after rescuing flea in Bone_East_10_Church
+    SavedFleaBoneEast10Church,
+    /// Rescued Flea Far Fields Trap (Flea)
+    ///
+    /// Splits after rescuing flea in Bone_East_17b
+    SavedFleaBoneEast17b,
+    /// Rescued Flea Sands of Karak (Flea)
+    ///
+    /// Splits after rescuing flea in Coral_24
+    SavedFleaCoral24,
+    /// Rescued Flea Blasted Steps (Flea)
+    ///
+    /// Splits after rescuing flea in Coral_35
+    SavedFleaCoral35,
+    /// Rescued Flea Wormways (Flea)
+    ///
+    /// Splits after rescuing flea in Crawl_06
+    SavedFleaCrawl06,
+    /// Rescued Flea Deep Docks Arena (Flea)
+    ///
+    /// Splits after rescuing flea in Dock_03d
+    SavedFleaDock03d,
+    /// Rescued Flea Deep Docks Bellway (Flea)
+    ///
+    /// Splits after rescuing flea in Dock_16
+    SavedFleaDock16,
+    /// Rescued Flea Bilewater Organ (Flea)
+    ///
+    /// Splits after rescuing flea in Dust_09
+    SavedFleaDust09,
+    /// Rescued Flea Sinner's Road (Flea)
+    ///
+    /// Splits after rescuing flea in Dust_12
+    SavedFleaDust12,
+    /// Rescued Flea Greymoor Roof (Flea)
+    ///
+    /// Splits after rescuing flea in Greymoor_06
+    SavedFleaGreymoor06,
+    /// Rescued Flea Greymoor Lake (Flea)
+    ///
+    /// Splits after rescuing flea in Greymoor_15b
+    SavedFleaGreymoor15b,
+    /// Rescued Flea Whispering Vaults (Flea)
+    ///
+    /// Splits after rescuing flea in Library_01
+    SavedFleaLibrary01,
+    /// Rescued Flea Songclave (Flea)
+    ///
+    /// Splits after rescuing flea in Library_09
+    SavedFleaLibrary09,
+    /// Rescued Flea Mount Fay (Flea)
+    ///
+    /// Splits after rescuing flea in Peak_05c
+    SavedFleaPeak05c,
+    /// Rescued Flea Bilewater Trap (Flea)
+    ///
+    /// Splits after rescuing flea in Shadow_10
+    SavedFleaShadow10,
+    /// Rescued Flea Bilewater Thieves (Flea)
+    ///
+    /// Splits after rescuing flea in Shadow_28
+    SavedFleaShadow28,
+    /// Rescued Flea Shellwood (Flea)
+    ///
+    /// Splits after rescuing flea in Shellwood_03
+    SavedFleaShellwood03,
+    /// Rescued Flea Slab Bellway (Flea)
+    ///
+    /// Splits after rescuing flea in Slab_06
+    SavedFleaSlab06,
+    /// Rescued Flea Slab Cage (Flea)
+    ///
+    /// Splits after rescuing flea in Slab_Cell
+    SavedFleaSlabCell,
+    /// Rescued Flea Choral Chambers Wind (Flea)
+    ///
+    /// Splits after rescuing flea in Song_11
+    SavedFleaSong11,
+    /// Rescued Flea Choral Chambers Cage (Flea)
+    ///
+    /// Splits after rescuing flea in Song_14
+    SavedFleaSong14,
+    /// Rescued Flea Underworks Explosions (Flea)
+    ///
+    /// Splits after rescuing flea in Under_21
+    SavedFleaUnder21,
+    /// Rescued Flea Underworks Wisp Thicket (Flea)
+    ///
+    /// Splits after rescuing flea in Under_23
+    SavedFleaUnder23,
+    /// Defeated Giant Flea (Flea)
+    ///
+    /// Splits after defeating Giant Flea
+    TamedGiantFlea,
+    /// Met Vog (Flea)
+    ///
+    /// Splits after talking to Vog
+    MetTroupeHunterWild,
+    /// Freed Kratt (Flea)
+    ///
+    /// Splits after freeing Kratt
+    CaravanLechSaved,
+    // endregion: FleaSpecific
+
+    // region: Bellways
+    /// Unlocked Putrified Ducts (Bellway)
+    ///
+    /// Splits after unlocking Putrified Ducts Bellway
+    UnlockedAqueductStation,
+    /// Unlocked Bellhart (Bellway)
+    ///
+    /// Splits after unlocking Bellhart Bellway
+    UnlockedBelltownStation,
+    /// Unlocked Far Fields (Bellway)
+    ///
+    /// Splits after unlocking Far Fields Bellway
+    UnlockedBoneforestEastStation,
+    /// Unlocked Grand Bellway (Bellway)
+    ///
+    /// Splits after unlocking Grand Bellway
+    UnlockedCityStation,
+    /// Unlocked Blasted Steps (Bellway)
+    ///
+    /// Splits after unlocking Blasted Steps Bellway
+    UnlockedCoralTowerStation,
+    /// Unlocked Deep Docks (Bellway)
+    ///
+    /// Splits after unlocking Deep Docks Bellway
+    UnlockedDocksStation,
+    /// Unlocked Greymoor (Bellway)
+    ///
+    /// Splits after unlocking Greymoor Bellway
+    UnlockedGreymoorStation,
+    /// Unlocked Mount Fay (Bellway)
+    ///
+    /// Splits after unlocking Mount Fay Bellway
+    UnlockedPeakStation,
+    /// Unlocked Bilewater (Bellway)
+    ///
+    /// Splits after unlocking Bilewater Bellway
+    UnlockedShadowStation,
+    /// Unlocked Shellwood (Bellway)
+    ///
+    /// Splits after unlocking Shellwood Bellway
+    UnlockedShellwoodStation,
+    // endregion: Bellways
+
+    // region: Ventricas
+    /// Unlocked Choral Chambers (Ventrica)
+    ///
+    /// Splits after unlocking Choral Chambers Ventrica
+    UnlockedSongTube,
+    /// Unlocked Underworks (Ventrica)
+    ///
+    /// Splits after unlocking Underworks Ventrica
+    UnlockedUnderTube,
+    /// Unlocked Grand Bellway (Ventrica)
+    ///
+    /// Splits after unlocking Grand Bellway Ventrica
+    UnlockedCityBellwayTube,
+    /// Unlocked High Halls (Ventrica)
+    ///
+    /// Splits after unlocking High Halls Ventrica
+    UnlockedHangTube,
+    /// Unlocked Songclave (Ventrica)
+    ///
+    /// Splits after unlocking Songclave Ventrica
+    UnlockedEnclaveTube,
+    /// Unlocked Memorium (Ventrica)
+    ///
+    /// Splits after unlocking Memorium Ventrica
+    UnlockedArboriumTube,
+    // endregion: Ventricas
+
+    // region: ShakraEncounters
+    /// Seen Shakra Bonebottom (Mapper)
+    ///
+    /// Splits after seeing Shakra in Bonebottom
+    SeenMapperBonetown,
+    /// Seen Shakra Marrow (Mapper)
+    ///
+    /// Splits after seeing Shakra in Marrow
+    SeenMapperBoneForest,
+    /// Seen Shakra Deep Docks (Mapper)
+    ///
+    /// Splits after seeing Shakra in Deep Docks
+    SeenMapperDocks,
+    /// Seen Shakra Far Fields (Mapper)
+    ///
+    /// Splits after seeing Shakra in Far Fields
+    SeenMapperWilds,
+    /// Seen Shakra Wormways (Mapper)
+    ///
+    /// Splits after seeing Shakra in Wormways
+    SeenMapperCrawl,
+    /// Seen Shakra Greymoor (Mapper)
+    ///
+    /// Splits after seeing Shakra in Greymoor
+    SeenMapperGreymoor,
+    /// Seen Shakra Bellhart (Mapper)
+    ///
+    /// Splits after seeing Shakra in Bellhart
+    SeenMapperBellhart,
+    /// Seen Shakra Shellwood (Mapper)
+    ///
+    /// Splits after seeing Shakra in Shellwood
+    SeenMapperShellwood,
+    /// Seen Shakra Hunter's March (Mapper)
+    ///
+    /// Splits after seeing Shakra in Hunter's March
+    SeenMapperHuntersNest,
+    /// Seen Shakra Blasted Steps (Mapper)
+    ///
+    /// Splits after seeing Shakra in Blasted Steps
+    SeenMapperJudgeSteps,
+    /// Seen Shakra Sinner's Road (Mapper)
+    ///
+    /// Splits after seeing Shakra in Sinner's Road
+    SeenMapperDustpens,
+    /// Seen Shakra Mount Fay (Mapper)
+    ///
+    /// Splits after seeing Shakra in Mount Fay
+    SeenMapperPeak,
+    /// Seen Shakra Bilewater (Mapper)
+    ///
+    /// Splits after seeing Shakra in Bilewater
+    SeenMapperShadow,
+    /// Seen Shakra Sands of Karak (Mapper)
+    ///
+    /// Splits after seeing Shakra in Sands of Karak
+    SeenMapperCoralCaverns,
+    // endregion: ShakraEncounters
+
+    // region: MiscTE
+    /// Met Merchant Enclave (NPC)
+    ///
+    /// Splits after talking to Jubilana in Songclave
+    MetCityMerchantEnclave,
+    /// Met Sherma Enclave (NPC)
+    ///
+    /// Splits after talking to Sherma in Songclave
+    MetShermaEnclave,
+    /// Unlock Prince Cage (Event)
+    ///
+    /// Splits when you unlock Green Prince's Cage in Sinner's Road
+    UnlockedDustCage,
+    /// Met Green Prince Cogwork (NPC)
+    ///
+    /// Splits when you talk to Green Prince in Cogwork Dancer's arena
+    GreenPrinceLocationIsVerdania,
+    /// Seen Fleatopia Empty (Event)
+    ///
+    /// Splits when you find Fleatopias location
+    SeenFleatopiaEmpty,
+    /// Faydown Cloak (Ability)
+    ///
+    /// Splits when you obtain Double Jump
+    HasDoubleJump,
+    /// Silk Soar (Ability)
+    ///
+    /// Splits when you obtain Super Jump
+    HasSuperJump,
+    /// Thread Storm (Ability)
+    ///
+    /// Splits when you obtain Thread Storm
+    HasSilkSpecial,
+    /// Nyleth's Heart (Item)
+    ///
+    /// Splits when you obtain Nyleth's Heart
+    CollectedHeartFlower,
+    /// Khann's Heart (Item)
+    ///
+    /// Splits when you obtain Khann's Heart
+    CollectedHeartCoral,
+    /// Karmelita's Heart (Item)
+    ///
+    /// Splits when you obtain Karmelita's Heart
+    CollectedHeartHunter,
+    /// Clover Dancer's Heart (Item)
+    ///
+    /// Split when you obtain Conjoined Heart
+    CollectedHeartClover,
+    /// Red Memory (Event)
+    ///
+    /// Splits on completing Red Memory
+    CompletedRedMemory,
+    /// Pavo Bellhome Key (NPC)
+    ///
+    /// Splits when obtaining Bellhome Key from Pavo
+    BelltownGreeterHouseFullDlg,
+    // endregion: Misc TE
+
 }
 
 impl StoreWidget for Split {
@@ -321,6 +633,7 @@ pub fn transition_splits(
     mem: &Memory,
     _gm: &GameManagerPointers,
     pd: &PlayerDataPointers,
+    _gp: &GameplayPointers,
 ) -> SplitterAction {
     match split {
         // region: Start, End, and Menu
@@ -416,6 +729,7 @@ pub fn continuous_splits(
     mem: &Memory,
     gm: &GameManagerPointers,
     pd: &PlayerDataPointers,
+    _gp: &GameplayPointers,
 ) -> SplitterAction {
     let game_state: i32 = mem.deref(&gm.game_state).unwrap_or_default();
     if !NON_MENU_GAME_STATES.contains(&game_state) {
@@ -545,6 +859,95 @@ pub fn continuous_splits(
         }
         // endregion: NeedleUpgrade
 
+        //region: FleaSpecific
+        Split::SavedFleaAnt03 => should_split(mem.deref(&pd.savedflea_ant_03).unwrap_or_default()),
+        Split::SavedFleaBelltown04 => should_split(mem.deref(&pd.savedflea_belltown_04).unwrap_or_default()),
+        Split::SavedFleaBone06 => should_split(mem.deref(&pd.savedflea_bone_06).unwrap_or_default()),
+        Split::SavedFleaBoneEast05 => should_split(mem.deref(&pd.savedflea_bone_east_05).unwrap_or_default()),
+        Split::SavedFleaBoneEast10Church => should_split(mem.deref(&pd.savedflea_bone_east_10_church).unwrap_or_default()),
+        Split::SavedFleaBoneEast17b => should_split(mem.deref(&pd.savedflea_bone_east_17b).unwrap_or_default()),
+        Split::SavedFleaCoral24 => should_split(mem.deref(&pd.savedflea_coral_24).unwrap_or_default()),
+        Split::SavedFleaCoral35 => should_split(mem.deref(&pd.savedflea_coral_35).unwrap_or_default()),
+        Split::SavedFleaCrawl06 => should_split(mem.deref(&pd.savedflea_crawl_06).unwrap_or_default()),
+        Split::SavedFleaDock03d => should_split(mem.deref(&pd.savedflea_dock_03d).unwrap_or_default()),
+        Split::SavedFleaDock16 => should_split(mem.deref(&pd.savedflea_dock_16).unwrap_or_default()),
+        Split::SavedFleaDust09 => should_split(mem.deref(&pd.savedflea_dust_09).unwrap_or_default()),
+        Split::SavedFleaDust12 => should_split(mem.deref(&pd.savedflea_dust_12).unwrap_or_default()),
+        Split::SavedFleaGreymoor06 => should_split(mem.deref(&pd.savedflea_greymoor_06).unwrap_or_default()),
+        Split::SavedFleaGreymoor15b => should_split(mem.deref(&pd.savedflea_greymoor_15b).unwrap_or_default()),
+        Split::SavedFleaLibrary01 => should_split(mem.deref(&pd.savedflea_library_01).unwrap_or_default()),
+        Split::SavedFleaLibrary09 => should_split(mem.deref(&pd.savedflea_library_09).unwrap_or_default()),
+        Split::SavedFleaPeak05c => should_split(mem.deref(&pd.savedflea_peak_05c).unwrap_or_default()),
+        Split::SavedFleaShadow10 => should_split(mem.deref(&pd.savedflea_shadow_10).unwrap_or_default()),
+        Split::SavedFleaShadow28 => should_split(mem.deref(&pd.savedflea_shadow_28).unwrap_or_default()),
+        Split::SavedFleaShellwood03 => should_split(mem.deref(&pd.savedflea_shellwood_03).unwrap_or_default()),
+        Split::SavedFleaSlab06 => should_split(mem.deref(&pd.savedflea_slab_06).unwrap_or_default()),
+        Split::SavedFleaSlabCell => should_split(mem.deref(&pd.savedflea_slab_cell).unwrap_or_default()),
+        Split::SavedFleaSong11 => should_split(mem.deref(&pd.savedflea_song_11).unwrap_or_default()),
+        Split::SavedFleaSong14 => should_split(mem.deref(&pd.savedflea_song_14).unwrap_or_default()),
+        Split::SavedFleaUnder21 => should_split(mem.deref(&pd.savedflea_under_21).unwrap_or_default()),
+        Split::SavedFleaUnder23 => should_split(mem.deref(&pd.savedflea_under_23).unwrap_or_default()),
+        Split::TamedGiantFlea => should_split(mem.deref(&pd.tamed_giant_flea).unwrap_or_default()),
+        Split::MetTroupeHunterWild => should_split(mem.deref(&pd.met_troupe_hunter_wild).unwrap_or_default()),
+        Split::CaravanLechSaved => should_split(mem.deref(&pd.caravan_lech_saved).unwrap_or_default()),
+        // endregion: FleaSpecific
+
+        // region: Stations (Bellway)
+        Split::UnlockedAqueductStation => should_split(mem.deref(&pd.unlocked_aqueduct_station).unwrap_or_default()),
+        Split::UnlockedBelltownStation => should_split(mem.deref(&pd.unlocked_belltown_station).unwrap_or_default()),
+        Split::UnlockedBoneforestEastStation => should_split(mem.deref(&pd.unlocked_boneforest_east_station).unwrap_or_default()),
+        Split::UnlockedCityStation => should_split(mem.deref(&pd.unlocked_city_station).unwrap_or_default()),
+        Split::UnlockedCoralTowerStation => should_split(mem.deref(&pd.unlocked_coral_tower_station).unwrap_or_default()),
+        Split::UnlockedDocksStation => should_split(mem.deref(&pd.unlocked_docks_station).unwrap_or_default()),
+        Split::UnlockedGreymoorStation => should_split(mem.deref(&pd.unlocked_greymoor_station).unwrap_or_default()),
+        Split::UnlockedPeakStation => should_split(mem.deref(&pd.unlocked_peak_station).unwrap_or_default()),
+        Split::UnlockedShadowStation => should_split(mem.deref(&pd.unlocked_shadow_station).unwrap_or_default()),
+        Split::UnlockedShellwoodStation => should_split(mem.deref(&pd.unlocked_shellwood_station).unwrap_or_default()),
+        // endregion: Stations (Bellway)
+
+        // region: Ventricas
+        Split::UnlockedSongTube => should_split(mem.deref(&pd.unlocked_song_tube).unwrap_or_default()),
+        Split::UnlockedUnderTube => should_split(mem.deref(&pd.unlocked_under_tube).unwrap_or_default()),
+        Split::UnlockedCityBellwayTube => should_split(mem.deref(&pd.unlocked_city_bellway_tube).unwrap_or_default()),
+        Split::UnlockedHangTube => should_split(mem.deref(&pd.unlocked_hang_tube).unwrap_or_default()),
+        Split::UnlockedEnclaveTube => should_split(mem.deref(&pd.unlocked_enclave_tube).unwrap_or_default()),
+        Split::UnlockedArboriumTube => should_split(mem.deref(&pd.unlocked_arborium_tube).unwrap_or_default()),
+        // endregion: Ventricas
+
+        // region: ShakraEncounters
+        Split::SeenMapperBonetown => should_split(mem.deref(&pd.seen_mapper_bonetown).unwrap_or_default()),
+        Split::SeenMapperBoneForest => should_split(mem.deref(&pd.seen_mapper_bone_forest).unwrap_or_default()),
+        Split::SeenMapperDocks => should_split(mem.deref(&pd.seen_mapper_docks).unwrap_or_default()),
+        Split::SeenMapperWilds => should_split(mem.deref(&pd.seen_mapper_wilds).unwrap_or_default()),
+        Split::SeenMapperCrawl => should_split(mem.deref(&pd.seen_mapper_crawl).unwrap_or_default()),
+        Split::SeenMapperGreymoor => should_split(mem.deref(&pd.seen_mapper_greymoor).unwrap_or_default()),
+        Split::SeenMapperBellhart => should_split(mem.deref(&pd.seen_mapper_bellhart).unwrap_or_default()),
+        Split::SeenMapperShellwood => should_split(mem.deref(&pd.seen_mapper_shellwood).unwrap_or_default()),
+        Split::SeenMapperHuntersNest => should_split(mem.deref(&pd.seen_mapper_hunters_nest).unwrap_or_default()),
+        Split::SeenMapperJudgeSteps => should_split(mem.deref(&pd.seen_mapper_judge_steps).unwrap_or_default()),
+        Split::SeenMapperDustpens => should_split(mem.deref(&pd.seen_mapper_dustpens).unwrap_or_default()),
+        Split::SeenMapperPeak => should_split(mem.deref(&pd.seen_mapper_peak).unwrap_or_default()),
+        Split::SeenMapperShadow => should_split(mem.deref(&pd.seen_mapper_shadow).unwrap_or_default()),
+        Split::SeenMapperCoralCaverns => should_split(mem.deref(&pd.seen_mapper_coral_caverns).unwrap_or_default()),
+        // endregion: ShakraEncounters
+
+        // region: MiscTE
+        Split::MetCityMerchantEnclave => should_split(mem.deref(&pd.met_city_merchant_enclave).unwrap_or_default()),
+        Split::MetShermaEnclave => should_split(mem.deref(&pd.met_sherma_enclave).unwrap_or_default()),
+        Split::UnlockedDustCage => should_split(mem.deref(&pd.unlocked_dust_cage).unwrap_or_default()),
+        Split::GreenPrinceLocationIsVerdania => should_split(mem.deref(&pd.green_prince_location).is_ok_and(|n: i32| n == 3)),
+        Split::SeenFleatopiaEmpty => should_split(mem.deref(&pd.seen_fleatopia_empty).unwrap_or_default()),
+        Split::HasDoubleJump => should_split(mem.deref(&pd.has_double_jump).unwrap_or_default()),
+        Split::HasSuperJump => should_split(mem.deref(&pd.has_super_jump).unwrap_or_default()),
+        Split::HasSilkSpecial => should_split(mem.deref(&pd.has_silk_special).unwrap_or_default()),
+        Split::CollectedHeartFlower => should_split(mem.deref(&pd.collected_heart_flower).unwrap_or_default()),
+        Split::CollectedHeartCoral => should_split(mem.deref(&pd.collected_heart_coral).unwrap_or_default()),
+        Split::CollectedHeartHunter => should_split(mem.deref(&pd.collected_heart_hunter).unwrap_or_default()),
+        Split::CollectedHeartClover => should_split(mem.deref(&pd.collected_heart_clover).unwrap_or_default()),
+        Split::CompletedRedMemory => should_split(mem.deref(&pd.completed_red_memory).unwrap_or_default()),
+        Split::BelltownGreeterHouseFullDlg => should_split(mem.deref(&pd.belltown_greeter_house_full_dlg).unwrap_or_default()),
+        // endregion: MiscTE
+
         // else
         _ => should_split(false),
     }
@@ -555,13 +958,14 @@ pub fn splits(
     mem: &Memory,
     gm: &GameManagerPointers,
     pd: &PlayerDataPointers,
+    gp: &GameplayPointers,
     trans_now: bool,
     ss: &mut SceneStore,
 ) -> SplitterAction {
-    let a1 = continuous_splits(split, mem, gm, pd).or_else(|| {
+    let a1 = continuous_splits(split, mem, gm, pd, gp).or_else(|| {
         let scenes = ss.pair();
         if trans_now {
-            transition_splits(split, &scenes, mem, gm, pd)
+            transition_splits(split, &scenes, mem, gm, pd, gp)
         } else {
             SplitterAction::Pass
         }
