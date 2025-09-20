@@ -296,7 +296,6 @@ declare_pointers!(PlayerDataPointers {
     belltown_greeter_house_full_dlg: UnityPointer<3> = UnityPointer::new("GameManager", 0, &["_instance", "playerData", "BelltownGreeterHouseFullDlg"]),
 });
 
-
 // --------------------------------------------------------
 
 pub struct Memory<'a> {

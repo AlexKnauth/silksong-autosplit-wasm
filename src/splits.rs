@@ -552,7 +552,6 @@ pub enum Split {
     SeenShakraSandsOfKarak,
     // endregion: ShakraEncounters
 
-
     // region: MiscTE
     /// Met Merchant Enclave (NPC)
     ///
@@ -607,7 +606,6 @@ pub enum Split {
     /// Splits when obtaining Bellhome Key from Pavo
     BellhouseKeyConversation,
     // endregion: Misc TE
-
 }
 
 impl StoreWidget for Split {
@@ -855,91 +853,238 @@ pub fn continuous_splits(
         // endregion: NeedleUpgrade
 
         // region: FleaSpecific
-        Split::SavedFleaHuntersMarch => should_split(mem.deref(&pd.savedflea_ant_03).unwrap_or_default()),
-        Split::SavedFleaBellhart => should_split(mem.deref(&pd.savedflea_belltown_04).unwrap_or_default()),
-        Split::SavedFleaMarrow => should_split(mem.deref(&pd.savedflea_bone_06).unwrap_or_default()),
-        Split::SavedFleaDeepDocksSprint => should_split(mem.deref(&pd.savedflea_bone_east_05).unwrap_or_default()),
-        Split::SavedFleaFarFieldsPilgrimsRest => should_split(mem.deref(&pd.savedflea_bone_east_10_church).unwrap_or_default()),
-        Split::SavedFleaFarFieldsTrap => should_split(mem.deref(&pd.savedflea_bone_east_17b).unwrap_or_default()),
-        Split::SavedFleaSandsOfKarak => should_split(mem.deref(&pd.savedflea_coral_24).unwrap_or_default()),
-        Split::SavedFleaBlastedSteps => should_split(mem.deref(&pd.savedflea_coral_35).unwrap_or_default()),
-        Split::SavedFleaWormways => should_split(mem.deref(&pd.savedflea_crawl_06).unwrap_or_default()),
-        Split::SavedFleaDeepDocksArena => should_split(mem.deref(&pd.savedflea_dock_03d).unwrap_or_default()),
-        Split::SavedFleaDeepDocksBellway => should_split(mem.deref(&pd.savedflea_dock_16).unwrap_or_default()),
-        Split::SavedFleaBilewaterOrgan => should_split(mem.deref(&pd.savedflea_dust_09).unwrap_or_default()),
-        Split::SavedFleaSinnersRoad => should_split(mem.deref(&pd.savedflea_dust_12).unwrap_or_default()),
-        Split::SavedFleaGreymoorRoof => should_split(mem.deref(&pd.savedflea_greymoor_06).unwrap_or_default()),
-        Split::SavedFleaGreymoorLake => should_split(mem.deref(&pd.savedflea_greymoor_15b).unwrap_or_default()),
-        Split::SavedFleaWhisperingVaults => should_split(mem.deref(&pd.savedflea_library_01).unwrap_or_default()),
-        Split::SavedFleaSongclave => should_split(mem.deref(&pd.savedflea_library_09).unwrap_or_default()),
-        Split::SavedFleaMountFay => should_split(mem.deref(&pd.savedflea_peak_05c).unwrap_or_default()),
-        Split::SavedFleaBilewaterTrap => should_split(mem.deref(&pd.savedflea_shadow_10).unwrap_or_default()),
-        Split::SavedFleaBilewaterThieves => should_split(mem.deref(&pd.savedflea_shadow_28).unwrap_or_default()),
-        Split::SavedFleaShellwood => should_split(mem.deref(&pd.savedflea_shellwood_03).unwrap_or_default()),
-        Split::SavedFleaSlabBellway => should_split(mem.deref(&pd.savedflea_slab_06).unwrap_or_default()),
-        Split::SavedFleaSlabCage => should_split(mem.deref(&pd.savedflea_slab_cell).unwrap_or_default()),
-        Split::SavedFleaChoralChambersWind => should_split(mem.deref(&pd.savedflea_song_11).unwrap_or_default()),
-        Split::SavedFleaChoralChambersCage => should_split(mem.deref(&pd.savedflea_song_14).unwrap_or_default()),
-        Split::SavedFleaUnderworksExplosions => should_split(mem.deref(&pd.savedflea_under_21).unwrap_or_default()),
-        Split::SavedFleaUnderworksWispThicket => should_split(mem.deref(&pd.savedflea_under_23).unwrap_or_default()),
-        Split::SavedFleaGiantFlea => should_split(mem.deref(&pd.tamed_giant_flea).unwrap_or_default()),
-        Split::SavedFleaVog => should_split(mem.deref(&pd.met_troupe_hunter_wild).unwrap_or_default()),
-        Split::SavedFleaKratt => should_split(mem.deref(&pd.caravan_lech_saved).unwrap_or_default()),
+        Split::SavedFleaHuntersMarch => {
+            should_split(mem.deref(&pd.savedflea_ant_03).unwrap_or_default())
+        }
+        Split::SavedFleaBellhart => {
+            should_split(mem.deref(&pd.savedflea_belltown_04).unwrap_or_default())
+        }
+        Split::SavedFleaMarrow => {
+            should_split(mem.deref(&pd.savedflea_bone_06).unwrap_or_default())
+        }
+        Split::SavedFleaDeepDocksSprint => {
+            should_split(mem.deref(&pd.savedflea_bone_east_05).unwrap_or_default())
+        }
+        Split::SavedFleaFarFieldsPilgrimsRest => should_split(
+            mem.deref(&pd.savedflea_bone_east_10_church)
+                .unwrap_or_default(),
+        ),
+        Split::SavedFleaFarFieldsTrap => {
+            should_split(mem.deref(&pd.savedflea_bone_east_17b).unwrap_or_default())
+        }
+        Split::SavedFleaSandsOfKarak => {
+            should_split(mem.deref(&pd.savedflea_coral_24).unwrap_or_default())
+        }
+        Split::SavedFleaBlastedSteps => {
+            should_split(mem.deref(&pd.savedflea_coral_35).unwrap_or_default())
+        }
+        Split::SavedFleaWormways => {
+            should_split(mem.deref(&pd.savedflea_crawl_06).unwrap_or_default())
+        }
+        Split::SavedFleaDeepDocksArena => {
+            should_split(mem.deref(&pd.savedflea_dock_03d).unwrap_or_default())
+        }
+        Split::SavedFleaDeepDocksBellway => {
+            should_split(mem.deref(&pd.savedflea_dock_16).unwrap_or_default())
+        }
+        Split::SavedFleaBilewaterOrgan => {
+            should_split(mem.deref(&pd.savedflea_dust_09).unwrap_or_default())
+        }
+        Split::SavedFleaSinnersRoad => {
+            should_split(mem.deref(&pd.savedflea_dust_12).unwrap_or_default())
+        }
+        Split::SavedFleaGreymoorRoof => {
+            should_split(mem.deref(&pd.savedflea_greymoor_06).unwrap_or_default())
+        }
+        Split::SavedFleaGreymoorLake => {
+            should_split(mem.deref(&pd.savedflea_greymoor_15b).unwrap_or_default())
+        }
+        Split::SavedFleaWhisperingVaults => {
+            should_split(mem.deref(&pd.savedflea_library_01).unwrap_or_default())
+        }
+        Split::SavedFleaSongclave => {
+            should_split(mem.deref(&pd.savedflea_library_09).unwrap_or_default())
+        }
+        Split::SavedFleaMountFay => {
+            should_split(mem.deref(&pd.savedflea_peak_05c).unwrap_or_default())
+        }
+        Split::SavedFleaBilewaterTrap => {
+            should_split(mem.deref(&pd.savedflea_shadow_10).unwrap_or_default())
+        }
+        Split::SavedFleaBilewaterThieves => {
+            should_split(mem.deref(&pd.savedflea_shadow_28).unwrap_or_default())
+        }
+        Split::SavedFleaShellwood => {
+            should_split(mem.deref(&pd.savedflea_shellwood_03).unwrap_or_default())
+        }
+        Split::SavedFleaSlabBellway => {
+            should_split(mem.deref(&pd.savedflea_slab_06).unwrap_or_default())
+        }
+        Split::SavedFleaSlabCage => {
+            should_split(mem.deref(&pd.savedflea_slab_cell).unwrap_or_default())
+        }
+        Split::SavedFleaChoralChambersWind => {
+            should_split(mem.deref(&pd.savedflea_song_11).unwrap_or_default())
+        }
+        Split::SavedFleaChoralChambersCage => {
+            should_split(mem.deref(&pd.savedflea_song_14).unwrap_or_default())
+        }
+        Split::SavedFleaUnderworksExplosions => {
+            should_split(mem.deref(&pd.savedflea_under_21).unwrap_or_default())
+        }
+        Split::SavedFleaUnderworksWispThicket => {
+            should_split(mem.deref(&pd.savedflea_under_23).unwrap_or_default())
+        }
+        Split::SavedFleaGiantFlea => {
+            should_split(mem.deref(&pd.tamed_giant_flea).unwrap_or_default())
+        }
+        Split::SavedFleaVog => {
+            should_split(mem.deref(&pd.met_troupe_hunter_wild).unwrap_or_default())
+        }
+        Split::SavedFleaKratt => {
+            should_split(mem.deref(&pd.caravan_lech_saved).unwrap_or_default())
+        }
         // endregion: FleaSpecific
 
         // region: Stations (Bellway)
-        Split::PutrifiedDuctsStation => should_split(mem.deref(&pd.unlocked_aqueduct_station).unwrap_or_default()),
-        Split::BellhartStation => should_split(mem.deref(&pd.unlocked_belltown_station).unwrap_or_default()),
-        Split::FarFieldsStation => should_split(mem.deref(&pd.unlocked_boneforest_east_station).unwrap_or_default()),
-        Split::GrandBellwayStation => should_split(mem.deref(&pd.unlocked_city_station).unwrap_or_default()),
-        Split::BlastedStepsStation => should_split(mem.deref(&pd.unlocked_coral_tower_station).unwrap_or_default()),
-        Split::DeepDocksStation => should_split(mem.deref(&pd.unlocked_docks_station).unwrap_or_default()),
-        Split::GreymoorStation => should_split(mem.deref(&pd.unlocked_greymoor_station).unwrap_or_default()),
-        Split::MountFayStation => should_split(mem.deref(&pd.unlocked_peak_station).unwrap_or_default()),
-        Split::BilewaterStation => should_split(mem.deref(&pd.unlocked_shadow_station).unwrap_or_default()),
-        Split::ShellwoodStation => should_split(mem.deref(&pd.unlocked_shellwood_station).unwrap_or_default()),
+        Split::PutrifiedDuctsStation => {
+            should_split(mem.deref(&pd.unlocked_aqueduct_station).unwrap_or_default())
+        }
+        Split::BellhartStation => {
+            should_split(mem.deref(&pd.unlocked_belltown_station).unwrap_or_default())
+        }
+        Split::FarFieldsStation => should_split(
+            mem.deref(&pd.unlocked_boneforest_east_station)
+                .unwrap_or_default(),
+        ),
+        Split::GrandBellwayStation => {
+            should_split(mem.deref(&pd.unlocked_city_station).unwrap_or_default())
+        }
+        Split::BlastedStepsStation => should_split(
+            mem.deref(&pd.unlocked_coral_tower_station)
+                .unwrap_or_default(),
+        ),
+        Split::DeepDocksStation => {
+            should_split(mem.deref(&pd.unlocked_docks_station).unwrap_or_default())
+        }
+        Split::GreymoorStation => {
+            should_split(mem.deref(&pd.unlocked_greymoor_station).unwrap_or_default())
+        }
+        Split::MountFayStation => {
+            should_split(mem.deref(&pd.unlocked_peak_station).unwrap_or_default())
+        }
+        Split::BilewaterStation => {
+            should_split(mem.deref(&pd.unlocked_shadow_station).unwrap_or_default())
+        }
+        Split::ShellwoodStation => should_split(
+            mem.deref(&pd.unlocked_shellwood_station)
+                .unwrap_or_default(),
+        ),
         // endregion: Stations (Bellway)
 
         // region: Ventricas
-        Split::ChoralChambersTube => should_split(mem.deref(&pd.unlocked_song_tube).unwrap_or_default()),
-        Split::UnderworksTube => should_split(mem.deref(&pd.unlocked_under_tube).unwrap_or_default()),
-        Split::CityBellwayTube => should_split(mem.deref(&pd.unlocked_city_bellway_tube).unwrap_or_default()),
+        Split::ChoralChambersTube => {
+            should_split(mem.deref(&pd.unlocked_song_tube).unwrap_or_default())
+        }
+        Split::UnderworksTube => {
+            should_split(mem.deref(&pd.unlocked_under_tube).unwrap_or_default())
+        }
+        Split::CityBellwayTube => should_split(
+            mem.deref(&pd.unlocked_city_bellway_tube)
+                .unwrap_or_default(),
+        ),
         Split::HighHallsTube => should_split(mem.deref(&pd.unlocked_hang_tube).unwrap_or_default()),
-        Split::SongclaveTube => should_split(mem.deref(&pd.unlocked_enclave_tube).unwrap_or_default()),
-        Split::MemoriumTube => should_split(mem.deref(&pd.unlocked_arborium_tube).unwrap_or_default()),
+        Split::SongclaveTube => {
+            should_split(mem.deref(&pd.unlocked_enclave_tube).unwrap_or_default())
+        }
+        Split::MemoriumTube => {
+            should_split(mem.deref(&pd.unlocked_arborium_tube).unwrap_or_default())
+        }
         // endregion: Ventricas
 
         // region: ShakraEncounters
-        Split::SeenShakraBonebottom => should_split(mem.deref(&pd.seen_mapper_bonetown).unwrap_or_default()),
-        Split::SeenShakraMarrow => should_split(mem.deref(&pd.seen_mapper_bone_forest).unwrap_or_default()),
-        Split::SeenShakraDeepDocks => should_split(mem.deref(&pd.seen_mapper_docks).unwrap_or_default()),
-        Split::SeenShakraFarFields => should_split(mem.deref(&pd.seen_mapper_wilds).unwrap_or_default()),
-        Split::SeenShakraWormways => should_split(mem.deref(&pd.seen_mapper_crawl).unwrap_or_default()),
-        Split::SeenShakraGreymoor => should_split(mem.deref(&pd.seen_mapper_greymoor).unwrap_or_default()),
-        Split::SeenShakraBellhart => should_split(mem.deref(&pd.seen_mapper_bellhart).unwrap_or_default()),
-        Split::SeenShakraShellwood => should_split(mem.deref(&pd.seen_mapper_shellwood).unwrap_or_default()),
-        Split::SeenShakraHuntersMarch => should_split(mem.deref(&pd.seen_mapper_hunters_nest).unwrap_or_default()),
-        Split::SeenShakraBlastedSteps => should_split(mem.deref(&pd.seen_mapper_judge_steps).unwrap_or_default()),
-        Split::SeenShakraSinnersRoad => should_split(mem.deref(&pd.seen_mapper_dustpens).unwrap_or_default()),
-        Split::SeenShakraMountFay => should_split(mem.deref(&pd.seen_mapper_peak).unwrap_or_default()),
-        Split::SeenShakraBilewater => should_split(mem.deref(&pd.seen_mapper_shadow).unwrap_or_default()),
-        Split::SeenShakraSandsOfKarak => should_split(mem.deref(&pd.seen_mapper_coral_caverns).unwrap_or_default()),
+        Split::SeenShakraBonebottom => {
+            should_split(mem.deref(&pd.seen_mapper_bonetown).unwrap_or_default())
+        }
+        Split::SeenShakraMarrow => {
+            should_split(mem.deref(&pd.seen_mapper_bone_forest).unwrap_or_default())
+        }
+        Split::SeenShakraDeepDocks => {
+            should_split(mem.deref(&pd.seen_mapper_docks).unwrap_or_default())
+        }
+        Split::SeenShakraFarFields => {
+            should_split(mem.deref(&pd.seen_mapper_wilds).unwrap_or_default())
+        }
+        Split::SeenShakraWormways => {
+            should_split(mem.deref(&pd.seen_mapper_crawl).unwrap_or_default())
+        }
+        Split::SeenShakraGreymoor => {
+            should_split(mem.deref(&pd.seen_mapper_greymoor).unwrap_or_default())
+        }
+        Split::SeenShakraBellhart => {
+            should_split(mem.deref(&pd.seen_mapper_bellhart).unwrap_or_default())
+        }
+        Split::SeenShakraShellwood => {
+            should_split(mem.deref(&pd.seen_mapper_shellwood).unwrap_or_default())
+        }
+        Split::SeenShakraHuntersMarch => {
+            should_split(mem.deref(&pd.seen_mapper_hunters_nest).unwrap_or_default())
+        }
+        Split::SeenShakraBlastedSteps => {
+            should_split(mem.deref(&pd.seen_mapper_judge_steps).unwrap_or_default())
+        }
+        Split::SeenShakraSinnersRoad => {
+            should_split(mem.deref(&pd.seen_mapper_dustpens).unwrap_or_default())
+        }
+        Split::SeenShakraMountFay => {
+            should_split(mem.deref(&pd.seen_mapper_peak).unwrap_or_default())
+        }
+        Split::SeenShakraBilewater => {
+            should_split(mem.deref(&pd.seen_mapper_shadow).unwrap_or_default())
+        }
+        Split::SeenShakraSandsOfKarak => {
+            should_split(mem.deref(&pd.seen_mapper_coral_caverns).unwrap_or_default())
+        }
         // endregion: ShakraEncounters
 
         // region: MiscTE
-        Split::MetJubilanaEnclave => should_split(mem.deref(&pd.met_city_merchant_enclave).unwrap_or_default()),
-        Split::MetShermaEnclave => should_split(mem.deref(&pd.met_sherma_enclave).unwrap_or_default()),
-        Split::UnlockedPrinceCage => should_split(mem.deref(&pd.unlocked_dust_cage).unwrap_or_default()),
-        Split::GreenPrinceInVerdania => should_split(mem.deref(&pd.green_prince_location).is_ok_and(|n: i32| n == 3)),
-        Split::SeenFleatopiaEmpty => should_split(mem.deref(&pd.seen_fleatopia_empty).unwrap_or_default()),
+        Split::MetJubilanaEnclave => {
+            should_split(mem.deref(&pd.met_city_merchant_enclave).unwrap_or_default())
+        }
+        Split::MetShermaEnclave => {
+            should_split(mem.deref(&pd.met_sherma_enclave).unwrap_or_default())
+        }
+        Split::UnlockedPrinceCage => {
+            should_split(mem.deref(&pd.unlocked_dust_cage).unwrap_or_default())
+        }
+        Split::GreenPrinceInVerdania => should_split(
+            mem.deref(&pd.green_prince_location)
+                .is_ok_and(|n: i32| n == 3),
+        ),
+        Split::SeenFleatopiaEmpty => {
+            should_split(mem.deref(&pd.seen_fleatopia_empty).unwrap_or_default())
+        }
         Split::FaydownCloak => should_split(mem.deref(&pd.has_double_jump).unwrap_or_default()),
         Split::SilkSoar => should_split(mem.deref(&pd.has_super_jump).unwrap_or_default()),
-        Split::CollectedHeartNyleth => should_split(mem.deref(&pd.collected_heart_flower).unwrap_or_default()),
-        Split::CollectedHeartKhann => should_split(mem.deref(&pd.collected_heart_coral).unwrap_or_default()),
-        Split::CollectedHeartKarmelita => should_split(mem.deref(&pd.collected_heart_hunter).unwrap_or_default()),
-        Split::CollectedHeartClover => should_split(mem.deref(&pd.collected_heart_clover).unwrap_or_default()),
-        Split::CompletedRedMemory => should_split(mem.deref(&pd.completed_red_memory).unwrap_or_default()),
-        Split::BellhouseKeyConversation => should_split(mem.deref(&pd.belltown_greeter_house_full_dlg).unwrap_or_default()),
+        Split::CollectedHeartNyleth => {
+            should_split(mem.deref(&pd.collected_heart_flower).unwrap_or_default())
+        }
+        Split::CollectedHeartKhann => {
+            should_split(mem.deref(&pd.collected_heart_coral).unwrap_or_default())
+        }
+        Split::CollectedHeartKarmelita => {
+            should_split(mem.deref(&pd.collected_heart_hunter).unwrap_or_default())
+        }
+        Split::CollectedHeartClover => {
+            should_split(mem.deref(&pd.collected_heart_clover).unwrap_or_default())
+        }
+        Split::CompletedRedMemory => {
+            should_split(mem.deref(&pd.completed_red_memory).unwrap_or_default())
+        }
+        Split::BellhouseKeyConversation => should_split(
+            mem.deref(&pd.belltown_greeter_house_full_dlg)
+                .unwrap_or_default(),
+        ),
         // endregion: MiscTE
 
         // else
