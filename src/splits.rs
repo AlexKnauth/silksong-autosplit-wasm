@@ -431,7 +431,7 @@ pub enum Split {
     /// Bellhart (Bellway)
     ///
     /// Splits after unlocking Bellhart Bellway
-    BelltownStation,
+    BellhartStation,
     /// Far Fields (Bellway)
     ///
     /// Splits after unlocking Far Fields Bellway
@@ -889,7 +889,7 @@ pub fn continuous_splits(
 
         // region: Stations (Bellway)
         Split::PutrifiedDuctsStation => should_split(mem.deref(&pd.unlocked_aqueduct_station).unwrap_or_default()),
-        Split::BelltownStation => should_split(mem.deref(&pd.unlocked_belltown_station).unwrap_or_default()),
+        Split::BellhartStation => should_split(mem.deref(&pd.unlocked_belltown_station).unwrap_or_default()),
         Split::FarFieldsStation => should_split(mem.deref(&pd.unlocked_boneforest_east_station).unwrap_or_default()),
         Split::GrandBellwayStation => should_split(mem.deref(&pd.unlocked_city_station).unwrap_or_default()),
         Split::BlastedStepsStation => should_split(mem.deref(&pd.unlocked_coral_tower_station).unwrap_or_default()),
