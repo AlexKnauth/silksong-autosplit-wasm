@@ -539,7 +539,6 @@ async fn handle_splits(
 fn load_removal(state: &mut AutoSplitterState, mem: &Memory, gm: &GameManagerPointers) {
     // only remove loads if timer is running
     if asr::timer::state() != TimerState::Running {
-        asr::timer::pause_game_time();
         return;
     }
 
