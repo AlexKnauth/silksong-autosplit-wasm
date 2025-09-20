@@ -216,6 +216,42 @@ declare_pointers!(PlayerDataPointers {
     has_melody_architect: UnityPointer<3> = UnityPointer::new("GameManager", 0, &["_instance", "playerData", "HasMelodyArchitect"]),
     unlocked_melody_lift: UnityPointer<3> = UnityPointer::new("GameManager", 0, &["_instance", "playerData", "UnlockedMelodyLift"]),
     nail_upgrades: UnityPointer<3> = UnityPointer::new("GameManager", 0, &["_instance", "playerData", "nailUpgrades"]),
+
+    savedflea_ant_03: UnityPointer<3> = UnityPointer::new("GameManager", 0, &["_instance", "playerData", "SavedFlea_Ant_03"]),
+    savedflea_belltown_04: UnityPointer<3> = UnityPointer::new("GameManager", 0, &["_instance", "playerData", "SavedFlea_Belltown_04"]),
+    savedflea_bone_06: UnityPointer<3> = UnityPointer::new("GameManager", 0, &["_instance", "playerData", "SavedFlea_Bone_06"]),
+    savedflea_bone_east_05: UnityPointer<3> = UnityPointer::new("GameManager", 0, &["_instance", "playerData", "SavedFlea_Bone_East_05"]),
+    savedflea_bone_east_10_church: UnityPointer<3> = UnityPointer::new("GameManager", 0, &["_instance", "playerData", "SavedFlea_Bone_East_10_Church"]),
+    savedflea_bone_east_17b: UnityPointer<3> = UnityPointer::new("GameManager", 0, &["_instance", "playerData", "SavedFlea_Bone_East_17b"]),
+    savedflea_coral_24: UnityPointer<3> = UnityPointer::new("GameManager", 0, &["_instance", "playerData", "SavedFlea_Coral_24"]),
+    savedflea_coral_35: UnityPointer<3> = UnityPointer::new("GameManager", 0, &["_instance", "playerData", "SavedFlea_Coral_35"]),
+    savedflea_crawl_06: UnityPointer<3> = UnityPointer::new("GameManager", 0, &["_instance", "playerData", "SavedFlea_Crawl_06"]),
+    savedflea_dock_03d: UnityPointer<3> = UnityPointer::new("GameManager", 0, &["_instance", "playerData", "SavedFlea_Dock_03d"]),
+    savedflea_dock_16: UnityPointer<3> = UnityPointer::new("GameManager", 0, &["_instance", "playerData", "SavedFlea_Dock_16"]),
+    savedflea_dust_09: UnityPointer<3> = UnityPointer::new("GameManager", 0, &["_instance", "playerData", "SavedFlea_Dust_09"]),
+    savedflea_dust_12: UnityPointer<3> = UnityPointer::new("GameManager", 0, &["_instance", "playerData", "SavedFlea_Dust_12"]),
+    savedflea_greymoor_06: UnityPointer<3> = UnityPointer::new("GameManager", 0, &["_instance", "playerData", "SavedFlea_Greymoor_06"]),
+    savedflea_greymoor_15b: UnityPointer<3> = UnityPointer::new("GameManager", 0, &["_instance", "playerData", "SavedFlea_Greymoor_15b"]),
+    savedflea_library_01: UnityPointer<3> = UnityPointer::new("GameManager", 0, &["_instance", "playerData", "SavedFlea_Library_01"]),
+    savedflea_library_09: UnityPointer<3> = UnityPointer::new("GameManager", 0, &["_instance", "playerData", "SavedFlea_Library_09"]),
+    savedflea_peak_05c: UnityPointer<3> = UnityPointer::new("GameManager", 0, &["_instance", "playerData", "SavedFlea_Peak_05c"]),
+    savedflea_shadow_10: UnityPointer<3> = UnityPointer::new("GameManager", 0, &["_instance", "playerData", "SavedFlea_Shadow_10"]),
+    savedflea_shadow_28: UnityPointer<3> = UnityPointer::new("GameManager", 0, &["_instance", "playerData", "SavedFlea_Shadow_28"]),
+    savedflea_shellwood_03: UnityPointer<3> = UnityPointer::new("GameManager", 0, &["_instance", "playerData", "SavedFlea_Shellwood_03"]),
+    savedflea_slab_06: UnityPointer<3> = UnityPointer::new("GameManager", 0, &["_instance", "playerData", "SavedFlea_Slab_06"]),
+    savedflea_slab_cell: UnityPointer<3> = UnityPointer::new("GameManager", 0, &["_instance", "playerData", "SavedFlea_Slab_Cell"]),
+    savedflea_song_11: UnityPointer<3> = UnityPointer::new("GameManager", 0, &["_instance", "playerData", "SavedFlea_Song_11"]),
+    savedflea_song_14: UnityPointer<3> = UnityPointer::new("GameManager", 0, &["_instance", "playerData", "SavedFlea_Song_14"]),
+    savedflea_under_21: UnityPointer<3> = UnityPointer::new("GameManager", 0, &["_instance", "playerData", "SavedFlea_Under_21"]),
+    savedflea_under_23: UnityPointer<3> = UnityPointer::new("GameManager", 0, &["_instance", "playerData", "SavedFlea_Under_23"]),
+    tamed_giant_flea: UnityPointer<3> = UnityPointer::new("GameManager", 0, &["_instance", "playerData", "tamedGiantFlea"]),
+    met_troupe_hunter_wild: UnityPointer<3> = UnityPointer::new("GameManager", 0, &["_instance", "playerData", "MetTroupeHunterWild"]),
+    caravan_lech_saved: UnityPointer<3> = UnityPointer::new("GameManager", 0, &["_instance", "playerData", "CaravanLechSaved"]),
+
+});
+
+declare_pointers!(GameplayPointers {
+    saved_fleas: UnityPointer<3> = UnityPointer::new("GlobalSettings.Gameplay", 0, &["FleasCollectedCount"]),
 });
 
 // --------------------------------------------------------

@@ -7,7 +7,7 @@ use ugly_widget::{
 
 use crate::{
     silksong_memory::{
-        is_menu, GameManagerPointers, Memory, PlayerDataPointers, SceneStore, MENU_TITLE,
+        is_menu, GameManagerPointers, Memory, PlayerDataPointers, GameplayPointers, SceneStore, MENU_TITLE,
         NON_MENU_GAME_STATES, OPENING_SCENES,
     },
     timer::{should_split, SplitterAction},
@@ -299,6 +299,129 @@ pub enum Split {
     /// Splits when upgrading to Pale Steel Needle
     NeedleUpgrade4,
     // endregion: NeedleUpgrade
+
+    //region: FleaSpecific
+    /// Flea Hunter's March
+    /// 
+    /// Splits when rescuing flea in Ant_03
+    SavedFleaAnt03,
+    /// Flea Bellhart
+    /// 
+    /// Splits when rescuing flea in Belltown_04
+    SavedFleaBelltown04,
+    /// Flea Marrow
+    /// 
+    /// Splits when rescuing flea in Bone_06
+    SavedFleaBone06,
+    /// Flea Deep Docks Sprint
+    /// 
+    /// Splits when rescuing flea in Bone_East_05
+    SavedFleaBoneEast05,
+    /// Flea Far Fields Pilgrim's Rest
+    /// 
+    /// Splits when rescuing flea in Bone_East_10_Church
+    SavedFleaBoneEast10Church,
+    /// Flea Far Fields Trap
+    /// 
+    /// Splits when rescuing flea in Bone_East_17b
+    SavedFleaBoneEast17b,
+    /// Flea Sands of Karak
+    /// 
+    /// Splits when rescuing flea in Coral_24
+    SavedFleaCoral24,
+    /// Flea Blasted Steps
+    /// 
+    /// Splits when rescuing flea in Coral_35
+    SavedFleaCoral35,
+    /// Flea Wormways
+    /// 
+    /// Splits when rescuing flea in Crawl_06
+    SavedFleaCrawl06,
+    /// Flea Deep Docks Arena
+    /// 
+    /// Splits when rescuing flea in Dock_03d
+    SavedFleaDock03d,
+    /// Flea Deep Docks Bellway
+    /// 
+    /// Splits when rescuing flea in Dock_16
+    SavedFleaDock16,
+    /// Flea Bilewater Organ
+    /// 
+    /// Splits when rescuing flea in Dust_09
+    SavedFleaDust09,
+    /// Flea Sinner's Road
+    /// 
+    /// Splits when rescuing flea in Dust_12
+    SavedFleaDust12,
+    /// Flea Greymoor Roof
+    /// 
+    /// Splits when rescuing flea in Greymoor_06
+    SavedFleaGreymoor06,
+    /// Flea Greymoor Lake
+    /// 
+    /// Splits when rescuing flea in Greymoor_15b
+    SavedFleaGreymoor15b,
+    /// Flea Whispering Vaults
+    /// 
+    /// Splits when rescuing flea in Library_01
+    SavedFleaLibrary01,
+    /// Flea Songclave
+    /// 
+    /// Splits when rescuing flea in Library_09
+    SavedFleaLibrary09,
+    /// Flea Mount Fay
+    /// 
+    /// Splits when rescuing flea in Peak_05c
+    SavedFleaPeak05c,
+    /// Flea Bilewater Trap
+    /// 
+    /// Splits when rescuing flea in Shadow_10
+    SavedFleaShadow10,
+    /// Flea Bilewater Thieves
+    /// 
+    /// Splits when rescuing flea in Shadow_28
+    SavedFleaShadow28,
+    /// Flea Shellwood
+    /// 
+    /// Splits when rescuing flea in Shellwood_03
+    SavedFleaShellwood03,
+    /// Flea Slab Bellway
+    /// 
+    /// Splits when rescuing flea in Slab_06
+    SavedFleaSlab06,
+    /// Flea Slab Cage
+    /// 
+    /// Splits when rescuing flea in Slab_Cell
+    SavedFleaSlabCell,
+    /// Flea Choral Chambers Wind
+    /// 
+    /// Splits when rescuing flea in Song_11
+    SavedFleaSong11,
+    /// Flea Choral Chambers Cage
+    /// 
+    /// Splits when rescuing flea in Song_14
+    SavedFleaSong14,
+    /// Flea Underworks Explosions
+    /// 
+    /// Splits when rescuing flea in Under_21
+    SavedFleaUnder21,
+    /// Flea Underworks Wisp Thicket
+    /// 
+    /// Splits when rescuing flea in Under_23
+    SavedFleaUnder23,
+    /// Flea Giant Tamed
+    /// 
+    /// Splits when defeating Giant Flea
+    TamedGiantFlea,
+    /// Flea Vog
+    /// 
+    /// Splits after talking to Vog
+    MetTroupeHunterWild,
+    /// Flea Kratt
+    /// 
+    /// Splits after freeing Kratt
+    CaravanLechSaved,
+//endregion
 }
 
 impl StoreWidget for Split {
@@ -321,6 +444,7 @@ pub fn transition_splits(
     mem: &Memory,
     _gm: &GameManagerPointers,
     pd: &PlayerDataPointers,
+    _gp: &GameplayPointers,
 ) -> SplitterAction {
     match split {
         // region: Start, End, and Menu
@@ -416,6 +540,7 @@ pub fn continuous_splits(
     mem: &Memory,
     gm: &GameManagerPointers,
     pd: &PlayerDataPointers,
+    _gp: &GameplayPointers,
 ) -> SplitterAction {
     let game_state: i32 = mem.deref(&gm.game_state).unwrap_or_default();
     if !NON_MENU_GAME_STATES.contains(&game_state) {
@@ -545,6 +670,39 @@ pub fn continuous_splits(
         }
         // endregion: NeedleUpgrade
 
+        //region: FleaSpecific
+        Split::SavedFleaAnt03 => should_split(mem.deref(&pd.savedflea_ant_03).unwrap_or_default()),
+        Split::SavedFleaBelltown04 => should_split(mem.deref(&pd.savedflea_belltown_04).unwrap_or_default()),
+        Split::SavedFleaBone06 => should_split(mem.deref(&pd.savedflea_bone_06).unwrap_or_default()),
+        Split::SavedFleaBoneEast05 => should_split(mem.deref(&pd.savedflea_bone_east_05).unwrap_or_default()),
+        Split::SavedFleaBoneEast10Church => should_split(mem.deref(&pd.savedflea_bone_east_10_church).unwrap_or_default()),
+        Split::SavedFleaBoneEast17b => should_split(mem.deref(&pd.savedflea_bone_east_17b).unwrap_or_default()),
+        Split::SavedFleaCoral24 => should_split(mem.deref(&pd.savedflea_coral_24).unwrap_or_default()),
+        Split::SavedFleaCoral35 => should_split(mem.deref(&pd.savedflea_coral_35).unwrap_or_default()),
+        Split::SavedFleaCrawl06 => should_split(mem.deref(&pd.savedflea_crawl_06).unwrap_or_default()),
+        Split::SavedFleaDock03d => should_split(mem.deref(&pd.savedflea_dock_03d).unwrap_or_default()),
+        Split::SavedFleaDock16 => should_split(mem.deref(&pd.savedflea_dock_16).unwrap_or_default()),
+        Split::SavedFleaDust09 => should_split(mem.deref(&pd.savedflea_dust_09).unwrap_or_default()),
+        Split::SavedFleaDust12 => should_split(mem.deref(&pd.savedflea_dust_12).unwrap_or_default()),
+        Split::SavedFleaGreymoor06 => should_split(mem.deref(&pd.savedflea_greymoor_06).unwrap_or_default()),
+        Split::SavedFleaGreymoor15b => should_split(mem.deref(&pd.savedflea_greymoor_15b).unwrap_or_default()),
+        Split::SavedFleaLibrary01 => should_split(mem.deref(&pd.savedflea_library_01).unwrap_or_default()),
+        Split::SavedFleaLibrary09 => should_split(mem.deref(&pd.savedflea_library_09).unwrap_or_default()),
+        Split::SavedFleaPeak05c => should_split(mem.deref(&pd.savedflea_peak_05c).unwrap_or_default()),
+        Split::SavedFleaShadow10 => should_split(mem.deref(&pd.savedflea_shadow_10).unwrap_or_default()),
+        Split::SavedFleaShadow28 => should_split(mem.deref(&pd.savedflea_shadow_28).unwrap_or_default()),
+        Split::SavedFleaShellwood03 => should_split(mem.deref(&pd.savedflea_shellwood_03).unwrap_or_default()),
+        Split::SavedFleaSlab06 => should_split(mem.deref(&pd.savedflea_slab_06).unwrap_or_default()),
+        Split::SavedFleaSlabCell => should_split(mem.deref(&pd.savedflea_slab_cell).unwrap_or_default()),
+        Split::SavedFleaSong11 => should_split(mem.deref(&pd.savedflea_song_11).unwrap_or_default()),
+        Split::SavedFleaSong14 => should_split(mem.deref(&pd.savedflea_song_14).unwrap_or_default()),
+        Split::SavedFleaUnder21 => should_split(mem.deref(&pd.savedflea_under_21).unwrap_or_default()),
+        Split::SavedFleaUnder23 => should_split(mem.deref(&pd.savedflea_under_23).unwrap_or_default()),
+        Split::TamedGiantFlea => should_split(mem.deref(&pd.tamed_giant_flea).unwrap_or_default()),
+        Split::MetTroupeHunterWild => should_split(mem.deref(&pd.met_troupe_hunter_wild).unwrap_or_default()),
+        Split::CaravanLechSaved => should_split(mem.deref(&pd.caravan_lech_saved).unwrap_or_default()),
+        // endregion: FleaSpecific
+
         // else
         _ => should_split(false),
     }
@@ -555,13 +713,14 @@ pub fn splits(
     mem: &Memory,
     gm: &GameManagerPointers,
     pd: &PlayerDataPointers,
+    gp: &GameplayPointers,
     trans_now: bool,
     ss: &mut SceneStore,
 ) -> SplitterAction {
-    let a1 = continuous_splits(split, mem, gm, pd).or_else(|| {
+    let a1 = continuous_splits(split, mem, gm, pd, gp).or_else(|| {
         let scenes = ss.pair();
         if trans_now {
-            transition_splits(split, &scenes, mem, gm, pd)
+            transition_splits(split, &scenes, mem, gm, pd, gp)
         } else {
             SplitterAction::Pass
         }

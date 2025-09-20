@@ -3,6 +3,7 @@
 
 # Editor-generated files
 .vscode/settings.json
+.vsidx
 
 # OS-generated files
 .DS_Store

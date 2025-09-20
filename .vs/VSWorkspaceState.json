@@ -1,0 +1,15 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\.cargo",
+    "\\.github",
+    "\\examples",
+    "\\splits",
+    "\\src",
+    "\\target",
+    "\\target\\debug",
+    "\\target\\wasm32-unknown-unknown"
+  ],
+  "SelectedNode": "\\README.md",
+  "PreviewInSolutionExplorer": false
+}
