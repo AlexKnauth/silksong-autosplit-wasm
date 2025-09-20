@@ -7,7 +7,7 @@ use ugly_widget::{
 
 use crate::{
     silksong_memory::{
-        is_menu, GameManagerPointers, Memory, PlayerDataPointers, GameplayPointers, SceneStore, MENU_TITLE,
+        is_menu, GameManagerPointers, Memory, PlayerDataPointers, SceneStore, MENU_TITLE,
         NON_MENU_GAME_STATES, OPENING_SCENES,
     },
     timer::{should_split, SplitterAction},
@@ -428,125 +428,125 @@ pub enum Split {
     ///
     /// Splits after unlocking Putrified Ducts Bellway
     UnlockedAqueductStation,
-    /// Unlocked Bellhart (Bellway)
+    /// Bellhart (Bellway)
     ///
     /// Splits after unlocking Bellhart Bellway
     UnlockedBelltownStation,
-    /// Unlocked Far Fields (Bellway)
+    /// Far Fields (Bellway)
     ///
     /// Splits after unlocking Far Fields Bellway
     UnlockedBoneforestEastStation,
-    /// Unlocked Grand Bellway (Bellway)
+    /// Grand Bellway (Bellway)
     ///
     /// Splits after unlocking Grand Bellway
     UnlockedCityStation,
-    /// Unlocked Blasted Steps (Bellway)
+    /// Blasted Steps (Bellway)
     ///
     /// Splits after unlocking Blasted Steps Bellway
     UnlockedCoralTowerStation,
-    /// Unlocked Deep Docks (Bellway)
+    /// Deep Docks (Bellway)
     ///
     /// Splits after unlocking Deep Docks Bellway
     UnlockedDocksStation,
-    /// Unlocked Greymoor (Bellway)
+    /// Greymoor (Bellway)
     ///
     /// Splits after unlocking Greymoor Bellway
     UnlockedGreymoorStation,
-    /// Unlocked Mount Fay (Bellway)
+    /// Mount Fay (Bellway)
     ///
     /// Splits after unlocking Mount Fay Bellway
     UnlockedPeakStation,
-    /// Unlocked Bilewater (Bellway)
+    /// Bilewater (Bellway)
     ///
     /// Splits after unlocking Bilewater Bellway
     UnlockedShadowStation,
-    /// Unlocked Shellwood (Bellway)
+    /// Shellwood (Bellway)
     ///
     /// Splits after unlocking Shellwood Bellway
     UnlockedShellwoodStation,
     // endregion: Bellways
 
     // region: Ventricas
-    /// Unlocked Choral Chambers (Ventrica)
+    /// Choral Chambers (Ventrica)
     ///
     /// Splits after unlocking Choral Chambers Ventrica
     UnlockedSongTube,
-    /// Unlocked Underworks (Ventrica)
+    /// Underworks (Ventrica)
     ///
     /// Splits after unlocking Underworks Ventrica
     UnlockedUnderTube,
-    /// Unlocked Grand Bellway (Ventrica)
+    /// Grand Bellway (Ventrica)
     ///
     /// Splits after unlocking Grand Bellway Ventrica
     UnlockedCityBellwayTube,
-    /// Unlocked High Halls (Ventrica)
+    /// High Halls (Ventrica)
     ///
     /// Splits after unlocking High Halls Ventrica
     UnlockedHangTube,
-    /// Unlocked Songclave (Ventrica)
+    /// Songclave (Ventrica)
     ///
     /// Splits after unlocking Songclave Ventrica
     UnlockedEnclaveTube,
-    /// Unlocked Memorium (Ventrica)
+    /// Memorium (Ventrica)
     ///
     /// Splits after unlocking Memorium Ventrica
     UnlockedArboriumTube,
     // endregion: Ventricas
 
     // region: ShakraEncounters
-    /// Seen Shakra Bonebottom (Mapper)
+    /// Seen Shakra Bonebottom (NPC)
     ///
     /// Splits after seeing Shakra in Bonebottom
     SeenMapperBonetown,
-    /// Seen Shakra Marrow (Mapper)
+    /// Seen Shakra Marrow (NPC)
     ///
     /// Splits after seeing Shakra in Marrow
     SeenMapperBoneForest,
-    /// Seen Shakra Deep Docks (Mapper)
+    /// Seen Shakra Deep Docks (NPC)
     ///
     /// Splits after seeing Shakra in Deep Docks
     SeenMapperDocks,
-    /// Seen Shakra Far Fields (Mapper)
+    /// Seen Shakra Far Fields (NPC)
     ///
     /// Splits after seeing Shakra in Far Fields
     SeenMapperWilds,
-    /// Seen Shakra Wormways (Mapper)
+    /// Seen Shakra Wormways (NPC)
     ///
     /// Splits after seeing Shakra in Wormways
     SeenMapperCrawl,
-    /// Seen Shakra Greymoor (Mapper)
+    /// Seen Shakra Greymoor (NPC)
     ///
     /// Splits after seeing Shakra in Greymoor
     SeenMapperGreymoor,
-    /// Seen Shakra Bellhart (Mapper)
+    /// Seen Shakra Bellhart (NPC)
     ///
     /// Splits after seeing Shakra in Bellhart
     SeenMapperBellhart,
-    /// Seen Shakra Shellwood (Mapper)
+    /// Seen Shakra Shellwood (NPC)
     ///
     /// Splits after seeing Shakra in Shellwood
     SeenMapperShellwood,
-    /// Seen Shakra Hunter's March (Mapper)
+    /// Seen Shakra Hunter's March (NPC)
     ///
     /// Splits after seeing Shakra in Hunter's March
     SeenMapperHuntersNest,
-    /// Seen Shakra Blasted Steps (Mapper)
+    /// Seen Shakra Blasted Steps (NPC)
     ///
     /// Splits after seeing Shakra in Blasted Steps
     SeenMapperJudgeSteps,
-    /// Seen Shakra Sinner's Road (Mapper)
+    /// Seen Shakra Sinner's Road (NPC)
     ///
     /// Splits after seeing Shakra in Sinner's Road
     SeenMapperDustpens,
-    /// Seen Shakra Mount Fay (Mapper)
+    /// Seen Shakra Mount Fay (NPC)
     ///
     /// Splits after seeing Shakra in Mount Fay
     SeenMapperPeak,
-    /// Seen Shakra Bilewater (Mapper)
+    /// Seen Shakra Bilewater (NPC)
     ///
     /// Splits after seeing Shakra in Bilewater
     SeenMapperShadow,
-    /// Seen Shakra Sands of Karak (Mapper)
+    /// Seen Shakra Sands of Karak (NPC)
     ///
     /// Splits after seeing Shakra in Sands of Karak
     SeenMapperCoralCaverns,
@@ -573,18 +573,14 @@ pub enum Split {
     ///
     /// Splits when you find Fleatopias location
     SeenFleatopiaEmpty,
-    /// Faydown Cloak (Ability)
+    /// Faydown Cloak (Skill)
     ///
     /// Splits when you obtain Double Jump
-    HasDoubleJump,
-    /// Silk Soar (Ability)
+    FaydownCloak,
+    /// Silk Soar (Skill)
     ///
     /// Splits when you obtain Super Jump
     HasSuperJump,
-    /// Thread Storm (Ability)
-    ///
-    /// Splits when you obtain Thread Storm
-    HasSilkSpecial,
     /// Nyleth's Heart (Item)
     ///
     /// Splits when you obtain Nyleth's Heart
@@ -633,7 +629,6 @@ pub fn transition_splits(
     mem: &Memory,
     _gm: &GameManagerPointers,
     pd: &PlayerDataPointers,
-    _gp: &GameplayPointers,
 ) -> SplitterAction {
     match split {
         // region: Start, End, and Menu
@@ -729,7 +724,6 @@ pub fn continuous_splits(
     mem: &Memory,
     gm: &GameManagerPointers,
     pd: &PlayerDataPointers,
-    _gp: &GameplayPointers,
 ) -> SplitterAction {
     let game_state: i32 = mem.deref(&gm.game_state).unwrap_or_default();
     if !NON_MENU_GAME_STATES.contains(&game_state) {
@@ -937,9 +931,8 @@ pub fn continuous_splits(
         Split::UnlockedDustCage => should_split(mem.deref(&pd.unlocked_dust_cage).unwrap_or_default()),
         Split::GreenPrinceLocationIsVerdania => should_split(mem.deref(&pd.green_prince_location).is_ok_and(|n: i32| n == 3)),
         Split::SeenFleatopiaEmpty => should_split(mem.deref(&pd.seen_fleatopia_empty).unwrap_or_default()),
-        Split::HasDoubleJump => should_split(mem.deref(&pd.has_double_jump).unwrap_or_default()),
+        Split::FaydownCloak => should_split(mem.deref(&pd.has_double_jump).unwrap_or_default()),
         Split::HasSuperJump => should_split(mem.deref(&pd.has_super_jump).unwrap_or_default()),
-        Split::HasSilkSpecial => should_split(mem.deref(&pd.has_silk_special).unwrap_or_default()),
         Split::CollectedHeartFlower => should_split(mem.deref(&pd.collected_heart_flower).unwrap_or_default()),
         Split::CollectedHeartCoral => should_split(mem.deref(&pd.collected_heart_coral).unwrap_or_default()),
         Split::CollectedHeartHunter => should_split(mem.deref(&pd.collected_heart_hunter).unwrap_or_default()),
@@ -958,14 +951,13 @@ pub fn splits(
     mem: &Memory,
     gm: &GameManagerPointers,
     pd: &PlayerDataPointers,
-    gp: &GameplayPointers,
     trans_now: bool,
     ss: &mut SceneStore,
 ) -> SplitterAction {
-    let a1 = continuous_splits(split, mem, gm, pd, gp).or_else(|| {
+    let a1 = continuous_splits(split, mem, gm, pd).or_else(|| {
         let scenes = ss.pair();
         if trans_now {
-            transition_splits(split, &scenes, mem, gm, pd, gp)
+            transition_splits(split, &scenes, mem, gm, pd)
         } else {
             SplitterAction::Pass
         }

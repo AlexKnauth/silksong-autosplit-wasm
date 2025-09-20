@@ -1,9 +1,11 @@
 # Rust-generated files
 /target
+asr-debugger.exe
 
 # Editor-generated files
 .vscode/settings.json
 .vsidx
 .vs/
+
 # OS-generated files
 .DS_Store

@@ -288,7 +288,6 @@ declare_pointers!(PlayerDataPointers {
     seen_fleatopia_empty: UnityPointer<3> = UnityPointer::new("GameManager", 0, &["_instance", "playerData", "SeenFleatopiaEmpty"]),
     has_double_jump: UnityPointer<3> = UnityPointer::new("GameManager", 0, &["_instance", "playerData", "hasDoubleJump"]),
     has_super_jump: UnityPointer<3> = UnityPointer::new("GameManager", 0, &["_instance", "playerData", "hasSuperJump"]),
-    has_silk_special: UnityPointer<3> = UnityPointer::new("GameManager", 0, &["_instance", "playerData", "MetShermaEnclave"]),
     collected_heart_flower: UnityPointer<3> = UnityPointer::new("GameManager", 0, &["_instance", "playerData", "CollectedHeartFlower"]),
     collected_heart_coral: UnityPointer<3> = UnityPointer::new("GameManager", 0, &["_instance", "playerData", "CollectedHeartCoral"]),
     collected_heart_hunter: UnityPointer<3> = UnityPointer::new("GameManager", 0, &["_instance", "playerData", "CollectedHeartHunter"]),
@@ -297,9 +296,6 @@ declare_pointers!(PlayerDataPointers {
     belltown_greeter_house_full_dlg: UnityPointer<3> = UnityPointer::new("GameManager", 0, &["_instance", "playerData", "BelltownGreeterHouseFullDlg"]),
 });
 
-declare_pointers!(GameplayPointers {
-    saved_fleas: UnityPointer<3> = UnityPointer::new("GlobalSettings.Gameplay", 0, &["FleasCollectedCount"]),
-});
 
 // --------------------------------------------------------
 
