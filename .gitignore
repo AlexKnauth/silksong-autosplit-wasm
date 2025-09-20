@@ -4,6 +4,6 @@
 # Editor-generated files
 .vscode/settings.json
 .vsidx
-
+.vs/
 # OS-generated files
 .DS_Store
