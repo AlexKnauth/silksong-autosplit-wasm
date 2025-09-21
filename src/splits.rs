@@ -204,10 +204,11 @@ pub enum Split {
     // endregion: CogworkCore
 
     // region: WhisperingVaults
-    /// Whispering Vaults Gauntlet (Mini Boss)
+    /// Whispering Vaults Arena (Mini Boss)
     ///
-    /// Splits when completing the Whispering Vaults Gauntlet
-    WhisperingVaultsGauntlet,
+    /// Splits when completing the Whispering Vaults Arena
+    #[alias = "WhisperingVaultsGauntlet"]
+    WhisperingVaultsArena,
     // endregion: WhisperingVaults
 
     // region: ChoralChambers
@@ -233,14 +234,16 @@ pub enum Split {
     ///
     /// Splits when entering High Halls
     EnterHighHalls,
-    /// Enter High Halls Gauntlet (Transition)
+    /// Enter High Halls Arena (Transition)
     ///
-    /// Splits when entering the High Halls Gauntlet room
-    EnterHighHallsGauntlet,
-    /// High Halls Gauntlet (Mini Boss)
+    /// Splits when entering the High Halls Arena room
+    #[alias = "EnterHighHallsGauntlet"]
+    EnterHighHallsArena,
+    /// High Halls Arena (Mini Boss)
     ///
-    /// Splits when completing the High Halls Gauntlet
-    HighHallsGauntlet,
+    /// Splits when completing the High Halls Arena
+    #[alias = "HighHallsGauntlet"]
+    HighHallsArena,
     // endregion: HighHalls
 
     // region: TheCradle
@@ -696,7 +699,7 @@ pub fn transition_splits(
         Split::EnterHighHalls => {
             should_split(scenes.old == "Hang_01" && scenes.current == "Hang_02")
         }
-        Split::EnterHighHallsGauntlet => {
+        Split::EnterHighHallsArena => {
             should_split(scenes.old == "Hang_06" && scenes.current == "Hang_04")
         }
         // endregion: HighHalls
@@ -800,7 +803,7 @@ pub fn continuous_splits(
         // endregion: CogworkCore
 
         // region: WhisperingVaults
-        Split::WhisperingVaultsGauntlet => should_split(
+        Split::WhisperingVaultsArena => should_split(
             mem.deref(&pd.completed_library_entry_battle)
                 .unwrap_or_default(),
         ),
@@ -815,7 +818,7 @@ pub fn continuous_splits(
         //endregion: Underworks
 
         // region: HighHalls
-        Split::HighHallsGauntlet => should_split(mem.deref(&pd.hang04_battle).unwrap_or_default()),
+        Split::HighHallsArena => should_split(mem.deref(&pd.hang04_battle).unwrap_or_default()),
         //endregion: HighHalls
 
         // region: TheCradle

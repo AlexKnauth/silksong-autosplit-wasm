@@ -185,9 +185,9 @@
     "tooltip": "Splits when killing Cogwork Dancers"
   },
   {
-    "description": "Whispering Vaults Gauntlet (Mini Boss)",
-    "key": "WhisperingVaultsGauntlet",
-    "tooltip": "Splits when completing the Whispering Vaults Gauntlet"
+    "description": "Whispering Vaults Arena (Mini Boss)",
+    "key": "WhisperingVaultsArena",
+    "tooltip": "Splits when completing the Whispering Vaults Arena"
   },
   {
     "description": "Trobbio (Boss)",
@@ -210,14 +210,14 @@
     "tooltip": "Splits when entering High Halls"
   },
   {
-    "description": "Enter High Halls Gauntlet (Transition)",
-    "key": "EnterHighHallsGauntlet",
-    "tooltip": "Splits when entering the High Halls Gauntlet room"
+    "description": "Enter High Halls Arena (Transition)",
+    "key": "EnterHighHallsArena",
+    "tooltip": "Splits when entering the High Halls Arena room"
   },
   {
-    "description": "High Halls Gauntlet (Mini Boss)",
-    "key": "HighHallsGauntlet",
-    "tooltip": "Splits when completing the High Halls Gauntlet"
+    "description": "High Halls Arena (Mini Boss)",
+    "key": "HighHallsArena",
+    "tooltip": "Splits when completing the High Halls Arena"
   },
   {
     "description": "Lace 2 (Boss)",
