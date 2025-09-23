@@ -215,7 +215,7 @@ checksum = "c9e9a38711f559d9e3ce1cdb06dd7c5b8ea546bc90052da6d06bb76da74bb07c"
 [[package]]
 name = "ugly_widget"
 version = "0.1.0"
-source = "git+https://github.com/AlexKnauth/hollowknight-autosplit-wasm#ee787e2a8821bd8415d144036216f8e649f1988d"
+source = "git+https://github.com/AlexKnauth/hollowknight-autosplit-wasm#4fdd7f2b6a717d5ff1c5a58c68d867015539fd98"
 dependencies = [
  "asr",
  "ugly_widget_derive",
@@ -224,7 +224,7 @@ dependencies = [
 [[package]]
 name = "ugly_widget_derive"
 version = "0.1.0"
-source = "git+https://github.com/AlexKnauth/hollowknight-autosplit-wasm#ee787e2a8821bd8415d144036216f8e649f1988d"
+source = "git+https://github.com/AlexKnauth/hollowknight-autosplit-wasm#4fdd7f2b6a717d5ff1c5a58c68d867015539fd98"
 dependencies = [
  "quote",
  "syn",

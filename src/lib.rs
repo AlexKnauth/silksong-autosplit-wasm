@@ -18,7 +18,7 @@ use asr::{
 };
 use core::cmp;
 use ugly_widget::{
-    radio_button::options_str,
+    radio_button::{options_normalize, options_str},
     store::{StoreGui, StoreWidget},
     ugly_list::UglyList,
 };
@@ -310,6 +310,10 @@ fn default_splits_init() -> asr::settings::Map {
         .is_some_and(|v| v.get_list().is_some_and(|l| !l.is_empty()))
     {
         asr::print_message("Settings from asr::settings::Map::load");
+        if asr_settings_normalize(&settings1).is_some() {
+            asr::print_message("Settings normalized");
+            settings1.store();
+        }
         return settings1;
     }
     let l = asr::settings::List::new();
@@ -323,6 +327,27 @@ fn default_splits_init() -> asr::settings::Map {
             asr::print_message("No settings found: default splits initialized");
             return new;
         }
+    }
+}
+
+fn asr_settings_normalize(m: &asr::settings::Map) -> Option<()> {
+    let old_splits = m.get("splits")?.get_list()?;
+    let new_splits = asr::settings::List::new();
+    let mut changed = false;
+    for (i, old_split) in old_splits.iter().enumerate() {
+        let old_string = old_split.get_string()?;
+        let new_string = options_normalize::<splits::Split>(&old_string);
+        new_splits.push(new_string.as_str());
+        if old_string != new_string {
+            changed = true;
+            m.insert(&format!("splits_{}_item", i), new_string.as_str());
+        }
+    }
+    if changed {
+        m.insert("splits", new_splits);
+        Some(())
+    } else {
+        None
     }
 }
 
