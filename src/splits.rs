@@ -147,7 +147,7 @@ pub enum Split {
 
     // region: Shellwood
     /// Enter Shellwood (Transition)
-    /// 
+    ///
     /// Splits when entering Shellwood
     EnterShellwood,
     /// Cling Grip (Skill)
@@ -166,7 +166,7 @@ pub enum Split {
 
     // region: Bellhart
     /// Enter Bellhart (Transition)
-    /// 
+    ///
     /// Splits when entering Bellhart
     EnterBellhart,
     /// Widow (Boss)
@@ -320,7 +320,7 @@ pub enum Split {
 
     // region: Crests
     /// Reaper Crest (Transition)
-    /// 
+    ///
     /// Splits when leaving the church with the Reaper Crest unlocked
     ReaperCrestTrans,
     // endregion: Crests
@@ -687,8 +687,8 @@ pub fn transition_splits(
 
         // region: Wormways
         Split::EnterWormways => should_split(
-            (scenes.old == "Crawl_02" && scenes.current == "Crawl_03b") ||
-            (scenes.old == "Aspid_01" && scenes.current == "Crawl_01"),
+            (scenes.old == "Crawl_02" && scenes.current == "Crawl_03b")
+                || (scenes.old == "Aspid_01" && scenes.current == "Crawl_01"),
         ),
         // endregion: Wormways
 
