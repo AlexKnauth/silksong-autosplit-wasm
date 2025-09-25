@@ -117,8 +117,8 @@
     "alias": null,
     "description": "Enter Wormways (Transition)",
     "key": "EnterWormways",
-    "tooltip": "Splits when entering Wormways"
-  },  
+    "tooltip": "Splits on entering Wormways"
+  },
   {
     "alias": null,
     "description": "Drifter's Cloak (Skill)",
@@ -161,18 +161,12 @@
     "key": "MoorwingTrans",
     "tooltip": "Splits on the transition after killing Moorwing"
   },
- {
-    "alias": null,
-    "description": "Enter Bellhart (Transition)",
-    "key": "EnterBellhart",
-    "tooltip": "Splits when entering Bellhart"
-  },
- {
+  {
     "alias": null,
     "description": "Enter Shellwood (Transition)",
     "key": "EnterShellwood",
     "tooltip": "Splits when entering Shellwood"
-  },  
+  },
   {
     "alias": null,
     "description": "Cling Grip (Skill)",
@@ -190,6 +184,12 @@
     "description": "Shellwood Bell (Event)",
     "key": "ShellwoodBell",
     "tooltip": "Splits when ringing the Shellwood Bell Shrine"
+  },
+  {
+    "alias": null,
+    "description": "Enter Bellhart (Transition)",
+    "key": "EnterBellhart",
+    "tooltip": "Splits when entering Bellhart"
   },
   {
     "alias": null,
