@@ -648,6 +648,23 @@ impl StoreWidget for Split {
     }
 }
 
+pub fn menu_splits(
+    split: &Split,
+    scenes: &Pair<&str>,
+    _mem: &Memory,
+    _gm: &GameManagerPointers,
+    _pd: &PlayerDataPointers,
+) -> SplitterAction {
+    match split {
+        // region: Start, End, and Menu
+        Split::Menu => should_split(scenes.current == MENU_TITLE),
+        // endregion: Start, End, and Menu
+
+        // else
+        _ => should_split(false),
+    }
+}
+
 pub fn transition_splits(
     split: &Split,
     scenes: &Pair<&str>,
@@ -659,10 +676,7 @@ pub fn transition_splits(
         // region: Start, End, and Menu
         Split::EndingSplit => should_split(scenes.current.starts_with("Cinematic_Ending")),
         Split::EndingA => should_split(scenes.current == "Cinematic_Ending_A"),
-        Split::Menu => should_split(scenes.current == MENU_TITLE),
-        Split::AnyTransition => should_split(
-            scenes.current != scenes.old && !(is_menu(scenes.old) || is_menu(scenes.current)),
-        ),
+        Split::AnyTransition => should_split(true),
         // endregion: Start, End, and Menu
 
         // region: MossLands
@@ -1181,7 +1195,11 @@ pub fn splits(
         };
         a2.or_else(|| {
             if trans_now {
-                transition_splits(split, &scenes, mem, gm, pd)
+                if is_menu(scenes.old) || is_menu(scenes.current) {
+                    menu_splits(split, &scenes, mem, gm, pd)
+                } else {
+                    transition_splits(split, &scenes, mem, gm, pd)
+                }
             } else {
                 SplitterAction::Pass
             }

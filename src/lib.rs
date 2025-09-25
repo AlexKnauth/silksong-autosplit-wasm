@@ -113,7 +113,10 @@ impl AutoSplitterState {
             {
                 // Reset
                 if settings.get_hit_counter() {
-                    Settings::update_comparison_hits(&mut self.comparison_hits, &self.cumulative_hits);
+                    Settings::update_comparison_hits(
+                        &mut self.comparison_hits,
+                        &self.cumulative_hits,
+                    );
                     if self.timer_state == TimerState::Ended {
                         if let Some(pb_hits) = self.comparison_hits.last() {
                             asr::timer::set_variable_int("pb hits", *pb_hits);
