@@ -664,7 +664,11 @@ pub fn transition_splits(
         // endregion: DeepDocks
 
         // region: FarFields
-        Split::DriftersCloakTrans => should_split(mem.deref(&pd.has_brolly).unwrap_or_default()),
+        Split::DriftersCloakTrans => should_split(
+            mem.deref(&pd.has_brolly).unwrap_or_default()
+                && scenes.old == "Bone_East_Umbrella"
+                && scenes.current == "Bone_East_09",
+        ),
         // endregion: FarFields
 
         // region: Greymoor
