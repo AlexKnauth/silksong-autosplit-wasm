@@ -7,6 +7,12 @@
   },
   {
     "alias": null,
+    "description": "Start New Game (Start)",
+    "key": "StartNewGame",
+    "tooltip": "Splits when starting a new save file from the opening cutscenes into Moss Grotto"
+  },
+  {
+    "alias": null,
     "description": "Act 1 Start (Start)",
     "key": "Act1Start",
     "tooltip": "Splits when starting Act 1, either from the starting Bind, or from revert autosave Act1Start"
