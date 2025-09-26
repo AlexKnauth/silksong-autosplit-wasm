@@ -327,7 +327,6 @@ declare_pointers!(PlayerDataPointers {
 
 });
 
-
 // --------------------------------------------------------
 
 pub struct Memory<'a> {
@@ -512,4 +511,3 @@ impl Default for SceneStore {
 }
 
 // --------------------------------------------------------
-
