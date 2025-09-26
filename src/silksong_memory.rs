@@ -307,7 +307,7 @@ declare_pointers!(PlayerDataPointers {
     defeated_swamp_shaman: UnityPointer<3> = UnityPointer::new("GameManager", 0, &["_instance", "playerData", "DefeatedSwampShaman"]),
     defeated_bone_flyer_giant: UnityPointer<3> = UnityPointer::new("GameManager", 0, &["_instance", "playerData", "defeatedBoneFlyerGiant"]),
     defeated_bone_flyer_giant_golem_scene: UnityPointer<3> = UnityPointer::new("GameManager", 0, &["_instance", "playerData", "defeatedBoneFlyerGiantGolemScene"]),
-    carvan_troupe_location: UnityPointer<3> = UnityPointer::new("GameManager", 0, &["_instance", "playerData", "CaravanTroupeLocation"]),
+    caravan_troupe_location: UnityPointer<3> = UnityPointer::new("GameManager", 0, &["_instance", "playerData", "CaravanTroupeLocation"]),
     belltown_relic_dealer_gave_relic: UnityPointer<3> = UnityPointer::new("GameManager", 0, &["_instance", "playerData", "BelltownRelicDealerGaveRelic"]),
     collected_ward_key: UnityPointer<3> = UnityPointer::new("GameManager", 0, &["_instance", "playerData", "CollectedWardKey"]),
     belltown_greeter_met_time_passed: UnityPointer<3> = UnityPointer::new("GameManager", 0, &["_instance", "playerData", "BelltownGreeterMetTimepassed"]),

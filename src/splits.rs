@@ -431,7 +431,7 @@ pub enum Split {
     ///
     /// Splits after rescuing flea in Song_14
     SavedFleaChoralChambersCage,
-    /// Rescued Flea Underworks Explosions (Flea)
+    /// Rescued Flea Underworks Cauldron (Flea)
     ///
     /// Splits after rescuing flea in Under_21
     #[alias = "SavedFleaUnderworksExplosions"]
@@ -1295,10 +1295,10 @@ pub fn continuous_splits(
             should_split(mem.deref(&pd.defeated_bone_flyer_giant_golem_scene).unwrap_or_default())
         }
         Split::CaravanTroupeGreymoor => {
-            should_split(mem.deref(&pd.carvan_troupe_location).is_ok_and(|n: i32| n >= 1))
+            should_split(mem.deref(&pd.caravan_troupe_location).is_ok_and(|n: i32| n >= 1))
         }
         Split::CaravanTroupeFleatopia => {
-            should_split(mem.deref(&pd.carvan_troupe_location).is_ok_and(|n: i32| n >= 3))
+            should_split(mem.deref(&pd.caravan_troupe_location).is_ok_and(|n: i32| n >= 3))
         }
         Split::SoldRelic => {
             should_split(mem.deref(&pd.belltown_relic_dealer_gave_relic).unwrap_or_default())
