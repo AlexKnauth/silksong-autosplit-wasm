@@ -22,10 +22,12 @@ pub enum Split {
     /// Never splits. Use this when you need to manually split
     #[default]
     ManualSplit,
-    /// Start New Game (Start)
+    /// Act 1 Start (Start)
     ///
-    /// Splits when starting a new save file
-    StartNewGame,
+    /// Splits when starting Act 1,
+    /// either from the starting Bind,
+    /// or from revert autosave Act1Start
+    Act1Start,
     /// Credits Roll (Ending)
     ///
     /// Splits on any credits rolling, any ending
@@ -781,7 +783,7 @@ pub fn transition_once_splits(
 ) -> SplitterAction {
     match split {
         // region: Start, End, and Menu
-        Split::StartNewGame => should_split(
+        Split::Act1Start => should_split(
             scenes.current == "Tut_01"
                 && (OPENING_SCENES.contains(&scenes.old)
                     || (scenes.old == MENU_TITLE

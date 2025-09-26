@@ -9,7 +9,7 @@ json:
 	    jq --indent 4 . "$$i" > "$${i}.tmp" && mv "$${i}.tmp" "$$i" ; \
 	done
 
-examples/splits.json: examples/splits.rs src/splits.rs
+examples/splits.json: src/splits.rs examples/splits.rs
 	cargo run --example splits --target $$(rustc -vV | sed -n 's|host: ||p')
 
 clean:
