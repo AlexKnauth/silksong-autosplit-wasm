@@ -61,6 +61,7 @@ struct AutoSplitterState {
     last_recoil: bool,
     last_hazard: bool,
     last_health_0: bool,
+    mms_room_dupe: bool,
     #[cfg(debug_assertions)]
     last_health: Option<i32>,
     #[cfg(debug_assertions)]
@@ -91,6 +92,7 @@ impl AutoSplitterState {
             last_recoil: false,
             last_hazard: false,
             last_health_0: false,
+            mms_room_dupe: false,
             #[cfg(debug_assertions)]
             last_health: None,
             #[cfg(debug_assertions)]
@@ -627,6 +629,16 @@ fn load_removal(state: &mut AutoSplitterState, mem: &Memory, gm: &GameManagerPoi
         state.look_for_teleporting = false;
     }
 
+    if game_state == GAME_STATE_LOADING
+        && state.last_game_state == GAME_STATE_CUTSCENE
+        && scene_name == "Opening_Sequence"
+    {
+        state.mms_room_dupe = true;
+    } else if game_state == GAME_STATE_PLAYING && state.last_game_state == GAME_STATE_EXITING_LEVEL
+    {
+        state.mms_room_dupe = false;
+    }
+
     // TODO: hazard_respawning
     let accepting_input: bool = mem.deref(&gm.accepting_input).unwrap_or_default();
     let hero_transition_state: i32 = mem.deref(&gm.hero_transition_state).unwrap_or_default();
@@ -640,9 +652,11 @@ fn load_removal(state: &mut AutoSplitterState, mem: &Memory, gm: &GameManagerPoi
             && ui_state != UI_STATE_PLAYING)
         || (game_state != GAME_STATE_PLAYING
             && game_state != GAME_STATE_CUTSCENE
-            && !accepting_input)
-        || ((game_state == GAME_STATE_EXITING_LEVEL && scene_load_activation_allowed)
+            && !accepting_input
+            && !state.mms_room_dupe)
+        || (((game_state == GAME_STATE_EXITING_LEVEL && scene_load_activation_allowed)
             || game_state == GAME_STATE_LOADING)
+            && !state.mms_room_dupe)
         || (hero_transition_state == HERO_TRANSITION_STATE_WAITING_TO_ENTER_LEVEL)
         || (ui_state != UI_STATE_PLAYING
             && (loading_menu
