@@ -633,8 +633,16 @@ fn load_removal(state: &mut AutoSplitterState, mem: &Memory, gm: &GameManagerPoi
         && state.last_game_state == GAME_STATE_CUTSCENE
         && OPENING_SCENES.contains(&scene_name.as_str())
     {
+        #[cfg(debug_assertions)]
+        if !state.mms_room_dupe {
+            asr::print_message("mms_room_dupe: true");
+        }
         state.mms_room_dupe = true;
     } else if game_state == GAME_STATE_PLAYING {
+        #[cfg(debug_assertions)]
+        if state.mms_room_dupe {
+            asr::print_message("mms_room_dupe: false");
+        }
         state.mms_room_dupe = false;
     }
 
