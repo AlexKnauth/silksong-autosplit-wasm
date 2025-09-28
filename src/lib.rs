@@ -634,8 +634,7 @@ fn load_removal(state: &mut AutoSplitterState, mem: &Memory, gm: &GameManagerPoi
         && scene_name == "Opening_Sequence"
     {
         state.mms_room_dupe = true;
-    } else if game_state == GAME_STATE_PLAYING && state.last_game_state == GAME_STATE_EXITING_LEVEL
-    {
+    } else if game_state == GAME_STATE_PLAYING {
         state.mms_room_dupe = false;
     }
 
@@ -654,9 +653,10 @@ fn load_removal(state: &mut AutoSplitterState, mem: &Memory, gm: &GameManagerPoi
             && game_state != GAME_STATE_CUTSCENE
             && !accepting_input
             && !state.mms_room_dupe)
-        || (((game_state == GAME_STATE_EXITING_LEVEL && scene_load_activation_allowed)
-            || game_state == GAME_STATE_LOADING)
+        || ((game_state == GAME_STATE_EXITING_LEVEL
+            && scene_load_activation_allowed
             && !state.mms_room_dupe)
+            || game_state == GAME_STATE_LOADING)
         || (hero_transition_state == HERO_TRANSITION_STATE_WAITING_TO_ENTER_LEVEL)
         || (ui_state != UI_STATE_PLAYING
             && (loading_menu
