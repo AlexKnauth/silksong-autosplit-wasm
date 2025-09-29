@@ -125,6 +125,8 @@ struct AutoSplitterState {
     last_paused: bool,
     #[cfg(debug_assertions)]
     last_reasons: Vec<&'static str>,
+    #[cfg(debug_assertions)]
+    reason_change: bool,
 }
 
 impl AutoSplitterState {
@@ -170,6 +172,8 @@ impl AutoSplitterState {
             last_paused: false,
             #[cfg(debug_assertions)]
             last_reasons: Vec::new(),
+            #[cfg(debug_assertions)]
+            reason_change: false,
         }
     }
 
@@ -251,6 +255,7 @@ impl AutoSplitterState {
                 {
                     self.last_paused = false;
                     self.last_reasons = Vec::new();
+                    self.reason_change = false;
                 }
             }
             TimerState::Running if is_timer_state_between_runs(self.timer_state) => {
@@ -786,7 +791,15 @@ async fn handle_splits(
                 let Some(split) = settings.get_split(0) else {
                     break;
                 };
-                let a = splits::splits(&split, env, trans_now, ss, &mut state.store);
+                let a = splits::splits(
+                    &split,
+                    env,
+                    trans_now,
+                    ss,
+                    &mut state.store,
+                    #[cfg(debug_assertions)]
+                    state.reason_change,
+                );
                 match a {
                     Some(SplitterAction::Split) => {
                         // Start
@@ -837,7 +850,15 @@ async fn handle_splits(
                 else {
                     break;
                 };
-                let a = splits::splits(&split, env, trans_now, ss, &mut state.store);
+                let a = splits::splits(
+                    &split,
+                    env,
+                    trans_now,
+                    ss,
+                    &mut state.store,
+                    #[cfg(debug_assertions)]
+                    state.reason_change,
+                );
                 match a {
                     Some(SplitterAction::Reset) => {
                         if settings.get_hit_counter() {
@@ -887,6 +908,7 @@ async fn handle_splits(
                         {
                             state.last_paused = false;
                             state.last_reasons = Vec::new();
+                            state.reason_change = false;
                         }
                         // no break, allow other actions after a skip or reset
                     }
@@ -1226,7 +1248,8 @@ fn load_removal(settings: &Settings, state: &mut AutoSplitterState, e: &Env) {
         {
             reasons.push("file_select");
         }
-        if reasons != state.last_reasons {
+        state.reason_change = reasons != state.last_reasons;
+        if state.reason_change {
             asr::print_message(&format!("reasons: {:?}", reasons));
         }
         state.last_reasons = reasons;
