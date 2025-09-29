@@ -22,6 +22,8 @@ pub enum Split {
     /// Never splits. Use this when you need to manually split
     #[default]
     ManualSplit,
+    #[cfg(debug_assertions)]
+    ReasonChange,
     /// Start New Game (Start)
     ///
     /// Splits when starting a new save file
@@ -1368,7 +1370,13 @@ pub fn splits(
     pd: &PlayerDataPointers,
     trans_now: bool,
     ss: &mut SceneStore,
+    #[cfg(debug_assertions)] reason_change: bool,
 ) -> SplitterAction {
+    #[cfg(debug_assertions)]
+    if *split == Split::ReasonChange && reason_change {
+        ss.split_this_transition = true;
+        return SplitterAction::Split;
+    }
     let a1 = continuous_splits(split, mem, gm, pd).or_else(|| {
         let scenes = ss.pair();
         let a2 = if !ss.split_this_transition {
