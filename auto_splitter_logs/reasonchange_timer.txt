@@ -1,0 +1,161 @@
+[02:53:22][Runtime][INFO] Auto splitter restarted.
+[02:53:22][Auto Splitter][INFO] Hello, World!
+[02:53:22][Auto Splitter][INFO] Settings from asr::settings::Map::load
+[02:53:22][Auto Splitter][INFO] hit_counter: true
+[02:53:22][Auto Splitter][INFO] splits: [ReasonChange, ReasonChange, ReasonChange, ReasonChange, ReasonChange, ReasonChange, ReasonChange, ReasonChange, ReasonChange, ReasonChange, ReasonChange, ReasonChange, ReasonChange, ReasonChange, ReasonChange, ReasonChange, ReasonChange, ReasonChange, ReasonChange, ReasonChange, ReasonChange, ReasonChange, ReasonChange, ReasonChange]
+[02:53:22][Runtime][DEBUG] Attached to a new process: Hollow Knight Silksong
+[02:53:22][Auto Splitter][INFO] Memory wait_attach: Module wait_attach...
+[02:53:22][Auto Splitter][INFO] Memory wait_attach: module get_default_image...
+[02:53:22][Auto Splitter][INFO] Memory wait_attach: got module and image
+[02:53:23][Auto Splitter][INFO] Initialized load removal pointers
+[02:53:23][Auto Splitter][INFO] curr_scene_name: Tut_01
+[02:53:23][Auto Splitter][INFO] prev  -> curr Tut_01
+
+Start Paused
+[02:53:35][Auto Splitter][INFO] ui_state: 5
+[02:53:35][Auto Splitter][INFO] game_state: 5
+[02:53:35][Auto Splitter][INFO] accepting_input: true
+[02:53:35][Auto Splitter][INFO] health: Some(5)
+
+Continue
+[02:53:41][Auto Splitter][INFO] ui_state: 4
+[02:53:41][Auto Splitter][INFO] game_state: 4
+[02:53:41][Auto Splitter][INFO] accepting_input: false
+[02:53:41][Auto Splitter][INFO] accepting_input: true
+
+Pause
+[02:53:48][Auto Splitter][INFO] ui_state: 5
+[02:53:48][Auto Splitter][INFO] game_state: 5
+[02:53:48][Auto Splitter][INFO] accepting_input: false
+[02:53:48][Auto Splitter][INFO] is_game_time_paused: true
+[02:53:48][Auto Splitter][INFO] reasons: ["not_accepting_input"]
+[02:53:48][Runtime][DEBUG] Splitted.
+Loading Pause Menu
+[02:53:49][Auto Splitter][INFO] accepting_input: true
+[02:53:49][Auto Splitter][INFO] is_game_time_paused: false
+[02:53:49][Auto Splitter][INFO] reasons: []
+[02:53:49][Runtime][DEBUG] Splitted.
+Paused
+
+SQ
+[02:53:54][Auto Splitter][INFO] accepting_input: false
+[02:53:54][Auto Splitter][INFO] is_game_time_paused: true
+[02:53:54][Auto Splitter][INFO] reasons: ["not_accepting_input"]
+[02:53:54][Runtime][DEBUG] Splitted.
+Loading Confirmation
+[02:53:54][Auto Splitter][INFO] accepting_input: true
+[02:53:54][Auto Splitter][INFO] is_game_time_paused: false
+[02:53:54][Auto Splitter][INFO] reasons: []
+[02:53:54][Runtime][DEBUG] Splitted.
+Confirmation
+
+Yes
+[02:53:58][Auto Splitter][INFO] accepting_input: false
+[02:53:58][Auto Splitter][INFO] is_game_time_paused: true
+[02:53:58][Auto Splitter][INFO] reasons: ["not_accepting_input"]
+[02:53:58][Runtime][DEBUG] Splitted.
+not_accepting_input 1
+[02:53:58][Auto Splitter][INFO] accepting_input: true
+[02:53:58][Auto Splitter][INFO] is_game_time_paused: false
+[02:53:58][Auto Splitter][INFO] reasons: []
+[02:53:58][Runtime][DEBUG] Splitted.
+running 1
+[02:54:01][Auto Splitter][INFO] curr_scene_name: Quit_To_Menu
+[02:54:01][Auto Splitter][INFO] prev Tut_01 -> curr Quit_To_Menu
+[02:54:01][Auto Splitter][INFO] is_game_time_paused: true
+[02:54:01][Auto Splitter][INFO] reasons: ["loading_menu_quit"]
+[02:54:01][Runtime][DEBUG] Splitted.
+loading_menu_quit 1
+[02:54:01][Auto Splitter][INFO] ui_state: 0
+[02:54:01][Auto Splitter][INFO] game_state: 0
+[02:54:01][Auto Splitter][INFO] accepting_input: false
+[02:54:01][Auto Splitter][INFO] reasons: ["not_accepting_input"]
+[02:54:01][Auto Splitter][INFO] health: None
+[02:54:01][Runtime][DEBUG] Splitted.
+not_accepting_input 2
+[02:54:02][Auto Splitter][INFO] curr_scene_name: test_persistent_01
+[02:54:02][Auto Splitter][INFO] prev Quit_To_Menu -> curr test_persistent_01
+[02:54:02][Auto Splitter][INFO] reasons: ["not_accepting_input", "loading_menu_next_empty"]
+[02:54:02][Auto Splitter][INFO] health: Some(5)
+[02:54:02][Auto Splitter][INFO] curr_scene_name: Menu_Title
+[02:54:02][Auto Splitter][INFO] prev test_persistent_01 -> curr Menu_Title
+[02:54:02][Runtime][DEBUG] Splitted.
+loading_menu_next_empty 1
+[02:54:02][Auto Splitter][INFO] reasons: ["not_accepting_input"]
+[02:54:02][Runtime][DEBUG] Splitted.
+not_accepting_input 3
+[02:54:02][Auto Splitter][INFO] accepting_input: true
+[02:54:02][Auto Splitter][INFO] is_game_time_paused: false
+[02:54:02][Auto Splitter][INFO] reasons: []
+[02:54:02][Runtime][DEBUG] Splitted.
+running 2
+[02:54:02][Auto Splitter][INFO] ui_state: 4
+[02:54:02][Auto Splitter][INFO] ui_state: 1
+[02:54:02][Auto Splitter][INFO] game_state: 1
+[02:54:02][Auto Splitter][INFO] accepting_input: false
+[02:54:02][Auto Splitter][INFO] is_game_time_paused: true
+[02:54:02][Auto Splitter][INFO] reasons: ["not_accepting_input"]
+[02:54:02][Runtime][DEBUG] Splitted.
+not_accepting_input 4
+[02:54:03][Auto Splitter][INFO] accepting_input: true
+[02:54:03][Auto Splitter][INFO] is_game_time_paused: false
+[02:54:03][Auto Splitter][INFO] reasons: []
+[02:54:03][Runtime][DEBUG] Splitted.
+Menu
+
+Start Game
+[02:54:08][Auto Splitter][INFO] accepting_input: false
+[02:54:08][Auto Splitter][INFO] is_game_time_paused: true
+[02:54:08][Auto Splitter][INFO] reasons: ["not_accepting_input"]
+[02:54:08][Runtime][DEBUG] Splitted.
+Loading File Select
+[02:54:09][Auto Splitter][INFO] accepting_input: true
+[02:54:09][Auto Splitter][INFO] is_game_time_paused: false
+[02:54:09][Auto Splitter][INFO] reasons: []
+[02:54:09][Runtime][DEBUG] Splitted.
+File Select
+
+Select
+[02:54:14][Auto Splitter][INFO] accepting_input: false
+[02:54:14][Auto Splitter][INFO] is_game_time_paused: true
+[02:54:14][Auto Splitter][INFO] reasons: ["not_accepting_input"]
+[02:54:14][Runtime][DEBUG] Splitted.
+not_accepting_input 5
+[02:54:17][Auto Splitter][INFO] game_state: 2
+[02:54:17][Auto Splitter][INFO] reasons: ["not_accepting_input", "game_state_loading"]
+[02:54:17][Runtime][DEBUG] Splitted.
+game_state_loading 1
+[02:54:18][Auto Splitter][INFO] next_scene_name: Tut_01
+[02:54:18][Auto Splitter][INFO] curr Menu_Title -> next Tut_01
+[02:54:18][Auto Splitter][INFO] game_state: 6
+[02:54:18][Auto Splitter][INFO] hero_transition_state: 1
+[02:54:18][Auto Splitter][INFO] reasons: ["not_accepting_input", "load_activation", "next_scene_ui_state"]
+[02:54:18][Runtime][DEBUG] Splitted.
+next_scene_ui_state 1
+[02:54:18][Auto Splitter][INFO] curr_scene_name: Tut_01
+[02:54:18][Auto Splitter][INFO] reasons: ["not_accepting_input", "load_activation"]
+[02:54:18][Runtime][DEBUG] Splitted.
+load_activation 1
+[02:54:18][Auto Splitter][INFO] ui_state: 4
+[02:54:18][Auto Splitter][INFO] game_state: 3
+[02:54:18][Auto Splitter][INFO] accepting_input: true
+[02:54:18][Auto Splitter][INFO] is_game_time_paused: false
+[02:54:18][Auto Splitter][INFO] reasons: []
+[02:54:18][Runtime][DEBUG] Splitted.
+Back in File
+[02:54:21][Auto Splitter][INFO] game_state: 4
+[02:54:21][Auto Splitter][INFO] hero_transition_state: 0
+
+Pause
+[02:54:24][Auto Splitter][INFO] accepting_input: false
+[02:54:24][Auto Splitter][INFO] ui_state: 5
+[02:54:24][Auto Splitter][INFO] game_state: 5
+[02:54:24][Auto Splitter][INFO] is_game_time_paused: true
+[02:54:24][Auto Splitter][INFO] reasons: ["not_accepting_input"]
+[02:54:24][Runtime][DEBUG] Splitted.
+Loading Pause Menu
+[02:54:24][Auto Splitter][INFO] accepting_input: true
+[02:54:24][Auto Splitter][INFO] is_game_time_paused: false
+[02:54:24][Auto Splitter][INFO] reasons: []
+[02:54:24][Runtime][DEBUG] Splitted.
+Ended
