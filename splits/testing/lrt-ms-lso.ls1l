@@ -49,7 +49,7 @@
                         ]
                     ]
                 },
-                "visual_split_count": 10,
+                "visual_split_count": 22,
                 "split_preview_count": 2,
                 "show_thin_separators": true,
                 "separator_last_split": true,
@@ -80,8 +80,8 @@
                 "columns": [
                     {
                         "name": "Time",
-                        "start_with": "ComparisonTime",
-                        "update_with": "SplitTime",
+                        "start_with": "ComparisonSegmentTime",
+                        "update_with": "SegmentTime",
                         "update_trigger": "OnEndingSegment",
                         "comparison_override": null,
                         "timing_method": null
@@ -89,7 +89,7 @@
                     {
                         "name": "+/−",
                         "start_with": "Empty",
-                        "update_with": "Delta",
+                        "update_with": "SegmentDelta",
                         "update_trigger": "Contextual",
                         "comparison_override": null,
                         "timing_method": null
