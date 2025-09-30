@@ -1,0 +1,296 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Run version="1.8.0">
+  <GameIcon />
+  <GameName>Hollow Knight: Silksong</GameName>
+  <CategoryName>ReasonChange Timer</CategoryName>
+  <Metadata>
+    <Run id="" />
+    <Platform usesEmulator="False" />
+    <Region />
+    <SpeedrunComVariables />
+    <CustomVariables />
+  </Metadata>
+  <LayoutPath />
+  <Offset>00:00:00.000000000</Offset>
+  <AttemptCount>0</AttemptCount>
+  <AttemptHistory />
+  <Segments>
+    <Segment>
+      <Name>Start Paused: Continue, Pause</Name>
+      <Icon />
+      <SplitTimes>
+        <SplitTime name="Personal Best" />
+      </SplitTimes>
+      <BestSegmentTime />
+      <SegmentHistory />
+    </Segment>
+    <Segment>
+      <Name>Loading Pause Menu</Name>
+      <Icon />
+      <SplitTimes>
+        <SplitTime name="Personal Best" />
+      </SplitTimes>
+      <BestSegmentTime />
+      <SegmentHistory />
+    </Segment>
+    <Segment>
+      <Name>Paused: SQ</Name>
+      <Icon />
+      <SplitTimes>
+        <SplitTime name="Personal Best" />
+      </SplitTimes>
+      <BestSegmentTime />
+      <SegmentHistory />
+    </Segment>
+    <Segment>
+      <Name>Loading Confirmation</Name>
+      <Icon />
+      <SplitTimes>
+        <SplitTime name="Personal Best" />
+      </SplitTimes>
+      <BestSegmentTime />
+      <SegmentHistory />
+    </Segment>
+    <Segment>
+      <Name>Confirmation: Yes</Name>
+      <Icon />
+      <SplitTimes>
+        <SplitTime name="Personal Best" />
+      </SplitTimes>
+      <BestSegmentTime />
+      <SegmentHistory />
+    </Segment>
+    <Segment>
+      <Name>not_accepting_input 1</Name>
+      <Icon />
+      <SplitTimes>
+        <SplitTime name="Personal Best" />
+      </SplitTimes>
+      <BestSegmentTime />
+      <SegmentHistory />
+    </Segment>
+    <Segment>
+      <Name>running 1</Name>
+      <Icon />
+      <SplitTimes>
+        <SplitTime name="Personal Best" />
+      </SplitTimes>
+      <BestSegmentTime />
+      <SegmentHistory />
+    </Segment>
+    <Segment>
+      <Name>loading_menu_quit 1</Name>
+      <Icon />
+      <SplitTimes>
+        <SplitTime name="Personal Best" />
+      </SplitTimes>
+      <BestSegmentTime />
+      <SegmentHistory />
+    </Segment>
+    <Segment>
+      <Name>not_accepting_input 2</Name>
+      <Icon />
+      <SplitTimes>
+        <SplitTime name="Personal Best" />
+      </SplitTimes>
+      <BestSegmentTime />
+      <SegmentHistory />
+    </Segment>
+    <Segment>
+      <Name>loading_menu_next_empty 1</Name>
+      <Icon />
+      <SplitTimes>
+        <SplitTime name="Personal Best" />
+      </SplitTimes>
+      <BestSegmentTime />
+      <SegmentHistory />
+    </Segment>
+    <Segment>
+      <Name>not_accepting_input 3</Name>
+      <Icon />
+      <SplitTimes>
+        <SplitTime name="Personal Best" />
+      </SplitTimes>
+      <BestSegmentTime />
+      <SegmentHistory />
+    </Segment>
+    <Segment>
+      <Name>running 2</Name>
+      <Icon />
+      <SplitTimes>
+        <SplitTime name="Personal Best" />
+      </SplitTimes>
+      <BestSegmentTime />
+      <SegmentHistory />
+    </Segment>
+    <Segment>
+      <Name>not_accepting_input 4</Name>
+      <Icon />
+      <SplitTimes>
+        <SplitTime name="Personal Best" />
+      </SplitTimes>
+      <BestSegmentTime />
+      <SegmentHistory />
+    </Segment>
+    <Segment>
+      <Name>Menu: Start Game</Name>
+      <Icon />
+      <SplitTimes>
+        <SplitTime name="Personal Best" />
+      </SplitTimes>
+      <BestSegmentTime />
+      <SegmentHistory />
+    </Segment>
+    <Segment>
+      <Name>Loading File Select</Name>
+      <Icon />
+      <SplitTimes>
+        <SplitTime name="Personal Best" />
+      </SplitTimes>
+      <BestSegmentTime />
+      <SegmentHistory />
+    </Segment>
+    <Segment>
+      <Name>File Select</Name>
+      <Icon />
+      <SplitTimes>
+        <SplitTime name="Personal Best" />
+      </SplitTimes>
+      <BestSegmentTime />
+      <SegmentHistory />
+    </Segment>
+    <Segment>
+      <Name>not_accepting_input 5</Name>
+      <Icon />
+      <SplitTimes>
+        <SplitTime name="Personal Best" />
+      </SplitTimes>
+      <BestSegmentTime />
+      <SegmentHistory />
+    </Segment>
+    <Segment>
+      <Name>game_state_loading 1</Name>
+      <Icon />
+      <SplitTimes>
+        <SplitTime name="Personal Best" />
+      </SplitTimes>
+      <BestSegmentTime />
+      <SegmentHistory />
+    </Segment>
+    <Segment>
+      <Name>next_scene_ui_state 1</Name>
+      <Icon />
+      <SplitTimes>
+        <SplitTime name="Personal Best" />
+      </SplitTimes>
+      <BestSegmentTime />
+      <SegmentHistory />
+    </Segment>
+    <Segment>
+      <Name>load_activation 1</Name>
+      <Icon />
+      <SplitTimes>
+        <SplitTime name="Personal Best" />
+      </SplitTimes>
+      <BestSegmentTime />
+      <SegmentHistory />
+    </Segment>
+    <Segment>
+      <Name>Back in File: Pause</Name>
+      <Icon />
+      <SplitTimes>
+        <SplitTime name="Personal Best" />
+      </SplitTimes>
+      <BestSegmentTime />
+      <SegmentHistory />
+    </Segment>
+    <Segment>
+      <Name>Loading Pause Menu</Name>
+      <Icon />
+      <SplitTimes>
+        <SplitTime name="Personal Best" />
+      </SplitTimes>
+      <BestSegmentTime />
+      <SegmentHistory />
+    </Segment>
+  </Segments>
+  <AutoSplitterSettings>
+    <Version>1.0.0.0</Version>
+    <ScriptPath />
+    <CustomSettings>
+      <Setting id="splits" type="list">
+        <Setting type="string" value="ManualSplit" />
+        <Setting type="string" value="ReasonChange" />
+        <Setting type="string" value="ReasonChange" />
+        <Setting type="string" value="ReasonChange" />
+        <Setting type="string" value="ReasonChange" />
+        <Setting type="string" value="ReasonChange" />
+        <Setting type="string" value="ReasonChange" />
+        <Setting type="string" value="ReasonChange" />
+        <Setting type="string" value="ReasonChange" />
+        <Setting type="string" value="ReasonChange" />
+        <Setting type="string" value="ReasonChange" />
+        <Setting type="string" value="ReasonChange" />
+        <Setting type="string" value="ReasonChange" />
+        <Setting type="string" value="ReasonChange" />
+        <Setting type="string" value="ReasonChange" />
+        <Setting type="string" value="ReasonChange" />
+        <Setting type="string" value="ReasonChange" />
+        <Setting type="string" value="ReasonChange" />
+        <Setting type="string" value="ReasonChange" />
+        <Setting type="string" value="ReasonChange" />
+        <Setting type="string" value="ReasonChange" />
+        <Setting type="string" value="ReasonChange" />
+        <Setting type="string" value="ReasonChange" />
+      </Setting>
+      <Setting id="splits_0_item" type="string" value="ManualSplit" />
+      <Setting id="splits_1_item" type="string" value="ReasonChange" />
+      <Setting id="splits_2_item" type="string" value="ReasonChange" />
+      <Setting id="splits_3_item" type="string" value="ReasonChange" />
+      <Setting id="splits_4_item" type="string" value="ReasonChange" />
+      <Setting id="splits_5_item" type="string" value="ReasonChange" />
+      <Setting id="splits_6_item" type="string" value="ReasonChange" />
+      <Setting id="splits_7_item" type="string" value="ReasonChange" />
+      <Setting id="splits_8_item" type="string" value="ReasonChange" />
+      <Setting id="splits_9_item" type="string" value="ReasonChange" />
+      <Setting id="splits_10_item" type="string" value="ReasonChange" />
+      <Setting id="splits_11_item" type="string" value="ReasonChange" />
+      <Setting id="splits_12_item" type="string" value="ReasonChange" />
+      <Setting id="splits_13_item" type="string" value="ReasonChange" />
+      <Setting id="splits_14_item" type="string" value="ReasonChange" />
+      <Setting id="splits_15_item" type="string" value="ReasonChange" />
+      <Setting id="splits_16_item" type="string" value="ReasonChange" />
+      <Setting id="splits_17_item" type="string" value="ReasonChange" />
+      <Setting id="splits_18_item" type="string" value="ReasonChange" />
+      <Setting id="splits_19_item" type="string" value="ReasonChange" />
+      <Setting id="splits_20_item" type="string" value="ReasonChange" />
+      <Setting id="splits_21_item" type="string" value="ReasonChange" />
+      <Setting id="splits_22_item" type="string" value="ReasonChange" />
+      <Setting id="hit_counter" type="bool">True</Setting>
+      <Setting id="splits_insert_0" type="bool">False</Setting>
+      <Setting id="splits_0_action" type="string" value="None" />
+      <Setting id="splits_1_action" type="string" value="None" />
+      <Setting id="splits_2_action" type="string" value="None" />
+      <Setting id="splits_3_action" type="string" value="None" />
+      <Setting id="splits_4_action" type="string" value="None" />
+      <Setting id="splits_5_action" type="string" value="None" />
+      <Setting id="splits_6_action" type="string" value="None" />
+      <Setting id="splits_7_action" type="string" value="None" />
+      <Setting id="splits_8_action" type="string" value="None" />
+      <Setting id="splits_9_action" type="string" value="None" />
+      <Setting id="splits_10_action" type="string" value="None" />
+      <Setting id="splits_11_action" type="string" value="None" />
+      <Setting id="splits_12_action" type="string" value="None" />
+      <Setting id="splits_13_action" type="string" value="None" />
+      <Setting id="splits_14_action" type="string" value="None" />
+      <Setting id="splits_15_action" type="string" value="None" />
+      <Setting id="splits_16_action" type="string" value="None" />
+      <Setting id="splits_17_action" type="string" value="None" />
+      <Setting id="splits_18_action" type="string" value="None" />
+      <Setting id="splits_19_action" type="string" value="None" />
+      <Setting id="splits_20_action" type="string" value="None" />
+      <Setting id="splits_21_action" type="string" value="None" />
+      <Setting id="splits_22_action" type="string" value="None" />
+    </CustomSettings>
+  </AutoSplitterSettings>
+</Run>
