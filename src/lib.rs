@@ -753,8 +753,21 @@ fn load_removal(state: &mut AutoSplitterState, mem: &Memory, gm: &GameManagerPoi
         if hero_transition_state == HERO_TRANSITION_STATE_WAITING_TO_ENTER_LEVEL {
             reasons.push("hero_transition_state");
         }
-        if ui_state != UI_STATE_PLAYING && (loading_menu) && next_scene != scene_name {
-            reasons.push("loading_menu");
+        if ui_state != UI_STATE_PLAYING
+            && (scene_name != MENU_TITLE && next_scene.is_empty())
+            && next_scene != scene_name
+        {
+            reasons.push("loading_menu_next_empty");
+        }
+        if ui_state != UI_STATE_PLAYING
+            && (scene_name != MENU_TITLE && next_scene == MENU_TITLE)
+            && next_scene != scene_name
+        {
+            reasons.push("loading_menu_next_title");
+        }
+        if ui_state != UI_STATE_PLAYING && (scene_name == QUIT_TO_MENU) && next_scene != scene_name
+        {
+            reasons.push("loading_menu_quit");
         }
         if ui_state != UI_STATE_PLAYING
             && (ui_state != UI_STATE_PAUSED
