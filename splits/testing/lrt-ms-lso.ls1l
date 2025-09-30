@@ -80,8 +80,8 @@
                 "columns": [
                     {
                         "name": "Time",
-                        "start_with": "ComparisonTime",
-                        "update_with": "SplitTime",
+                        "start_with": "ComparisonSegmentTime",
+                        "update_with": "SegmentTime",
                         "update_trigger": "OnEndingSegment",
                         "comparison_override": null,
                         "timing_method": null
@@ -89,7 +89,7 @@
                     {
                         "name": "+/−",
                         "start_with": "Empty",
-                        "update_with": "Delta",
+                        "update_with": "SegmentDelta",
                         "update_trigger": "Contextual",
                         "comparison_override": null,
                         "timing_method": null
