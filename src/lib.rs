@@ -125,7 +125,7 @@ impl AutoSplitterState {
                         }
                     }
                 }
-                #[cfg(not(feature = "unstable"))]
+                #[cfg(not(feature = "split-index"))]
                 {
                     self.split_index = None;
                 }
@@ -163,11 +163,11 @@ impl AutoSplitterState {
                     || self.timer_state == TimerState::Paused =>
             {
                 // End
-                #[cfg(not(feature = "unstable"))]
+                #[cfg(not(feature = "split-index"))]
                 {
                     self.split_index = Some(self.split_index.unwrap_or_default() + 1);
                 }
-                #[cfg(feature = "unstable")]
+                #[cfg(feature = "split-index")]
                 match new_index {
                     Some(new_idx) if self.split_index.unwrap_or_default() < new_idx => {
                         self.split_index = Some(new_idx)
@@ -188,7 +188,7 @@ impl AutoSplitterState {
                 }
             }
             _ => {
-                #[cfg(feature = "unstable")]
+                #[cfg(feature = "split-index")]
                 if let (Some(new_index), Some(old_index)) = (&new_index, &self.split_index) {
                     let new_i = *new_index as usize;
                     if new_index < old_index {
@@ -239,7 +239,7 @@ impl AutoSplitterState {
         }
 
         self.timer_state = new_state;
-        #[cfg(feature = "unstable")]
+        #[cfg(feature = "split-index")]
         {
             self.split_index = new_index;
         }
@@ -571,7 +571,7 @@ async fn handle_splits(
                         break;
                     }
                     SplitterAction::ManualSplit => {
-                        #[cfg(not(feature = "unstable"))]
+                        #[cfg(not(feature = "split-index"))]
                         {
                             let old_index = state.split_index.unwrap_or_default();
                             let old_i = old_index as usize;

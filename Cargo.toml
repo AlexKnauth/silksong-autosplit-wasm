@@ -37,7 +37,8 @@ ugly_widget_derive = { git = "https://github.com/AlexKnauth/hollowknight-autospl
 serde_json = { version = "1" }
 
 [features]
-unstable = ["asr/split-index"]
+default = ["split-index"]
+split-index = ["asr/split-index"]
 
 [lib]
 crate-type = ["cdylib", "lib"]
