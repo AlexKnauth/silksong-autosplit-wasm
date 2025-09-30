@@ -706,7 +706,7 @@ pub enum Split {
     ///
     /// Splits after defeating the Skull Tyrant
     SkullTyrant1,
-    /// Sherma Returned(NPC)
+    /// Sherma Returned (NPC)
     ///
     /// Splits when Sherma is rescued and time passes
     ShermaReturned,

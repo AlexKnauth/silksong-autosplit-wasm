@@ -895,7 +895,7 @@
   },
   {
     "alias": null,
-    "description": "Sherma Returned(NPC)",
+    "description": "Sherma Returned (NPC)",
     "key": "ShermaReturned",
     "tooltip": "Splits when Sherma is rescued and time passes"
   },
