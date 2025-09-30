@@ -194,6 +194,7 @@
         <Version>1.0</Version>
         <ScriptPath>C:\Users\Owner\Documents\git\LiveSplit\silksong-autosplit-wasm\target\wasm32-unknown-unknown\release\silksong_autosplit_wasm.wasm</ScriptPath>
         <CustomSettings>
+          <Setting id="script_name" type="string" value="silksong_autosplit_wasm" />
           <Setting id="splits" type="list">
             <Setting type="string" value="AnyTransition" />
             <Setting type="string" value="AnyTransition" />

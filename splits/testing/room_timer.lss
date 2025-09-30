@@ -29,6 +29,7 @@
     <Version>1.0.0.0</Version>
     <ScriptPath />
     <CustomSettings>
+      <Setting id="script_name" type="string" value="silksong_autosplit_wasm" />
       <Setting id="splits" type="list">
         <Setting type="string" value="AnyTransition" />
         <Setting type="string" value="AnyTransition" />
