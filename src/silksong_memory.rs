@@ -310,7 +310,7 @@ declare_pointers!(PlayerDataPointers {
     caravan_troupe_location: UnityPointer<3> = UnityPointer::new("GameManager", 0, &["_instance", "playerData", "CaravanTroupeLocation"]),
     belltown_relic_dealer_gave_relic: UnityPointer<3> = UnityPointer::new("GameManager", 0, &["_instance", "playerData", "BelltownRelicDealerGaveRelic"]),
     collected_ward_key: UnityPointer<3> = UnityPointer::new("GameManager", 0, &["_instance", "playerData", "CollectedWardKey"]),
-    belltown_greeter_met_time_passed: UnityPointer<3> = UnityPointer::new("GameManager", 0, &["_instance", "playerData", "BelltownGreeterMetTimepassed"]),
+    belltown_greeter_met_time_passed: UnityPointer<3> = UnityPointer::new("GameManager", 0, &["_instance", "playerData", "BelltownGreeterMetTimePassed"]),
     bell_shrine_enclave: UnityPointer<3> = UnityPointer::new("GameManager", 0, &["_instance", "playerData", "bellShrineEnclave"]),
     defeated_zap_core_enemy: UnityPointer<3> = UnityPointer::new("GameManager", 0, &["_instance", "playerData", "defeatedZapCoreEnemy"]),
     skull_king_defeated: UnityPointer<3> = UnityPointer::new("GameManager", 0, &["_instance", "playerData", "skullKingDefeated"]),
