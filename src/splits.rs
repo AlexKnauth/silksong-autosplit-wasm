@@ -670,7 +670,7 @@ pub enum Split {
     ///
     /// Splits after defeating the Beastfly in the Chapel
     SavageBeastfly1,
-    /// Savage Beastfly 2 (Boss))
+    /// Savage Beastfly 2 (Boss)
     ///
     /// Splits after completing the Beastfly in Far Fields
     SavageBeastfly2,
