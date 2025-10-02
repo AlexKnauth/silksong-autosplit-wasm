@@ -6,6 +6,7 @@ static ALLOC: dlmalloc::GlobalDlmalloc = dlmalloc::GlobalDlmalloc;
 
 mod silksong_memory;
 pub mod splits;
+mod store;
 mod timer;
 mod unstable;
 
