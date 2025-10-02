@@ -1,6 +1,6 @@
 [package]
 name = "silksong-autosplit-wasm"
-version = "0.1.13"
+version = "1.0.1"
 edition = "2021"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
@@ -37,7 +37,8 @@ ugly_widget_derive = { git = "https://github.com/AlexKnauth/hollowknight-autospl
 serde_json = { version = "1" }
 
 [features]
-unstable = ["asr/split-index"]
+default = ["split-index"]
+split-index = ["asr/split-index"]
 
 [lib]
 crate-type = ["cdylib", "lib"]

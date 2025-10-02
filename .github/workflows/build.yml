@@ -19,15 +19,15 @@ jobs:
       matrix:
         label:
           - Stable
-          - Unstable
+          - Legacy
         include:
           - label: Stable
             postfix: _stable
-            features: '""'
+            features: '--features "split-index"'
             sleep: 0
-          - label: Unstable
-            postfix: _unstable
-            features: '"unstable"'
+          - label: Legacy
+            postfix: _legacy
+            features: '--no-default-features'
             sleep: 10
     steps:
       - name: Checkout Commit
@@ -41,7 +41,7 @@ jobs:
 
       - name: Build
         run: |
-          cargo b --release --locked --features ${{matrix.features}}
+          cargo b --release --locked ${{matrix.features}}
           ls -lh target/wasm32-unknown-unknown/release/silksong_autosplit_wasm.wasm
 
       - name: Prepare Release

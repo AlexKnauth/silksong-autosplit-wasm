@@ -120,7 +120,7 @@ pub enum Split {
     // endregion: Wormways
 
     // region: FarFields
-    ///Enter Far Fields (Transition)
+    /// Enter Far Fields (Transition)
     ///
     /// Splits when entering Far Fields
     EnterFarFields,
@@ -753,7 +753,7 @@ pub enum Split {
     ///
     /// Splits after defeating the Beastfly in the Chapel
     SavageBeastfly1,
-    /// Savage Beastfly 2 (Boss))
+    /// Savage Beastfly 2 (Boss)
     ///
     /// Splits after completing the Beastfly in Far Fields
     SavageBeastfly2,
@@ -789,7 +789,7 @@ pub enum Split {
     ///
     /// Splits after defeating the Skull Tyrant
     SkullTyrant1,
-    /// Sherma Returned(NPC)
+    /// Sherma Returned (NPC)
     ///
     /// Splits when Sherma is rescued and time passes
     ShermaReturned,
