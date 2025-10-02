@@ -194,6 +194,8 @@ declare_pointers!(PlayerDataPointers {
         &["_instance", "playerData", "disablePause"],
     ),
     health: UnityPointer<3> = UnityPointer::new("GameManager", 0, &["_instance", "playerData", "health"]),
+    max_health_base: UnityPointer<3> = UnityPointer::new("GameManager", 0, &["_instance", "playerData", "maxHealthBase"]),
+    heart_pieces: UnityPointer<3> = UnityPointer::new("GameManager", 0, &["_instance", "playerData", "heartPieces"]),
     defeated_moss_mother: UnityPointer<3> = UnityPointer::new("GameManager", 0, &["_instance", "playerData", "defeatedMossMother"]),
     has_needle_throw: UnityPointer<3> = UnityPointer::new("GameManager", 0, &["_instance", "playerData", "hasNeedleThrow"]),
     defeated_bell_beast: UnityPointer<3> = UnityPointer::new("GameManager", 0, &["_instance", "playerData", "defeatedBellBeast"]),

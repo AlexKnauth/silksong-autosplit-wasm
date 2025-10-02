@@ -330,6 +330,89 @@ pub enum Split {
     NeedleUpgrade4,
     // endregion: NeedleUpgrade
 
+    // region: MaskShards
+    /// Mask Shard 1 (Fragment)
+    ///
+    /// Splits when getting 1st Mask Shard
+    MaskFragment1,
+    /// Mask Shard 2 (Fragment)
+    ///
+    /// Splits when getting 2nd Mask Shard
+    MaskFragment2,
+    /// Mask Shard 3 (Fragment)
+    ///
+    /// Splits when getting 3rd Mask Shard
+    MaskFragment3,
+    /// Mask Upgrade 4 (Upgrade)
+    ///
+    /// Splits when getting 1 extra Masks (6 base HP)
+    Mask1,
+    /// Mask Shard 5 (Fragment)
+    ///
+    /// Splits when getting 5th Mask Shard
+    MaskFragment5,
+    /// Mask Shard 6 (Fragment)
+    ///
+    /// Splits when getting 6th Mask Shard
+    MaskFragment6,
+    /// Mask Shard 7 (Fragment)
+    ///
+    /// Splits when getting 7th Mask Shard
+    MaskFragment7,
+    /// Mask Upgrade 8 (Upgrade)
+    ///
+    /// Splits when getting 2 extra Masks (7 base HP)
+    Mask2,
+    /// Mask Shard 9 (Fragment)
+    ///
+    /// Splits when getting 9th Mask Shard
+    MaskFragment9,
+    /// Mask Shard 10 (Fragment)
+    ///
+    /// Splits when getting 10th Mask Shard
+    MaskFragment10,
+    /// Mask Shard 11 (Fragment)
+    ///
+    /// Splits when getting 11th Mask Shard
+    MaskFragment11,
+    /// Mask Upgrade 12 (Upgrade)
+    ///
+    /// Splits when getting 3 extra Masks (8 base HP)
+    Mask3,
+    /// Mask Shard 13 (Fragment)
+    ///
+    /// Splits when getting 13th Mask Shard
+    MaskFragment13,
+    /// Mask Shard 14 (Fragment)
+    ///
+    /// Splits when getting 14th Mask Shard
+    MaskFragment14,
+    /// Mask Shard 15 (Fragment)
+    ///
+    /// Splits when getting 15th Mask Shard
+    MaskFragment15,
+    /// Mask Upgrade 16 (Upgrade)
+    ///
+    /// Splits when getting 4 extra Masks (9 base HP)
+    Mask4,
+    /// Mask Shard 17 (Fragment)
+    ///
+    /// Splits when getting 17th Mask Shard
+    MaskFragment17,
+    /// Mask Shard 18 (Fragment)
+    ///
+    /// Splits when getting 18th Mask Shard
+    MaskFragment18,
+    /// Mask Shard 19 (Fragment)
+    ///
+    /// Splits when getting 19th Mask Shard
+    MaskFragment19,
+    /// Mask Upgrade 20 (Upgrade)
+    ///
+    /// Splits when getting 5 extra Masks (10 base HP)
+    Mask5,
+    // endregion: MaskShards
+
     // region: Crests
     /// Reaper Crest (Transition)
     ///
@@ -1053,6 +1136,74 @@ pub fn continuous_splits(
             should_split(mem.deref(&pd.nail_upgrades).is_ok_and(|n: i32| n >= 4))
         }
         // endregion: NeedleUpgrade
+
+        // region: MaskShards
+        Split::MaskFragment1 => should_split(
+            mem.deref(&pd.heart_pieces).is_ok_and(|n: i32| n == 1)
+                && mem.deref(&pd.max_health_base).is_ok_and(|n: i32| n == 5),
+        ),
+        Split::MaskFragment2 => should_split(
+            mem.deref(&pd.heart_pieces).is_ok_and(|n: i32| n == 2)
+                && mem.deref(&pd.max_health_base).is_ok_and(|n: i32| n == 5),
+        ),
+        Split::MaskFragment3 => should_split(
+            mem.deref(&pd.heart_pieces).is_ok_and(|n: i32| n == 3)
+                && mem.deref(&pd.max_health_base).is_ok_and(|n: i32| n == 5),
+        ),
+        Split::Mask1 => should_split(mem.deref(&pd.max_health_base).is_ok_and(|n: i32| n == 6)),
+        Split::MaskFragment5 => should_split(
+            mem.deref(&pd.heart_pieces).is_ok_and(|n: i32| n == 5)
+                && mem.deref(&pd.max_health_base).is_ok_and(|n: i32| n == 6),
+        ),
+        Split::MaskFragment6 => should_split(
+            mem.deref(&pd.heart_pieces).is_ok_and(|n: i32| n == 6)
+                && mem.deref(&pd.max_health_base).is_ok_and(|n: i32| n == 6),
+        ),
+        Split::MaskFragment7 => should_split(
+            mem.deref(&pd.heart_pieces).is_ok_and(|n: i32| n == 7)
+                && mem.deref(&pd.max_health_base).is_ok_and(|n: i32| n == 6),
+        ),
+        Split::Mask2 => should_split(mem.deref(&pd.max_health_base).is_ok_and(|n: i32| n == 7)),
+        Split::MaskFragment9 => should_split(
+            mem.deref(&pd.heart_pieces).is_ok_and(|n: i32| n == 9)
+                && mem.deref(&pd.max_health_base).is_ok_and(|n: i32| n == 7),
+        ),
+        Split::MaskFragment10 => should_split(
+            mem.deref(&pd.heart_pieces).is_ok_and(|n: i32| n == 10)
+                && mem.deref(&pd.max_health_base).is_ok_and(|n: i32| n == 7),
+        ),
+        Split::MaskFragment11 => should_split(
+            mem.deref(&pd.heart_pieces).is_ok_and(|n: i32| n == 11)
+                && mem.deref(&pd.max_health_base).is_ok_and(|n: i32| n == 7),
+        ),
+        Split::Mask3 => should_split(mem.deref(&pd.max_health_base).is_ok_and(|n: i32| n == 8)),
+        Split::MaskFragment13 => should_split(
+            mem.deref(&pd.heart_pieces).is_ok_and(|n: i32| n == 13)
+                && mem.deref(&pd.max_health_base).is_ok_and(|n: i32| n == 8),
+        ),
+        Split::MaskFragment14 => should_split(
+            mem.deref(&pd.heart_pieces).is_ok_and(|n: i32| n == 14)
+                && mem.deref(&pd.max_health_base).is_ok_and(|n: i32| n == 8),
+        ),
+        Split::MaskFragment15 => should_split(
+            mem.deref(&pd.heart_pieces).is_ok_and(|n: i32| n == 15)
+                && mem.deref(&pd.max_health_base).is_ok_and(|n: i32| n == 8),
+        ),
+        Split::Mask4 => should_split(mem.deref(&pd.max_health_base).is_ok_and(|n: i32| n == 9)),
+        Split::MaskFragment17 => should_split(
+            mem.deref(&pd.heart_pieces).is_ok_and(|n: i32| n == 17)
+                && mem.deref(&pd.max_health_base).is_ok_and(|n: i32| n == 10),
+        ),
+        Split::MaskFragment18 => should_split(
+            mem.deref(&pd.heart_pieces).is_ok_and(|n: i32| n == 18)
+                && mem.deref(&pd.max_health_base).is_ok_and(|n: i32| n == 10),
+        ),
+        Split::MaskFragment19 => should_split(
+            mem.deref(&pd.heart_pieces).is_ok_and(|n: i32| n == 19)
+                && mem.deref(&pd.max_health_base).is_ok_and(|n: i32| n == 10),
+        ),
+        Split::Mask5 => should_split(mem.deref(&pd.max_health_base).is_ok_and(|n: i32| n == 10)),
+        // endregion: MaskShards
 
         // region: Crests
         Split::ReaperCrestTrans => {
