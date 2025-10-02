@@ -119,6 +119,13 @@ pub enum Split {
     EnterWormways,
     // endregion: Wormways
 
+    // region: HuntersMarch
+    /// Enter Hunter's March (Transition)
+    ///
+    /// Splits on entering Hunter's March in the room after the Skarrguard encounter
+    EnterHuntersMarch,
+    // endregion: HuntersMarch
+
     // region: FarFields
     /// Enter Far Fields (Transition)
     ///
@@ -210,6 +217,11 @@ pub enum Split {
     // endregion: TheMist
 
     // region: Bilewater
+    /// Enter Bilewater (Transition)
+    ///
+    /// Splits when entering Bilewater from Sinner's Road or Whispering Vaults
+    EnterBilewater,
+
     /// Phantom (Boss)
     ///
     /// Splits when killing Phantom
@@ -901,6 +913,12 @@ pub fn transition_splits(
         ),
         // endregion: Wormways
 
+        // region: HuntersMarch
+        Split::EnterHuntersMarch => {
+            should_split(scenes.old == "Ant_02" && scenes.current == "Ant_03")
+        }
+        // endregion: HuntersMarch
+
         // region: FarFields
         Split::EnterFarFields => should_split(
             !scenes.old.starts_with("Bone_East") && scenes.current.starts_with("Bone_East"),
@@ -941,6 +959,13 @@ pub fn transition_splits(
             should_split(scenes.old == "Dust_Maze_Last_Hall" && scenes.current == "Dust_09")
         }
         // endregion: TheMist
+
+        // region: Bilewater
+        Split::EnterBilewater => should_split(
+            (scenes.old == "Dust_06" && scenes.current == "Shadow_05")
+                || (scenes.old == "Library_07" && scenes.current == "Shadow_22"),
+        ),
+        // endregion: Bilewater
 
         // region: ChoralChambers
         Split::TrobbioTrans => should_split(mem.deref(&pd.defeated_trobbio).unwrap_or_default()),
