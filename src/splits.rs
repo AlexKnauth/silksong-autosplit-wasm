@@ -334,15 +334,15 @@ pub enum Split {
     /// Mask Shard 1 (Fragment)
     ///
     /// Splits when getting 1st Mask Shard
-    MaskFragment1,
+    MaskShard1,
     /// Mask Shard 2 (Fragment)
     ///
     /// Splits when getting 2nd Mask Shard
-    MaskFragment2,
+    MaskShard2,
     /// Mask Shard 3 (Fragment)
     ///
     /// Splits when getting 3rd Mask Shard
-    MaskFragment3,
+    MaskShard3,
     /// Mask Upgrade 4 (Upgrade)
     ///
     /// Splits when getting 1 extra Masks (6 base HP)
@@ -350,15 +350,15 @@ pub enum Split {
     /// Mask Shard 5 (Fragment)
     ///
     /// Splits when getting 5th Mask Shard
-    MaskFragment5,
+    MaskShard5,
     /// Mask Shard 6 (Fragment)
     ///
     /// Splits when getting 6th Mask Shard
-    MaskFragment6,
+    MaskShard6,
     /// Mask Shard 7 (Fragment)
     ///
     /// Splits when getting 7th Mask Shard
-    MaskFragment7,
+    MaskShard7,
     /// Mask Upgrade 8 (Upgrade)
     ///
     /// Splits when getting 2 extra Masks (7 base HP)
@@ -366,15 +366,15 @@ pub enum Split {
     /// Mask Shard 9 (Fragment)
     ///
     /// Splits when getting 9th Mask Shard
-    MaskFragment9,
+    MaskShard9,
     /// Mask Shard 10 (Fragment)
     ///
     /// Splits when getting 10th Mask Shard
-    MaskFragment10,
+    MaskShard10,
     /// Mask Shard 11 (Fragment)
     ///
     /// Splits when getting 11th Mask Shard
-    MaskFragment11,
+    MaskShard11,
     /// Mask Upgrade 12 (Upgrade)
     ///
     /// Splits when getting 3 extra Masks (8 base HP)
@@ -382,15 +382,15 @@ pub enum Split {
     /// Mask Shard 13 (Fragment)
     ///
     /// Splits when getting 13th Mask Shard
-    MaskFragment13,
+    MaskShard13,
     /// Mask Shard 14 (Fragment)
     ///
     /// Splits when getting 14th Mask Shard
-    MaskFragment14,
+    MaskShard14,
     /// Mask Shard 15 (Fragment)
     ///
     /// Splits when getting 15th Mask Shard
-    MaskFragment15,
+    MaskShard15,
     /// Mask Upgrade 16 (Upgrade)
     ///
     /// Splits when getting 4 extra Masks (9 base HP)
@@ -398,15 +398,15 @@ pub enum Split {
     /// Mask Shard 17 (Fragment)
     ///
     /// Splits when getting 17th Mask Shard
-    MaskFragment17,
+    MaskShard17,
     /// Mask Shard 18 (Fragment)
     ///
     /// Splits when getting 18th Mask Shard
-    MaskFragment18,
+    MaskShard18,
     /// Mask Shard 19 (Fragment)
     ///
     /// Splits when getting 19th Mask Shard
-    MaskFragment19,
+    MaskShard19,
     /// Mask Upgrade 20 (Upgrade)
     ///
     /// Splits when getting 5 extra Masks (10 base HP)
@@ -1138,67 +1138,67 @@ pub fn continuous_splits(
         // endregion: NeedleUpgrade
 
         // region: MaskShards
-        Split::MaskFragment1 => should_split(
+        Split::MaskShard1 => should_split(
             mem.deref(&pd.heart_pieces).is_ok_and(|n: i32| n == 1)
                 && mem.deref(&pd.max_health_base).is_ok_and(|n: i32| n == 5),
         ),
-        Split::MaskFragment2 => should_split(
+        Split::MaskShard2 => should_split(
             mem.deref(&pd.heart_pieces).is_ok_and(|n: i32| n == 2)
                 && mem.deref(&pd.max_health_base).is_ok_and(|n: i32| n == 5),
         ),
-        Split::MaskFragment3 => should_split(
+        Split::MaskShard3 => should_split(
             mem.deref(&pd.heart_pieces).is_ok_and(|n: i32| n == 3)
                 && mem.deref(&pd.max_health_base).is_ok_and(|n: i32| n == 5),
         ),
         Split::Mask1 => should_split(mem.deref(&pd.max_health_base).is_ok_and(|n: i32| n == 6)),
-        Split::MaskFragment5 => should_split(
+        Split::MaskShard5 => should_split(
             mem.deref(&pd.heart_pieces).is_ok_and(|n: i32| n == 5)
                 && mem.deref(&pd.max_health_base).is_ok_and(|n: i32| n == 6),
         ),
-        Split::MaskFragment6 => should_split(
+        Split::MaskShard6 => should_split(
             mem.deref(&pd.heart_pieces).is_ok_and(|n: i32| n == 6)
                 && mem.deref(&pd.max_health_base).is_ok_and(|n: i32| n == 6),
         ),
-        Split::MaskFragment7 => should_split(
+        Split::MaskShard7 => should_split(
             mem.deref(&pd.heart_pieces).is_ok_and(|n: i32| n == 7)
                 && mem.deref(&pd.max_health_base).is_ok_and(|n: i32| n == 6),
         ),
         Split::Mask2 => should_split(mem.deref(&pd.max_health_base).is_ok_and(|n: i32| n == 7)),
-        Split::MaskFragment9 => should_split(
+        Split::MaskShard9 => should_split(
             mem.deref(&pd.heart_pieces).is_ok_and(|n: i32| n == 9)
                 && mem.deref(&pd.max_health_base).is_ok_and(|n: i32| n == 7),
         ),
-        Split::MaskFragment10 => should_split(
+        Split::MaskShard10 => should_split(
             mem.deref(&pd.heart_pieces).is_ok_and(|n: i32| n == 10)
                 && mem.deref(&pd.max_health_base).is_ok_and(|n: i32| n == 7),
         ),
-        Split::MaskFragment11 => should_split(
+        Split::MaskShard11 => should_split(
             mem.deref(&pd.heart_pieces).is_ok_and(|n: i32| n == 11)
                 && mem.deref(&pd.max_health_base).is_ok_and(|n: i32| n == 7),
         ),
         Split::Mask3 => should_split(mem.deref(&pd.max_health_base).is_ok_and(|n: i32| n == 8)),
-        Split::MaskFragment13 => should_split(
+        Split::MaskShard13 => should_split(
             mem.deref(&pd.heart_pieces).is_ok_and(|n: i32| n == 13)
                 && mem.deref(&pd.max_health_base).is_ok_and(|n: i32| n == 8),
         ),
-        Split::MaskFragment14 => should_split(
+        Split::MaskShard14 => should_split(
             mem.deref(&pd.heart_pieces).is_ok_and(|n: i32| n == 14)
                 && mem.deref(&pd.max_health_base).is_ok_and(|n: i32| n == 8),
         ),
-        Split::MaskFragment15 => should_split(
+        Split::MaskShard15 => should_split(
             mem.deref(&pd.heart_pieces).is_ok_and(|n: i32| n == 15)
                 && mem.deref(&pd.max_health_base).is_ok_and(|n: i32| n == 8),
         ),
         Split::Mask4 => should_split(mem.deref(&pd.max_health_base).is_ok_and(|n: i32| n == 9)),
-        Split::MaskFragment17 => should_split(
+        Split::MaskShard17 => should_split(
             mem.deref(&pd.heart_pieces).is_ok_and(|n: i32| n == 17)
                 && mem.deref(&pd.max_health_base).is_ok_and(|n: i32| n == 10),
         ),
-        Split::MaskFragment18 => should_split(
+        Split::MaskShard18 => should_split(
             mem.deref(&pd.heart_pieces).is_ok_and(|n: i32| n == 18)
                 && mem.deref(&pd.max_health_base).is_ok_and(|n: i32| n == 10),
         ),
-        Split::MaskFragment19 => should_split(
+        Split::MaskShard19 => should_split(
             mem.deref(&pd.heart_pieces).is_ok_and(|n: i32| n == 19)
                 && mem.deref(&pd.max_health_base).is_ok_and(|n: i32| n == 10),
         ),
