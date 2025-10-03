@@ -192,6 +192,14 @@ pub enum Split {
     // endregion: Bellhart
 
     // region: BlastedSteps
+    /// Enter Blasted Steps (Transition)
+    ///
+    /// Splits when entering the Blasted Steps from Shellwood, where the area text appears
+    EnterBlastedSteps,
+    /// Enter Last Judge (Transition)
+    ///
+    /// Splits when entering the Last Judge boss arena from the Blasted Steps
+    EnterLastJudge,
     /// Last Judge (Boss)
     ///
     /// Splits when killing Last Judge
@@ -272,6 +280,13 @@ pub enum Split {
     #[alias = "HighHallsGauntlet"]
     HighHallsArena,
     // endregion: HighHalls
+
+    // region: Memorium
+    /// Enter Memorium
+    ///
+    /// Splits when entering the Memorium
+    EnterMemorium,
+    // endregion: Memorium
 
     // region: TheCradle
     /// Lace 2 (Boss)
@@ -704,16 +719,28 @@ pub enum Split {
     ///
     /// Splits when you obtain Super Jump
     SilkSoar,
+    /// Enter Nyleth Memory (Transition)
+    ///
+    /// Splits when entering Nyleth's memory
+    EnterNylethMemory,
     /// Nyleth's Heart (Item)
     ///
     /// Splits when you obtain Nyleth's Heart
     #[alias = "CollectedHeartNyleth"]
     HeartNyleth,
+    /// Enter Khann Memory
+    ///
+    /// Splits when entering Khann's Coral Tower memory
+    EnterKhannMemory,
     /// Khann's Heart (Item)
     ///
     /// Splits when you obtain Khann's Heart
     #[alias = "CollectedHeartKhann"]
     HeartKhann,
+    /// Enter Karmelita Memory (Transition)
+    ///
+    /// Splits when entering Karmelita's memory
+    EnterKarmelitaMemory,
     /// Karmelita's Heart (Item)
     ///
     /// Splits when you obtain Karmelita's Heart
@@ -809,6 +836,10 @@ pub enum Split {
     ///
     /// Splits when the Soul Snare becomes ready
     SoulSnareReady,
+    /// Enter Seth (Transition)
+    ///
+    /// Splits when entering Seth's boss arena
+    EnterSeth,
     /// Seth (Boss)
     ///
     /// Splits after defeating Seth
@@ -932,6 +963,15 @@ pub fn transition_splits(
         ),
         // endregion: Shellwood
 
+        // region: BlastedSteps
+        Split::EnterBlastedSteps => {
+            should_split(scenes.old == "Coral_19" && scenes.current == "Coral_02")
+        }
+        Split::EnterLastJudge => {
+            should_split(scenes.old == "Coral_32" && scenes.current == "Coral_Judge_Arena")
+        }
+        // endregion: BlastedSteps
+
         // region: TheMist
         Split::EnterMist => should_split(
             (scenes.old == "Dust_05" || scenes.old == "Shadow_04")
@@ -955,6 +995,12 @@ pub fn transition_splits(
         }
         // endregion: HighHalls
 
+        // region: Memorium
+        Split::EnterMemorium => {
+            should_split(scenes.old == "Song_25" && scenes.current == "Arborium_01")
+        }
+        // endregion: Memorium
+
         // region: ThreefoldMelody
         Split::VaultkeepersMelodyTrans => {
             should_split(mem.deref(&pd.has_melody_librarian).unwrap_or_default())
@@ -972,6 +1018,22 @@ pub fn transition_splits(
             should_split(mem.deref(&pd.completed_memory_reaper).unwrap_or_default())
         }
         // endregion: Crests
+
+        // region: MiscTE
+        Split::EnterSeth => {
+            should_split(scenes.old == "Under_27" && scenes.current == "Shellwood_22")
+        }
+        Split::EnterNylethMemory => {
+            should_split(scenes.old == "Shellwood_11b" && scenes.current == "Shellwood_11b_Memory")
+        }
+        Split::EnterKarmelitaMemory => {
+            should_split(scenes.old == "Ant_Queen" && scenes.current == "Memory_Ant_Queen")
+        }
+        Split::EnterKhannMemory => {
+            should_split(scenes.old == "Coral_Tower_01" && scenes.current == "Memory_Coral_Tower")
+        }
+        // endregion: MiscTE
+
         // else
         _ => should_split(false),
     }
