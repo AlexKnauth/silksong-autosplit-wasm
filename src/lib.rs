@@ -53,8 +53,18 @@ pub const DASH: &str = "—";
 // --------------------------------------------------------
 
 struct AutoSplitterState {
+    /// The timer state.
     timer_state: TimerState,
+    /// The last observed asr::timer::state.
+    /// Just in case asr::timer::state is a tad out-of-date.
+    last_timer_state: TimerState,
+    /// The split index.
+    /// None: NotRunning
+    /// Some: Running, Paused, or Ended
     split_index: Option<u64>,
+    /// The last observed split index.
+    /// Just in case asr::timer::current_split_index is a tad out-of-date.
+    last_split_index: Option<u64>,
     segments_splitted: Vec<bool>,
     look_for_teleporting: bool,
     #[cfg(debug_assertions)]
@@ -85,7 +95,9 @@ impl AutoSplitterState {
         let comparison_hits = Settings::get_comparison_hits().unwrap_or_default();
         AutoSplitterState {
             timer_state,
+            last_timer_state: timer_state,
             split_index,
+            last_split_index: split_index,
             segments_splitted,
             look_for_teleporting: false,
             #[cfg(debug_assertions)]
@@ -111,7 +123,11 @@ impl AutoSplitterState {
     fn update(&mut self, settings: &Settings) {
         let new_state = asr::timer::state();
         let new_index = unstable::timer_current_split_index();
-        if new_state == self.timer_state && new_index == self.split_index {
+        if (new_state == self.timer_state && new_index == self.split_index)
+            || (new_state == self.last_timer_state && new_index == self.last_split_index)
+        {
+            self.last_timer_state = new_state;
+            self.last_split_index = new_index;
             return;
         }
 
@@ -247,6 +263,8 @@ impl AutoSplitterState {
         }
 
         self.timer_state = new_state;
+        self.last_timer_state = new_state;
+        self.last_split_index = new_index;
         #[cfg(feature = "split-index")]
         {
             self.split_index = new_index;
