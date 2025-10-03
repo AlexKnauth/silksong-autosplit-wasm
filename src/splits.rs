@@ -64,6 +64,10 @@ pub enum Split {
     ///
     /// Splits on the transition after killing Moss Mother
     MossMotherTrans,
+    /// Enter Mosshome (Transition)
+    ///
+    /// Splits when entering Mosshome (Mosstown_01)
+    EnterMosshome,
     /// Silk Spear (Skill)
     ///
     /// Splits when obtaining Silk Spear
@@ -72,6 +76,10 @@ pub enum Split {
     ///
     /// Splits on the transition after obtaining Silk Spear
     SilkSpearTrans,
+    /// Bone Bottom Simple Key (Item)
+    ///
+    /// Splits when buying the Bone Bottom simple key from Pebb
+    BoneBottomSimpleKey,
     // endregion: MossLands
 
     // region: Marrow
@@ -213,6 +221,13 @@ pub enum Split {
     LastJudge,
     // endregion: BlastedSteps
 
+    // region: SinnersRoad
+    /// Enter Sinner's Road (Transition)
+    ///
+    /// Splits when entering Sinner's Road from Greymoor
+    EnterSinnersRoad,
+    // endregion: SinnersRoad
+
     // region: TheMist
     /// Enter The Mist (Transition)
     ///
@@ -229,6 +244,11 @@ pub enum Split {
     ///
     /// Splits when entering Bilewater from Sinner's Road or Whispering Vaults
     EnterBilewater,
+
+    /// Enter Exhaust Organ (Transition)
+    ///
+    /// Splits when entering the Exhaust Organ from Bilewater
+    EnterExhaustOrgan,
 
     /// Phantom (Boss)
     ///
@@ -924,6 +944,9 @@ pub fn transition_splits(
             should_split(mem.deref(&pd.defeated_moss_mother).unwrap_or_default())
         }
         Split::SilkSpearTrans => should_split(mem.deref(&pd.has_needle_throw).unwrap_or_default()),
+        Split::EnterMosshome => {
+            should_split(scenes.old == "Bone_05" && scenes.current == "Mosstown_01")
+        }
         // endregion: MossLands
 
         // region: Marrow
@@ -990,6 +1013,12 @@ pub fn transition_splits(
         }
         // endregion: BlastedSteps
 
+        // region: SinnersRoad
+        Split::EnterSinnersRoad => {
+            should_split(scenes.old == "Greymoor_03" && scenes.current == "Dust_01")
+        }
+        // endregion: SinnersRoad
+
         // region: TheMist
         Split::EnterMist => should_split(
             (scenes.old == "Dust_05" || scenes.old == "Shadow_04")
@@ -1005,6 +1034,9 @@ pub fn transition_splits(
             (scenes.old == "Dust_06" && scenes.current == "Shadow_05")
                 || (scenes.old == "Library_07" && scenes.current == "Shadow_22"),
         ),
+        Split::EnterExhaustOrgan => {
+            should_split(scenes.old == "Dust_09" && scenes.current == "Organ_01")
+        }
         // endregion: Bilewater
 
         // region: ChoralChambers
@@ -1109,6 +1141,9 @@ pub fn continuous_splits(
         // region: MossLands
         Split::MossMother => should_split(mem.deref(&pd.defeated_moss_mother).unwrap_or_default()),
         Split::SilkSpear => should_split(mem.deref(&pd.has_needle_throw).unwrap_or_default()),
+        Split::BoneBottomSimpleKey => {
+            should_split(mem.deref(&pd.has_bonebottom_simple_key).unwrap_or_default())
+        }
         // endregion: MossLands
 
         // region: Marrow

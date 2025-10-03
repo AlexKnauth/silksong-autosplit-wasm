@@ -198,6 +198,7 @@ declare_pointers!(PlayerDataPointers {
     heart_pieces: UnityPointer<3> = UnityPointer::new("GameManager", 0, &["_instance", "playerData", "heartPieces"]),
     defeated_moss_mother: UnityPointer<3> = UnityPointer::new("GameManager", 0, &["_instance", "playerData", "defeatedMossMother"]),
     has_needle_throw: UnityPointer<3> = UnityPointer::new("GameManager", 0, &["_instance", "playerData", "hasNeedleThrow"]),
+    has_bonebottom_simple_key: UnityPointer<3> = UnityPointer::new("GameManager", 0, &["_instance", "playerData", "PurchasedBonebottomFaithToken"]),
     defeated_bell_beast: UnityPointer<3> = UnityPointer::new("GameManager", 0, &["_instance", "playerData", "defeatedBellBeast"]),
     bell_shrine_bone_forest: UnityPointer<3> = UnityPointer::new("GameManager", 0, &["_instance", "playerData", "bellShrineBoneForest"]),
     has_dash: UnityPointer<3> = UnityPointer::new("GameManager", 0, &["_instance", "playerData", "hasDash"]),
