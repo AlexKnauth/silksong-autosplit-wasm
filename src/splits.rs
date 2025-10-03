@@ -778,6 +778,10 @@ pub enum Split {
     /// Splits when you obtain Karmelita's Heart
     #[alias = "CollectedHeartKarmelita"]
     HeartKarmelita,
+    /// Enter Verdania Memory (Transition)
+    ///
+    /// Splits when entering the Verdania Memory
+    EnterVerdaniaMemory,
     /// Clover Dancer's Heart (Item)
     ///
     /// Split when you obtain Conjoined Heart
@@ -1085,6 +1089,9 @@ pub fn transition_splits(
         }
         Split::EnterKarmelitaMemory => {
             should_split(scenes.old == "Ant_Queen" && scenes.current == "Memory_Ant_Queen")
+        }
+        Split::EnterVerdaniaMemory => {
+            should_split(scenes.old == "Clover_01" && scenes.current == "Clover_01b")
         }
         Split::EnterKhannMemory => {
             should_split(scenes.old == "Coral_Tower_01" && scenes.current == "Memory_Coral_Tower")
