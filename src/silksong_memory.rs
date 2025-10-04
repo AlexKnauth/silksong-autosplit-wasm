@@ -231,6 +231,8 @@ declare_pointers!(PlayerDataPointers {
     has_melody_architect: UnityPointer<3> = UnityPointer::new("GameManager", 0, &["_instance", "playerData", "HasMelodyArchitect"]),
     unlocked_melody_lift: UnityPointer<3> = UnityPointer::new("GameManager", 0, &["_instance", "playerData", "UnlockedMelodyLift"]),
     nail_upgrades: UnityPointer<3> = UnityPointer::new("GameManager", 0, &["_instance", "playerData", "nailUpgrades"]),
+    silk_max: UnityPointer<3> = UnityPointer::new("GameManager", 0, &["_instance", "playerData", "silkMax"]),
+    silk_spool_parts: UnityPointer<3> = UnityPointer::new("GameManager", 0, &["_instance", "playerData", "silkSpoolParts"]),
     completed_memory_reaper: UnityPointer<3> = UnityPointer::new("GameManager", 0, &["_instance", "playerData", "completedMemory_reaper"]),
 
     savedflea_ant_03: UnityPointer<3> = UnityPointer::new("GameManager", 0, &["_instance", "playerData", "SavedFlea_Ant_03"]),
