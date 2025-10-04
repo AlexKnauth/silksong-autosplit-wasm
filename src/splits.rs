@@ -747,6 +747,14 @@ pub enum Split {
     ///
     /// Splits when you obtain Double Jump
     FaydownCloak,
+    /// Enter Bell Eater (Transition)
+    ///
+    /// Splits when entering the Bell Eater's arena
+    EnterBellEater,
+    /// Beastling Call (Skill)
+    ///
+    /// Splits when obtaining Beastling Call
+    BeastlingCall,
     /// Silk Soar (Skill)
     ///
     /// Splits when you obtain Super Jump
@@ -1081,6 +1089,9 @@ pub fn transition_splits(
         // endregion: Crests
 
         // region: MiscTE
+        Split::EnterBellEater => should_split(
+            scenes.old != "Bellway_Centipede_Arena" && scenes.current == "Bellway_Centipede_Arena",
+        ),
         Split::EnterSeth => {
             should_split(scenes.old == "Under_27" && scenes.current == "Shellwood_22")
         }
@@ -1553,6 +1564,9 @@ pub fn continuous_splits(
             should_split(mem.deref(&pd.seen_fleatopia_empty).unwrap_or_default())
         }
         Split::FaydownCloak => should_split(mem.deref(&pd.has_double_jump).unwrap_or_default()),
+        Split::BeastlingCall => {
+            should_split(mem.deref(&pd.has_fast_travel_teleport).unwrap_or_default())
+        }
         Split::SilkSoar => should_split(mem.deref(&pd.has_super_jump).unwrap_or_default()),
         Split::HeartNyleth => {
             should_split(mem.deref(&pd.collected_heart_flower).unwrap_or_default())
