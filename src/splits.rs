@@ -279,7 +279,7 @@ pub enum Split {
     /// Splits on the transition after obtaining Cross Stitch
     CrossStitchTrans,
     // endregion: Bilewater
-    
+
     // region: TheSlab
     /// Rune Rage (Skill)
     ///
@@ -1036,7 +1036,9 @@ pub fn transition_splits(
             mem.deref(&pd.defeated_vampire_gnat_boss)
                 .unwrap_or_default(),
         ),
-        Split::ThreadStormTrans => should_split(mem.deref(&pd.has_thread_sphere).unwrap_or_default()),
+        Split::ThreadStormTrans => {
+            should_split(mem.deref(&pd.has_thread_sphere).unwrap_or_default())
+        }
         // endregion: Greymoor
 
         // region: Bellhart
@@ -1113,7 +1115,9 @@ pub fn transition_splits(
         // endregion: Memorium
 
         // region: TheCradle
-        Split::PaleNailsTrans => should_split(mem.deref(&pd.has_silk_boss_needle).unwrap_or_default()),
+        Split::PaleNailsTrans => {
+            should_split(mem.deref(&pd.has_silk_boss_needle).unwrap_or_default())
+        }
         // endregion: TheCradle
 
         // region: ThreefoldMelody
