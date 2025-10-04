@@ -125,6 +125,14 @@ pub enum Split {
     ///
     /// Splits on entering Wormways
     EnterWormways,
+    /// Sharpdart (Skill)
+    ///
+    /// Splits when obtaining Sharpdart
+    Sharpdart,
+    /// Sharpdart (Transition)
+    ///
+    /// Splits on the transition after obtaining Sharpdart
+    SharpdartTrans,
     // endregion: Wormways
 
     // region: HuntersMarch
@@ -170,6 +178,14 @@ pub enum Split {
     ///
     /// Splits on the transition after killing Moorwing
     MoorwingTrans,
+    /// Thread Storm (Skill)
+    ///
+    /// Splits when obtaining Thread Storm
+    ThreadStorm,
+    /// Thread Storm (Transition)
+    ///
+    /// Splits on the transition after obtaining Thread Storm
+    ThreadStormTrans,
     // endregion: Greymoor
 
     // region: Shellwood
@@ -254,7 +270,26 @@ pub enum Split {
     ///
     /// Splits when killing Phantom
     Phantom,
+    /// Cross Stitch (Skill)
+    ///
+    /// Splits when obtaining Cross Stitch
+    CrossStitch,
+    /// Cross Stitch (Transition)
+    ///
+    /// Splits on the transition after obtaining Cross Stitch
+    CrossStitchTrans,
     // endregion: Bilewater
+    
+    // region: TheSlab
+    /// Rune Rage (Skill)
+    ///
+    /// Splits when obtaining Rune Rage
+    RuneRage,
+    /// Rune Rage (Transition)
+    ///
+    /// Splits on the transition after obtaining Rune Rage
+    RuneRageTrans,
+    // endregion: TheSlab
 
     // region: Acts
     /// Act 2 Started (Event)
@@ -325,6 +360,14 @@ pub enum Split {
     ///
     /// Splits when defeating Lace 2 in TheCradle
     Lace2,
+    /// Pale Nails (Skill)
+    ///
+    /// Splits when obtaining Pale Nails
+    PaleNails,
+    /// Pale Nails (Transition)
+    ///
+    /// Splits on the transition after obtaining Pale Nails
+    PaleNailsTrans,
     // endregion: TheCradle
 
     // region: ThreefoldMelody
@@ -969,6 +1012,7 @@ pub fn transition_splits(
             (scenes.old == "Crawl_02" && scenes.current == "Crawl_03b")
                 || (scenes.old == "Aspid_01" && scenes.current == "Crawl_01"),
         ),
+        Split::SharpdartTrans => should_split(mem.deref(&pd.has_silk_charge).unwrap_or_default()),
         // endregion: Wormways
 
         // region: HuntersMarch
@@ -992,6 +1036,7 @@ pub fn transition_splits(
             mem.deref(&pd.defeated_vampire_gnat_boss)
                 .unwrap_or_default(),
         ),
+        Split::ThreadStormTrans => should_split(mem.deref(&pd.has_thread_sphere).unwrap_or_default()),
         // endregion: Greymoor
 
         // region: Bellhart
@@ -1041,7 +1086,12 @@ pub fn transition_splits(
         Split::EnterExhaustOrgan => {
             should_split(scenes.old == "Dust_09" && scenes.current == "Organ_01")
         }
+        Split::CrossStitchTrans => should_split(mem.deref(&pd.has_parry).unwrap_or_default()),
         // endregion: Bilewater
+
+        // region: TheSlab
+        Split::RuneRageTrans => should_split(mem.deref(&pd.has_silk_bomb).unwrap_or_default()),
+        // endregion: TheSlab
 
         // region: ChoralChambers
         Split::TrobbioTrans => should_split(mem.deref(&pd.defeated_trobbio).unwrap_or_default()),
@@ -1061,6 +1111,10 @@ pub fn transition_splits(
             should_split(scenes.old == "Song_25" && scenes.current == "Arborium_01")
         }
         // endregion: Memorium
+
+        // region: TheCradle
+        Split::PaleNailsTrans => should_split(mem.deref(&pd.has_silk_boss_needle).unwrap_or_default()),
+        // endregion: TheCradle
 
         // region: ThreefoldMelody
         Split::VaultkeepersMelodyTrans => {
@@ -1166,6 +1220,10 @@ pub fn continuous_splits(
         Split::DeepDocksBell => should_split(mem.deref(&pd.bell_shrine_wilds).unwrap_or_default()),
         // endregion: DeepDocks
 
+        // region: Wormways
+        Split::Sharpdart => should_split(mem.deref(&pd.has_silk_charge).unwrap_or_default()),
+        // endregion: Wormways
+
         // region: FarFields
         Split::DriftersCloak => should_split(mem.deref(&pd.has_brolly).unwrap_or_default()),
         Split::FourthChorus => should_split(mem.deref(&pd.defeated_song_golem).unwrap_or_default()),
@@ -1179,6 +1237,7 @@ pub fn continuous_splits(
             mem.deref(&pd.defeated_vampire_gnat_boss)
                 .unwrap_or_default(),
         ),
+        Split::ThreadStorm => should_split(mem.deref(&pd.has_thread_sphere).unwrap_or_default()),
         // endregion: Greymoor
 
         // region: Shellwood
@@ -1201,7 +1260,12 @@ pub fn continuous_splits(
 
         // region: Bilewater
         Split::Phantom => should_split(mem.deref(&pd.defeated_phantom).unwrap_or_default()),
+        Split::CrossStitch => should_split(mem.deref(&pd.has_parry).unwrap_or_default()),
         // endregion: Bilewater
+
+        // region: TheSlab
+        Split::RuneRage => should_split(mem.deref(&pd.has_silk_bomb).unwrap_or_default()),
+        // endregion: TheSlab
 
         // region: Acts
         Split::Act2Started => should_split(mem.deref(&pd.act2_started).unwrap_or_default()),
@@ -1234,6 +1298,7 @@ pub fn continuous_splits(
 
         // region: TheCradle
         Split::Lace2 => should_split(mem.deref(&pd.defeated_lace_tower).unwrap_or_default()),
+        Split::PaleNails => should_split(mem.deref(&pd.has_silk_boss_needle).unwrap_or_default()),
         // endregion: TheCradle
 
         // region: ThreefoldMelody
