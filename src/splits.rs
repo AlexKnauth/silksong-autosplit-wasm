@@ -503,6 +503,81 @@ pub enum Split {
     Mask5,
     // endregion: MaskShards
 
+    // region: SpoolFragments
+    /// Spool Fragment 1 (Fragment)
+    ///
+    /// Splits when getting 1st Spool Fragment
+    SpoolFragment1,
+    /// Spool Upgrade 2 (Upgrade)
+    ///
+    /// Splits when getting 1 extra silk meter (10 base silk)
+    Spool1,
+    /// Spool Fragment 3 (Fragment)
+    ///
+    /// Splits when getting 3rd Spool Fragment
+    SpoolFragment3,
+    /// Spool Upgrade 4 (Upgrade)
+    ///
+    /// Splits when getting 2 extra silk meter (11 base silk)
+    Spool2,
+    /// Spool Fragment 5 (Fragment)
+    ///
+    /// Splits when getting 5th Spool Fragment
+    SpoolFragment5,
+    /// Spool Upgrade 6 (Upgrade)
+    ///
+    /// Splits when getting 3 extra silk meter (12 base silk)
+    Spool3,
+    /// Spool Fragment 7 (Fragment)
+    ///
+    /// Splits when getting 7th Spool Fragment
+    SpoolFragment7,
+    /// Spool Upgrade 8 (Upgrade)
+    ///
+    /// Splits when getting 4 extra silk meter (13 base silk)
+    Spool4,
+    /// Spool Fragment 9 (Fragment)
+    ///
+    /// Splits when getting 9th Spool Fragment
+    SpoolFragment9,
+    /// Spool Upgrade 10 (Upgrade)
+    ///
+    /// Splits when getting 5 extra silk meter (14 base silk)
+    Spool5,
+    /// Spool Fragment 11 (Fragment)
+    ///
+    /// Splits when getting 11th Spool Fragment
+    SpoolFragment11,
+    /// Spool Upgrade 12 (Upgrade)
+    ///
+    /// Splits when getting 6 extra silk meter (15 base silk)
+    Spool6,
+    /// Spool Fragment 13 (Fragment)
+    ///
+    /// Splits when getting 13th Spool Fragment
+    SpoolFragment13,
+    /// Spool Upgrade 14 (Upgrade)
+    ///
+    /// Splits when getting 7 extra silk meter (16 base silk)
+    Spool7,
+    /// Spool Fragment 15 (Fragment)
+    ///
+    /// Splits when getting 15th Spool Fragment
+    SpoolFragment15,
+    /// Spool Upgrade 16 (Upgrade)
+    ///
+    /// Splits when getting 8 extra silk meter (17 base silk)
+    Spool8,
+    /// Spool Fragment 17 (Fragment)
+    ///
+    /// Splits when getting 17th Spool Fragment
+    SpoolFragment17,
+    /// Spool Upgrade 18 (Upgrade)
+    ///
+    /// Splits when getting 9 extra silk meter (18 base silk)
+    Spool9,
+    // endregion SpoolFragments
+
     // region: Crests
     /// Reaper Crest (Transition)
     ///
@@ -1413,6 +1488,81 @@ pub fn continuous_splits(
         ),
         Split::Mask5 => should_split(mem.deref(&pd.max_health_base).is_ok_and(|n: i32| n == 10)),
         // endregion: MaskShards
+
+        // region: SpoolFragments
+        Split::SpoolFragment1 => should_split(
+            mem.deref(&pd.silk_max).is_ok_and(|n: i32| n == 9)
+                && mem.deref(&pd.silk_spool_parts).is_ok_and(|n: i32| n == 1),
+        ),
+        Split::Spool1 => should_split(
+            mem.deref(&pd.silk_max).is_ok_and(|n: i32| n == 10)
+                && mem.deref(&pd.silk_spool_parts).is_ok_and(|n: i32| n == 0),
+        ),
+        Split::SpoolFragment3 => should_split(
+            mem.deref(&pd.silk_max).is_ok_and(|n: i32| n == 10)
+                && mem.deref(&pd.silk_spool_parts).is_ok_and(|n: i32| n == 1),
+        ),
+        Split::Spool2 => should_split(
+            mem.deref(&pd.silk_max).is_ok_and(|n: i32| n == 11)
+                && mem.deref(&pd.silk_spool_parts).is_ok_and(|n: i32| n == 0),
+        ),
+        Split::SpoolFragment5 => should_split(
+            mem.deref(&pd.silk_max).is_ok_and(|n: i32| n == 11)
+                && mem.deref(&pd.silk_spool_parts).is_ok_and(|n: i32| n == 1),
+        ),
+        Split::Spool3 => should_split(
+            mem.deref(&pd.silk_max).is_ok_and(|n: i32| n == 12)
+                && mem.deref(&pd.silk_spool_parts).is_ok_and(|n: i32| n == 0),
+        ),
+        Split::SpoolFragment7 => should_split(
+            mem.deref(&pd.silk_max).is_ok_and(|n: i32| n == 12)
+                && mem.deref(&pd.silk_spool_parts).is_ok_and(|n: i32| n == 1),
+        ),
+        Split::Spool4 => should_split(
+            mem.deref(&pd.silk_max).is_ok_and(|n: i32| n == 13)
+                && mem.deref(&pd.silk_spool_parts).is_ok_and(|n: i32| n == 0),
+        ),
+        Split::SpoolFragment9 => should_split(
+            mem.deref(&pd.silk_max).is_ok_and(|n: i32| n == 13)
+                && mem.deref(&pd.silk_spool_parts).is_ok_and(|n: i32| n == 1),
+        ),
+        Split::Spool5 => should_split(
+            mem.deref(&pd.silk_max).is_ok_and(|n: i32| n == 14)
+                && mem.deref(&pd.silk_spool_parts).is_ok_and(|n: i32| n == 0),
+        ),
+        Split::SpoolFragment11 => should_split(
+            mem.deref(&pd.silk_max).is_ok_and(|n: i32| n == 14)
+                && mem.deref(&pd.silk_spool_parts).is_ok_and(|n: i32| n == 1),
+        ),
+        Split::Spool6 => should_split(
+            mem.deref(&pd.silk_max).is_ok_and(|n: i32| n == 15)
+                && mem.deref(&pd.silk_spool_parts).is_ok_and(|n: i32| n == 0),
+        ),
+        Split::SpoolFragment13 => should_split(
+            mem.deref(&pd.silk_max).is_ok_and(|n: i32| n == 15)
+                && mem.deref(&pd.silk_spool_parts).is_ok_and(|n: i32| n == 1),
+        ),
+        Split::Spool7 => should_split(
+            mem.deref(&pd.silk_max).is_ok_and(|n: i32| n == 16)
+                && mem.deref(&pd.silk_spool_parts).is_ok_and(|n: i32| n == 0),
+        ),
+        Split::SpoolFragment15 => should_split(
+            mem.deref(&pd.silk_max).is_ok_and(|n: i32| n == 16)
+                && mem.deref(&pd.silk_spool_parts).is_ok_and(|n: i32| n == 1),
+        ),
+        Split::Spool8 => should_split(
+            mem.deref(&pd.silk_max).is_ok_and(|n: i32| n == 17)
+                && mem.deref(&pd.silk_spool_parts).is_ok_and(|n: i32| n == 0),
+        ),
+        Split::SpoolFragment17 => should_split(
+            mem.deref(&pd.silk_max).is_ok_and(|n: i32| n == 17)
+                && mem.deref(&pd.silk_spool_parts).is_ok_and(|n: i32| n == 1),
+        ),
+        Split::Spool9 => should_split(
+            mem.deref(&pd.silk_max).is_ok_and(|n: i32| n == 18)
+                && mem.deref(&pd.silk_spool_parts).is_ok_and(|n: i32| n == 0),
+        ),
+        // endregion SpoolFragments
 
         // region: Crests
         Split::ReaperCrestTrans => {
