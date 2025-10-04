@@ -461,10 +461,46 @@ pub enum Split {
     // endregion: MaskShards
 
     // region: Crests
+    /// Reaper Crest (Crest)
+    ///
+    /// Splits when the Reaper Crest is unlocked
+    ReaperCrest,
     /// Reaper Crest (Transition)
     ///
     /// Splits when leaving the church with the Reaper Crest unlocked
     ReaperCrestTrans,
+    /// Wanderer Crest (Crest)
+    ///
+    /// Splits when the Wanderer Crest is unlocked
+    WandererCrest,
+    /// Wanderer Crest (Transition)
+    ///
+    /// Splits when leaving the chapel with the Wanderer Crest unlocked
+    WandererCrestTrans,
+    /// Beast Crest (Crest)
+    ///
+    /// Splits when the Beast Crest is unlocked
+    BeastCrest,
+    /// Beast Crest (Transition)
+    ///
+    /// Splits when leaving the room with the Beast Crest unlocked
+    BeastCrestTrans,
+    /// Architect Crest (Crest)
+    ///
+    /// Splits when the Architect Crest is unlocked
+    ArchitectCrest,
+    /// Architect Crest (Transition)
+    ///
+    /// Splits when leaving the room with the Architect Crest unlocked
+    ArchitectCrestTrans,
+    /// Shaman Crest (Crest)
+    ///
+    /// Splits when the Shaman Crest is unlocked
+    ShamanCrest,
+    /// Shaman Crest (Transition)
+    ///
+    /// Splits when leaving the room with the Shaman Crest unlocked
+    ShamanCrestTrans,
     // endregion: Crests
 
     // region: FleaSpecific
@@ -1078,6 +1114,19 @@ pub fn transition_splits(
         Split::ReaperCrestTrans => {
             should_split(mem.deref(&pd.completed_memory_reaper).unwrap_or_default())
         }
+        Split::WandererCrestTrans => {
+            should_split(mem.deref(&pd.completed_memory_wanderer).unwrap_or_default())
+        }
+        Split::BeastCrestTrans => {
+            should_split(mem.deref(&pd.completed_memory_beast).unwrap_or_default())
+        }
+        Split::ArchitectCrestTrans => should_split(
+            mem.deref(&pd.completed_memory_toolmaster)
+                .unwrap_or_default(),
+        ),
+        Split::ShamanCrestTrans => {
+            should_split(mem.deref(&pd.completed_memory_shaman).unwrap_or_default())
+        }
         // endregion: Crests
 
         // region: MiscTE
@@ -1335,8 +1384,21 @@ pub fn continuous_splits(
         // endregion: MaskShards
 
         // region: Crests
-        Split::ReaperCrestTrans => {
+        Split::ReaperCrest => {
             should_split(mem.deref(&pd.completed_memory_reaper).unwrap_or_default())
+        }
+        Split::WandererCrest => {
+            should_split(mem.deref(&pd.completed_memory_wanderer).unwrap_or_default())
+        }
+        Split::BeastCrest => {
+            should_split(mem.deref(&pd.completed_memory_beast).unwrap_or_default())
+        }
+        Split::ArchitectCrest => should_split(
+            mem.deref(&pd.completed_memory_toolmaster)
+                .unwrap_or_default(),
+        ),
+        Split::ShamanCrest => {
+            should_split(mem.deref(&pd.completed_memory_shaman).unwrap_or_default())
         }
         // endregion: Crests
 
