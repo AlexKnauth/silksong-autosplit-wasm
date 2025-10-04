@@ -996,7 +996,9 @@ pub fn transition_splits(
 
         // region: Bellhart
         Split::EnterBellhart => should_split(
-            (scenes.old == "Belltown_06" || scenes.old == "Belltown_07")
+            (scenes.old == "Belltown_06"
+                || scenes.old == "Belltown_07"
+                || scenes.old == "Belltown_basement")
                 && scenes.current == "Belltown",
         ),
         // endregion: Bellhart
