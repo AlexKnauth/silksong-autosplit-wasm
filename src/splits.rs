@@ -1487,54 +1487,54 @@ pub fn continuous_splits(
         ),
         Split::Mask1 => should_split(mem.deref(&pd.max_health_base).is_ok_and(|n: i32| n == 6)),
         Split::MaskShard5 => should_split(
-            mem.deref(&pd.heart_pieces).is_ok_and(|n: i32| n == 5)
+            mem.deref(&pd.heart_pieces).is_ok_and(|n: i32| n == 1)
                 && mem.deref(&pd.max_health_base).is_ok_and(|n: i32| n == 6),
         ),
         Split::MaskShard6 => should_split(
-            mem.deref(&pd.heart_pieces).is_ok_and(|n: i32| n == 6)
+            mem.deref(&pd.heart_pieces).is_ok_and(|n: i32| n == 2)
                 && mem.deref(&pd.max_health_base).is_ok_and(|n: i32| n == 6),
         ),
         Split::MaskShard7 => should_split(
-            mem.deref(&pd.heart_pieces).is_ok_and(|n: i32| n == 7)
+            mem.deref(&pd.heart_pieces).is_ok_and(|n: i32| n == 3)
                 && mem.deref(&pd.max_health_base).is_ok_and(|n: i32| n == 6),
         ),
         Split::Mask2 => should_split(mem.deref(&pd.max_health_base).is_ok_and(|n: i32| n == 7)),
         Split::MaskShard9 => should_split(
-            mem.deref(&pd.heart_pieces).is_ok_and(|n: i32| n == 9)
+            mem.deref(&pd.heart_pieces).is_ok_and(|n: i32| n == 1)
                 && mem.deref(&pd.max_health_base).is_ok_and(|n: i32| n == 7),
         ),
         Split::MaskShard10 => should_split(
-            mem.deref(&pd.heart_pieces).is_ok_and(|n: i32| n == 10)
+            mem.deref(&pd.heart_pieces).is_ok_and(|n: i32| n == 2)
                 && mem.deref(&pd.max_health_base).is_ok_and(|n: i32| n == 7),
         ),
         Split::MaskShard11 => should_split(
-            mem.deref(&pd.heart_pieces).is_ok_and(|n: i32| n == 11)
+            mem.deref(&pd.heart_pieces).is_ok_and(|n: i32| n == 3)
                 && mem.deref(&pd.max_health_base).is_ok_and(|n: i32| n == 7),
         ),
         Split::Mask3 => should_split(mem.deref(&pd.max_health_base).is_ok_and(|n: i32| n == 8)),
         Split::MaskShard13 => should_split(
-            mem.deref(&pd.heart_pieces).is_ok_and(|n: i32| n == 13)
+            mem.deref(&pd.heart_pieces).is_ok_and(|n: i32| n == 1)
                 && mem.deref(&pd.max_health_base).is_ok_and(|n: i32| n == 8),
         ),
         Split::MaskShard14 => should_split(
-            mem.deref(&pd.heart_pieces).is_ok_and(|n: i32| n == 14)
+            mem.deref(&pd.heart_pieces).is_ok_and(|n: i32| n == 2)
                 && mem.deref(&pd.max_health_base).is_ok_and(|n: i32| n == 8),
         ),
         Split::MaskShard15 => should_split(
-            mem.deref(&pd.heart_pieces).is_ok_and(|n: i32| n == 15)
+            mem.deref(&pd.heart_pieces).is_ok_and(|n: i32| n == 3)
                 && mem.deref(&pd.max_health_base).is_ok_and(|n: i32| n == 8),
         ),
         Split::Mask4 => should_split(mem.deref(&pd.max_health_base).is_ok_and(|n: i32| n == 9)),
         Split::MaskShard17 => should_split(
-            mem.deref(&pd.heart_pieces).is_ok_and(|n: i32| n == 17)
+            mem.deref(&pd.heart_pieces).is_ok_and(|n: i32| n == 1)
                 && mem.deref(&pd.max_health_base).is_ok_and(|n: i32| n == 10),
         ),
         Split::MaskShard18 => should_split(
-            mem.deref(&pd.heart_pieces).is_ok_and(|n: i32| n == 18)
+            mem.deref(&pd.heart_pieces).is_ok_and(|n: i32| n == 2)
                 && mem.deref(&pd.max_health_base).is_ok_and(|n: i32| n == 10),
         ),
         Split::MaskShard19 => should_split(
-            mem.deref(&pd.heart_pieces).is_ok_and(|n: i32| n == 19)
+            mem.deref(&pd.heart_pieces).is_ok_and(|n: i32| n == 3)
                 && mem.deref(&pd.max_health_base).is_ok_and(|n: i32| n == 10),
         ),
         Split::Mask5 => should_split(mem.deref(&pd.max_health_base).is_ok_and(|n: i32| n == 10)),
