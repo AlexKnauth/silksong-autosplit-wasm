@@ -318,6 +318,7 @@ declare_pointers!(PlayerDataPointers {
     completed_red_memory: UnityPointer<3> = UnityPointer::new("GameManager", 0, &["_instance", "playerData", "CompletedRedMemory"]),
     belltown_greeter_house_full_dlg: UnityPointer<3> = UnityPointer::new("GameManager", 0, &["_instance", "playerData", "BelltownGreeterHouseFullDlg"]),
     clover_memory_orbs_collected_target: UnityPointer<3> = UnityPointer::new("GameManager", 0, &["_instance", "playerData", "CloverMemoryOrbsCollectedTarget"]),
+    summoned_lake_orbs: UnityPointer<3> = UnityPointer::new("GameManager", 0, &["_instance", "playerData", "summonedLakeOrbs"]),
     defeated_dock_foremen: UnityPointer<3> = UnityPointer::new("GameManager", 0, &["_instance", "playerData", "defeatedDockForemen"]),
     defeated_swamp_shaman: UnityPointer<3> = UnityPointer::new("GameManager", 0, &["_instance", "playerData", "DefeatedSwampShaman"]),
     defeated_bone_flyer_giant: UnityPointer<3> = UnityPointer::new("GameManager", 0, &["_instance", "playerData", "defeatedBoneFlyerGiant"]),

@@ -125,6 +125,10 @@ pub enum Split {
     ///
     /// Splits on entering Wormways
     EnterWormways,
+    /// Enter Upper Wormways (Transition)
+    ///
+    /// Splits on entering the vertical transition to the upper portion of Wormways (Crawl_03)
+    EnterUpperWormways,
     /// Sharpdart (Skill)
     ///
     /// Splits when obtaining Sharpdart
@@ -944,6 +948,10 @@ pub enum Split {
     ///
     /// Splits when entering the Verdania Memory
     EnterVerdaniaMemory,
+    /// Enter Verdania Castle (Transition)
+    ///
+    /// Splits when entering the room containing the Clover Dancers boss
+    EnterVerdaniaCastle,
     /// Clover Dancer's Heart (Item)
     ///
     /// Split when you obtain Conjoined Heart
@@ -958,6 +966,10 @@ pub enum Split {
     ///
     /// Splits when obtaining Bellhome Key from Pavo
     BellhouseKeyConversation,
+    /// Verdania Lake Fountain Orbs (Event)
+    ///
+    /// Splits when the orbs appear after activating the shrine in the Verdania lake
+    VerdaniaLakeFountainOrbs,
     /// Verdania Orbs (Event)
     ///
     /// Splits when you reach the required number of Verdania Orbs
@@ -1131,6 +1143,9 @@ pub fn transition_splits(
             (scenes.old == "Crawl_02" && scenes.current == "Crawl_03b")
                 || (scenes.old == "Aspid_01" && scenes.current == "Crawl_01"),
         ),
+        Split::EnterUpperWormways => {
+            should_split(scenes.old == "Crawl_03b" && scenes.current == "Crawl_03")
+        }
         Split::SharpdartTrans => should_split(mem.deref(&pd.has_silk_charge).unwrap_or_default()),
         // endregion: Wormways
 
@@ -1287,6 +1302,9 @@ pub fn transition_splits(
         }
         Split::EnterVerdaniaMemory => {
             should_split(scenes.old == "Clover_01" && scenes.current == "Clover_01b")
+        }
+        Split::EnterVerdaniaCastle => {
+            should_split(scenes.old == "Clover_04b" && scenes.current == "Clover_10")
         }
         Split::EnterKhannMemory => {
             should_split(scenes.old == "Coral_Tower_01" && scenes.current == "Memory_Coral_Tower")
@@ -1866,6 +1884,9 @@ pub fn continuous_splits(
             mem.deref(&pd.belltown_greeter_house_full_dlg)
                 .unwrap_or_default(),
         ),
+        Split::VerdaniaLakeFountainOrbs => {
+            should_split(mem.deref(&pd.summoned_lake_orbs).unwrap_or_default())
+        }
         Split::VerdaniaOrbsCollected => should_split(
             mem.deref(&pd.clover_memory_orbs_collected_target)
                 .unwrap_or_default(),
