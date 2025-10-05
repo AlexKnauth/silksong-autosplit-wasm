@@ -510,7 +510,7 @@ pub enum Split {
     SpoolFragment1,
     /// Spool Upgrade 2 (Upgrade)
     ///
-    /// Splits when getting 1 extra silk meter (10 base silk)
+    /// Splits when getting 1 extra Spool Extension (10 base silk)
     Spool1,
     /// Spool Fragment 3 (Fragment)
     ///
@@ -518,7 +518,7 @@ pub enum Split {
     SpoolFragment3,
     /// Spool Upgrade 4 (Upgrade)
     ///
-    /// Splits when getting 2 extra silk meter (11 base silk)
+    /// Splits when getting 2 extra Spool Extension (11 base silk)
     Spool2,
     /// Spool Fragment 5 (Fragment)
     ///
@@ -526,7 +526,7 @@ pub enum Split {
     SpoolFragment5,
     /// Spool Upgrade 6 (Upgrade)
     ///
-    /// Splits when getting 3 extra silk meter (12 base silk)
+    /// Splits when getting 3 extra Spool Extension (12 base silk)
     Spool3,
     /// Spool Fragment 7 (Fragment)
     ///
@@ -534,7 +534,7 @@ pub enum Split {
     SpoolFragment7,
     /// Spool Upgrade 8 (Upgrade)
     ///
-    /// Splits when getting 4 extra silk meter (13 base silk)
+    /// Splits when getting 4 extra Spool Extension (13 base silk)
     Spool4,
     /// Spool Fragment 9 (Fragment)
     ///
@@ -542,7 +542,7 @@ pub enum Split {
     SpoolFragment9,
     /// Spool Upgrade 10 (Upgrade)
     ///
-    /// Splits when getting 5 extra silk meter (14 base silk)
+    /// Splits when getting 5 extra Spool Extension (14 base silk)
     Spool5,
     /// Spool Fragment 11 (Fragment)
     ///
@@ -550,7 +550,7 @@ pub enum Split {
     SpoolFragment11,
     /// Spool Upgrade 12 (Upgrade)
     ///
-    /// Splits when getting 6 extra silk meter (15 base silk)
+    /// Splits when getting 6 extra Spool Extension (15 base silk)
     Spool6,
     /// Spool Fragment 13 (Fragment)
     ///
@@ -558,7 +558,7 @@ pub enum Split {
     SpoolFragment13,
     /// Spool Upgrade 14 (Upgrade)
     ///
-    /// Splits when getting 7 extra silk meter (16 base silk)
+    /// Splits when getting 7 extra Spool Extension (16 base silk)
     Spool7,
     /// Spool Fragment 15 (Fragment)
     ///
@@ -566,7 +566,7 @@ pub enum Split {
     SpoolFragment15,
     /// Spool Upgrade 16 (Upgrade)
     ///
-    /// Splits when getting 8 extra silk meter (17 base silk)
+    /// Splits when getting 8 extra Spool Extension (17 base silk)
     Spool8,
     /// Spool Fragment 17 (Fragment)
     ///
@@ -574,7 +574,7 @@ pub enum Split {
     SpoolFragment17,
     /// Spool Upgrade 18 (Upgrade)
     ///
-    /// Splits when getting 9 extra silk meter (18 base silk)
+    /// Splits when getting 9 extra Spool Extension (18 base silk)
     Spool9,
     // endregion SpoolFragments
 
