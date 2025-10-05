@@ -140,6 +140,10 @@ pub enum Split {
     ///
     /// Splits on entering Hunter's March in the room after the Skarrguard encounter
     EnterHuntersMarch,
+    /// Hunter's March - Post-Void Arena (Transition)
+    ///
+    /// Splits on transition to the room after the void arena in Act 3 Hunter's March
+    HuntersMarchPostVoidArenaTransition,
     // endregion: HuntersMarch
 
     // region: FarFields
@@ -1138,6 +1142,10 @@ pub fn transition_splits(
         Split::EnterHuntersMarch => {
             should_split(scenes.old == "Ant_02" && scenes.current == "Ant_03")
         }
+        Split::HuntersMarchPostVoidArenaTransition => should_split(
+            mem.deref(&pd.black_thread_world).unwrap_or_default()
+                && (scenes.old == "Ant_04_mid" && scenes.current == "Ant_04"),
+        ),
         // endregion: HuntersMarch
 
         // region: FarFields
