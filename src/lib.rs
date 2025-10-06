@@ -28,8 +28,8 @@ use crate::{
         attach_silksong, GameManagerPointers, Memory, PlayerDataPointers, SceneStore,
         GAME_STATE_CUTSCENE, GAME_STATE_ENTERING_LEVEL, GAME_STATE_EXITING_LEVEL,
         GAME_STATE_INACTIVE, GAME_STATE_LOADING, GAME_STATE_MAIN_MENU, GAME_STATE_PLAYING,
-        HERO_TRANSITION_STATE_WAITING_TO_ENTER_LEVEL, MENU_TITLE, OPENING_SCENES, QUIT_TO_MENU,
-        UI_STATE_CUTSCENE, UI_STATE_PAUSED, UI_STATE_PLAYING,
+        HERO_TRANSITION_STATE_WAITING_TO_ENTER_LEVEL, MENU_TITLE, NON_MENU_GAME_STATES,
+        OPENING_SCENES, QUIT_TO_MENU, UI_STATE_CUTSCENE, UI_STATE_PAUSED, UI_STATE_PLAYING,
     },
     timer::SplitterAction,
 };
@@ -496,6 +496,7 @@ async fn main() {
                     handle_splits(&settings, &mut state, &mem, &gm, &pd, &mut scene_store).await;
                     load_removal(&mut state, &mem, &gm);
                     handle_hits(&settings, &mut state, &mem, &gm, &pd);
+                    handle_percent(&mem, &gm, &pd);
                     next_tick().await;
                 }
             })
@@ -822,6 +823,25 @@ fn add_hit(state: &mut AutoSplitterState) {
     } else {
         asr::timer::set_variable("delta hits", DASH);
     }
+}
+
+fn handle_percent(mem: &Memory, gm: &GameManagerPointers, pd: &PlayerDataPointers) {
+    // only update percent if timer is running or paused
+    if is_timer_state_between_runs(asr::timer::state()) {
+        return;
+    }
+
+    // only update percent if game state is non-menu
+    let game_state: i32 = mem.deref(&gm.game_state).unwrap_or_default();
+    if !NON_MENU_GAME_STATES.contains(&game_state) {
+        return;
+    }
+
+    let Ok(percent) = mem.deref::<f32, _>(&pd.completion_percentage) else {
+        return;
+    };
+
+    asr::timer::set_variable("percent", &format!("{}%", percent));
 }
 
 // --------------------------------------------------------
