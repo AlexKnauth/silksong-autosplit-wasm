@@ -98,6 +98,35 @@
             }
         },
         {
+            "Text": {
+                "background": {
+                    "Vertical": [
+                        [
+                            1.0,
+                            1.0,
+                            1.0,
+                            0.06
+                        ],
+                        [
+                            1.0,
+                            1.0,
+                            1.0,
+                            0.005
+                        ]
+                    ]
+                },
+                "display_two_rows": false,
+                "left_center_color": null,
+                "right_color": null,
+                "text": {
+                    "Variable": [
+                        "percent",
+                        true
+                    ]
+                }
+            }
+        },
+        {
             "Timer": {
                 "background": "Transparent",
                 "timing_method": "GameTime",
