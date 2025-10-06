@@ -189,15 +189,16 @@ impl AutoSplitterState {
                 // End
                 #[cfg(not(feature = "split-index"))]
                 {
+                    // TODO: use last_split_index here but also other places on legacy / not-split-index
                     self.split_index = Some(self.split_index.unwrap_or_default() + 1);
                 }
                 #[cfg(feature = "split-index")]
                 match new_index {
-                    Some(new_idx) if self.split_index.unwrap_or_default() < new_idx => {
+                    Some(new_idx) if self.last_split_index.unwrap_or_default() < new_idx => {
                         self.split_index = Some(new_idx)
                     }
                     _ => {
-                        self.split_index = Some(self.split_index.unwrap_or_default() + 1);
+                        self.split_index = Some(self.last_split_index.unwrap_or_default() + 1);
                     }
                 }
                 if settings.get_hit_counter() {
