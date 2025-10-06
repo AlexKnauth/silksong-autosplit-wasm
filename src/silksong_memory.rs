@@ -238,6 +238,9 @@ declare_pointers!(PlayerDataPointers {
     completed_memory_beast: UnityPointer<3> = UnityPointer::new("GameManager", 0, &["_instance", "playerData", "completedMemory_beast"]),
     completed_memory_toolmaster: UnityPointer<3> = UnityPointer::new("GameManager", 0, &["_instance", "playerData", "completedMemory_toolmaster"]),
     completed_memory_shaman: UnityPointer<3> = UnityPointer::new("GameManager", 0, &["_instance", "playerData", "completedMemory_shaman"]),
+    tool_pouch_upgrades: UnityPointer<3> = UnityPointer::new("GameManager", 0, &["_instance", "playerData", "ToolPouchUpgrades"]),
+    tool_kit_upgrades: UnityPointer<3> = UnityPointer::new("GameManager", 0, &["_instance", "playerData", "ToolKitUpgrades"]),
+
 
     savedflea_ant_03: UnityPointer<3> = UnityPointer::new("GameManager", 0, &["_instance", "playerData", "SavedFlea_Ant_03"]),
     savedflea_belltown_04: UnityPointer<3> = UnityPointer::new("GameManager", 0, &["_instance", "playerData", "SavedFlea_Belltown_04"]),

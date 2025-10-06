@@ -586,6 +586,44 @@ pub enum Split {
     Spool9,
     // endregion SpoolFragments
 
+    // region: ToolPouchLevels
+    /// Tool Pouch Level 1 (Upgrade)
+    ///
+    /// Splits when getting the 1st tool pouch capacity upgrade
+    ToolPouch1,
+    /// Tool Pouch Level 2 (Upgrade)
+    ///
+    /// Splits when getting the 2nd tool pouch capacity upgrade
+    ToolPouch2,
+    /// Tool Pouch Level 3 (Upgrade)
+    ///
+    /// Splits when getting the 3rd tool pouch capacity upgrade
+    ToolPouch3,
+    /// Tool Pouch Level 4 (Upgrade)
+    ///
+    /// Splits when getting the 4th tool pouch capacity upgrade
+    ToolPouch4,
+    // endregion: ToolPouchLevels
+
+    // region: CraftingKitLevels
+    /// Crafting Kit Level 1 (Upgrade)
+    ///
+    /// Splits when getting the 1st crafting kit damage upgrade
+    CraftingKit1,
+    /// Crafting Kit Level 2 (Upgrade)
+    ///
+    /// Splits when getting the 2nd crafting kit damage upgrade
+    CraftingKit2,
+    /// Crafting Kit Level 3 (Upgrade)
+    ///
+    /// Splits when getting the 3rd crafting kit damage upgrade
+    CraftingKit3,
+    /// Crafting Kit Level 4 (Upgrade)
+    ///
+    /// Splits when getting the 4th crafting kit damage upgrade
+    CraftingKit4,
+    // endregion: CraftingKitLevels
+
     // region: Crests
     /// Reaper Crest (Crest)
     ///
@@ -1639,6 +1677,40 @@ pub fn continuous_splits(
                 && mem.deref(&pd.silk_spool_parts).is_ok_and(|n: i32| n == 0),
         ),
         // endregion SpoolFragments
+
+        // region: ToolPouchLevels
+        Split::ToolPouch1 => should_split(
+            mem.deref(&pd.tool_pouch_upgrades)
+                .is_ok_and(|n: i32| n == 1),
+        ),
+        Split::ToolPouch2 => should_split(
+            mem.deref(&pd.tool_pouch_upgrades)
+                .is_ok_and(|n: i32| n == 2),
+        ),
+        Split::ToolPouch3 => should_split(
+            mem.deref(&pd.tool_pouch_upgrades)
+                .is_ok_and(|n: i32| n == 3),
+        ),
+        Split::ToolPouch4 => should_split(
+            mem.deref(&pd.tool_pouch_upgrades)
+                .is_ok_and(|n: i32| n == 4),
+        ),
+        // endregion: ToolPouchLevels
+
+        // region: CraftingKitLevels
+        Split::CraftingKit1 => {
+            should_split(mem.deref(&pd.tool_kit_upgrades).is_ok_and(|n: i32| n == 1))
+        }
+        Split::CraftingKit2 => {
+            should_split(mem.deref(&pd.tool_kit_upgrades).is_ok_and(|n: i32| n == 2))
+        }
+        Split::CraftingKit3 => {
+            should_split(mem.deref(&pd.tool_kit_upgrades).is_ok_and(|n: i32| n == 3))
+        }
+        Split::CraftingKit4 => {
+            should_split(mem.deref(&pd.tool_kit_upgrades).is_ok_and(|n: i32| n == 4))
+        }
+        // endregion: CraftingKitLevels
 
         // region: Crests
         Split::ReaperCrest => {
