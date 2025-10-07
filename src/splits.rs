@@ -235,6 +235,14 @@ pub enum Split {
     ///
     /// Splits when entering the Blasted Steps from Shellwood, where the area text appears
     EnterBlastedSteps,
+    /// Needle Strike (Skill)
+    ///
+    /// Splits when obtaining Needle Strike (Charge Slash)
+    NeedleStrike,
+    /// Needle Strike (Transition)
+    ///
+    /// Splits on the transition after obtaining Needle Strike (Charge Slash)
+    NeedleStrikeTrans,
     /// Enter Last Judge (Transition)
     ///
     /// Splits when entering the Last Judge boss arena from the Blasted Steps
@@ -959,6 +967,10 @@ pub enum Split {
     ///
     /// Splits when you obtain Super Jump
     SilkSoar,
+    /// Elegy of the Deep (Skill)
+    ///
+    /// Splits when obtaining Elegy of the Deep
+    ElegyOfTheDeep,
     /// Enter Nyleth Memory (Transition)
     ///
     /// Splits when entering Nyleth's memory
@@ -1240,6 +1252,9 @@ pub fn transition_splits(
         Split::EnterBlastedSteps => {
             should_split(scenes.old == "Coral_19" && scenes.current == "Coral_02")
         }
+        Split::NeedleStrikeTrans => {
+            should_split(mem.deref(&pd.has_charge_slash).unwrap_or_default())
+        }
         Split::EnterLastJudge => {
             should_split(scenes.old == "Coral_32" && scenes.current == "Coral_Judge_Arena")
         }
@@ -1459,6 +1474,7 @@ pub fn continuous_splits(
         // endregion: Bellhart
 
         // region: BlastedSteps
+        Split::NeedleStrike => should_split(mem.deref(&pd.has_charge_slash).unwrap_or_default()),
         Split::LastJudge => should_split(mem.deref(&pd.defeated_last_judge).unwrap_or_default()),
         // endregion: BlastedSteps
 
@@ -1948,6 +1964,10 @@ pub fn continuous_splits(
             should_split(mem.deref(&pd.has_fast_travel_teleport).unwrap_or_default())
         }
         Split::SilkSoar => should_split(mem.deref(&pd.has_super_jump).unwrap_or_default()),
+        Split::ElegyOfTheDeep => should_split(
+            mem.deref(&pd.has_needolin_memory_powerup)
+                .unwrap_or_default(),
+        ),
         Split::HeartNyleth => {
             should_split(mem.deref(&pd.collected_heart_flower).unwrap_or_default())
         }
