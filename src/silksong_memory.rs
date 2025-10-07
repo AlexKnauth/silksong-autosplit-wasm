@@ -33,6 +33,8 @@ pub static DEATH_RESPAWN_MARKER_INIT: &str = "Death Respawn Marker Init";
 
 // static NON_PLAY_SCENES: [&str; 4] = [PRE_MENU_INTRO, MENU_TITLE, QUIT_TO_MENU, OPENING_SEQUENCE];
 
+static DEBUG_SAVE_STATE_SCENE_NAMES: [&str; 1] = ["Demo Start"];
+
 static BAD_SCENE_NAMES: [&str; 11] = [
     "Untagged",
     "left1",
@@ -100,6 +102,10 @@ pub fn attach_silksong() -> Option<Process> {
 
 pub fn is_menu(s: &str) -> bool {
     s.is_empty() || s == MENU_TITLE || s == QUIT_TO_MENU // || s == PERMA_DEATH
+}
+
+pub fn is_debug_save_state_scene(s: &str) -> bool {
+    DEBUG_SAVE_STATE_SCENE_NAMES.contains(&s)
 }
 
 // --------------------------------------------------------

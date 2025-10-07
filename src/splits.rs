@@ -7,9 +7,9 @@ use ugly_widget::{
 
 use crate::{
     silksong_memory::{
-        is_menu, GameManagerPointers, Memory, PlayerDataPointers, SceneStore,
-        DEATH_RESPAWN_MARKER_INIT, GAME_STATE_PLAYING, MENU_TITLE, NON_MENU_GAME_STATES,
-        OPENING_SCENES,
+        is_debug_save_state_scene, is_menu, GameManagerPointers, Memory, PlayerDataPointers,
+        SceneStore, DEATH_RESPAWN_MARKER_INIT, GAME_STATE_PLAYING, MENU_TITLE,
+        NON_MENU_GAME_STATES, OPENING_SCENES,
     },
     timer::{should_split, SplitterAction},
 };
@@ -53,6 +53,11 @@ pub enum Split {
     ///
     /// Splits when entering a transition (only one will split per transition)
     AnyTransition,
+    /// Transition excluding discontinuities (Transition)
+    ///
+    /// Splits when entering a transition
+    /// (excludes discontinuities including save states and deaths)
+    TransitionExcludingDiscontinuities,
     // endregion: Start, End, and Menu
 
     // region: MossLands
@@ -1197,6 +1202,13 @@ pub fn transition_splits(
         Split::EndingSplit => should_split(scenes.current.starts_with("Cinematic_Ending")),
         Split::EndingA => should_split(scenes.current == "Cinematic_Ending_A"),
         Split::AnyTransition => should_split(true),
+        // TODO: if there's anything like DreamGate in Silksong,
+        // should TransitionExcludingDiscontinuities exclude that too?
+        Split::TransitionExcludingDiscontinuities => should_split(
+            !(is_debug_save_state_scene(scenes.old)
+                || is_debug_save_state_scene(scenes.current)
+                || mem.deref(&pd.health).is_ok_and(|h: i32| h == 0)),
+        ),
         // endregion: Start, End, and Menu
 
         // region: MossLands
