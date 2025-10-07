@@ -237,7 +237,11 @@ declare_pointers!(PlayerDataPointers {
     completed_memory_wanderer: UnityPointer<3> = UnityPointer::new("GameManager", 0, &["_instance", "playerData", "completedMemory_wanderer"]),
     completed_memory_beast: UnityPointer<3> = UnityPointer::new("GameManager", 0, &["_instance", "playerData", "completedMemory_beast"]),
     completed_memory_toolmaster: UnityPointer<3> = UnityPointer::new("GameManager", 0, &["_instance", "playerData", "completedMemory_toolmaster"]),
+    completed_memory_witch: UnityPointer<3> = UnityPointer::new("GameManager", 0, &["_instance", "playerData", "completedMemory_witch"]),
+    gained_curse: UnityPointer<3> = UnityPointer::new("GameManager", 0, &["_instance", "playerData", "gainedCurse"]),
+    belltown_doctor_cured_curse: UnityPointer<3> = UnityPointer::new("GameManager", 0, &["_instance", "playerData", "BelltownDoctorCuredCurse"]),
     completed_memory_shaman: UnityPointer<3> = UnityPointer::new("GameManager", 0, &["_instance", "playerData", "completedMemory_shaman"]),
+    has_bound_crest_upgrader: UnityPointer<3> = UnityPointer::new("GameManager", 0, &["_instance", "playerData", "HasBoundCrestUpgrader"]),
     tool_pouch_upgrades: UnityPointer<3> = UnityPointer::new("GameManager", 0, &["_instance", "playerData", "ToolPouchUpgrades"]),
     tool_kit_upgrades: UnityPointer<3> = UnityPointer::new("GameManager", 0, &["_instance", "playerData", "ToolKitUpgrades"]),
 

@@ -657,6 +657,22 @@ pub enum Split {
     ///
     /// Splits when leaving the room with the Architect Crest unlocked
     ArchitectCrestTrans,
+    /// Curse Crest (Crest)
+    ///
+    /// Splits when the Curse crest is applied
+    CurseCrest,
+    /// Gained Curse (Event)
+    ///
+    /// Splits when Hornet first gains control after breaking out of the Curse Crest tree
+    GainedCurse,
+    /// Witch Crest (Crest)
+    ///
+    /// Splits when the Cursed Crest is transformed into the Witch Crest
+    WitchCrest,
+    /// Witch Crest (Transition)
+    ///
+    /// Splits when leaving Yarnaby's room after the Witch Crest is obtained
+    WitchCrestTrans,
     /// Shaman Crest (Crest)
     ///
     /// Splits when the Shaman Crest is unlocked
@@ -665,6 +681,14 @@ pub enum Split {
     ///
     /// Splits when leaving the room with the Shaman Crest unlocked
     ShamanCrestTrans,
+    /// Sylphsong (Skill)
+    ///
+    /// Splits when obtaining Sylphsong after binding Eva
+    Sylphsong,
+    /// Sylphsong (Transition)
+    ///
+    /// Splits when leaving the room after obtaining Sylphsong
+    SylphsongTrans,
     // endregion: Crests
 
     // region: FleaSpecific
@@ -1327,8 +1351,15 @@ pub fn transition_splits(
             mem.deref(&pd.completed_memory_toolmaster)
                 .unwrap_or_default(),
         ),
+        Split::WitchCrestTrans => should_split(
+            mem.deref(&pd.belltown_doctor_cured_curse)
+                .unwrap_or_default(),
+        ),
         Split::ShamanCrestTrans => {
             should_split(mem.deref(&pd.completed_memory_shaman).unwrap_or_default())
+        }
+        Split::SylphsongTrans => {
+            should_split(mem.deref(&pd.has_bound_crest_upgrader).unwrap_or_default())
         }
         // endregion: Crests
 
@@ -1726,8 +1757,19 @@ pub fn continuous_splits(
             mem.deref(&pd.completed_memory_toolmaster)
                 .unwrap_or_default(),
         ),
+        Split::CurseCrest => {
+            should_split(mem.deref(&pd.completed_memory_witch).unwrap_or_default())
+        }
+        Split::GainedCurse => should_split(mem.deref(&pd.gained_curse).unwrap_or_default()),
+        Split::WitchCrest => should_split(
+            mem.deref(&pd.belltown_doctor_cured_curse)
+                .unwrap_or_default(),
+        ),
         Split::ShamanCrest => {
             should_split(mem.deref(&pd.completed_memory_shaman).unwrap_or_default())
+        }
+        Split::Sylphsong => {
+            should_split(mem.deref(&pd.has_bound_crest_upgrader).unwrap_or_default())
         }
         // endregion: Crests
 
