@@ -316,7 +316,7 @@ pub enum Split {
     // region: WhisperingVaults
     /// Enter Whispering Vaults (Transition)
     ///
-    /// Splits when entering the rooms where the Whispering Vaults area text appears
+    /// Splits when entering the rooms where the Whispering Vaults area text appears, past the arena or from Songclave
     EnterWhisperingVaults,
     /// Whispering Vaults Arena (Mini Boss)
     ///
