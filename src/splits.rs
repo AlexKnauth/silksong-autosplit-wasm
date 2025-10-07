@@ -66,7 +66,7 @@ pub enum Split {
     MossMotherTrans,
     /// Enter Bone Bottom (Transition)
     ///
-    /// Splits when entering Bone Bottom from the Moss Grotto
+    /// Splits when entering Bone Bottom
     EnterBoneBottom,
     /// Enter Mosshome (Transition)
     ///
@@ -1209,7 +1209,7 @@ pub fn transition_splits(
         }
         Split::SilkSpearTrans => should_split(mem.deref(&pd.has_needle_throw).unwrap_or_default()),
         Split::EnterBoneBottom => {
-            should_split(scenes.old == "Tut_03" && scenes.current == "Bonetown")
+            should_split(scenes.old != "Bonetown" && scenes.current == "Bonetown")
         }
         Split::EnterMosshome => {
             should_split(scenes.old == "Bone_05" && scenes.current == "Mosstown_01")
