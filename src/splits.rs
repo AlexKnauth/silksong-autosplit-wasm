@@ -314,6 +314,10 @@ pub enum Split {
     // endregion: CogworkCore
 
     // region: WhisperingVaults
+    /// Enter Whispering Vaults (Transition)
+    ///
+    /// Splits when entering the rooms where the Whispering Vaults area text appears
+    EnterWhisperingVaults,
     /// Whispering Vaults Arena (Mini Boss)
     ///
     /// Splits when completing the Whispering Vaults Arena
@@ -357,7 +361,7 @@ pub enum Split {
     // endregion: HighHalls
 
     // region: Memorium
-    /// Enter Memorium
+    /// Enter Memorium (Transition)
     ///
     /// Splits when entering the Memorium
     EnterMemorium,
@@ -1279,6 +1283,13 @@ pub fn transition_splits(
         // region: ChoralChambers
         Split::TrobbioTrans => should_split(mem.deref(&pd.defeated_trobbio).unwrap_or_default()),
         //endregion: ChoralChambers
+
+        // region: WhisperingVaults
+        Split::EnterWhisperingVaults => should_split(
+            (scenes.old == "Library_02" && scenes.current == "Library_01")
+                || (scenes.old == "Song_Enclave" && scenes.current == "Library_04"),
+        ),
+        // endregion: WhisperingVaults
 
         // region: HighHalls
         Split::EnterHighHalls => {
