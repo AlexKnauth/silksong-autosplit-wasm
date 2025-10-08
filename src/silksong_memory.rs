@@ -345,7 +345,7 @@ declare_pointers!(PlayerDataPointers {
     caretaker_offered_snare_quest: UnityPointer<3> = UnityPointer::new("GameManager", 0, &["_instance", "playerData", "CaretakerOfferedSnareQuest"]),
     soul_snare_ready: UnityPointer<3> = UnityPointer::new("GameManager", 0, &["_instance", "playerData", "soulSnareReady"]),
     defeated_seth: UnityPointer<3> = UnityPointer::new("GameManager", 0, &["_instance", "playerData", "defeatedSeth"]),
-    completed_abyss_ascent: UnityPointer<3> = UnityPointer::new("GameManager", 0, &["_instance", "playerData", "CompletedAbyssAscent"]),
+    completed_abyss_ascent: UnityPointer<3> = UnityPointer::new("GameManager", 0, &["_instance", "playerData", "completedAbyssAscent"]),
     ballow_moved_to_diving_bell: UnityPointer<3> = UnityPointer::new("GameManager", 0, &["_instance", "playerData", "BallowMovedToDivingBell"]),
     black_thread_world: UnityPointer<3> = UnityPointer::new("GameManager", 0, &["_instance", "playerData", "blackThreadWorld"]),
     defeated_coral_drillers: UnityPointer<3> = UnityPointer::new("GameManager", 0, &["_instance", "playerData", "defeatedCoralDrillers"]),
