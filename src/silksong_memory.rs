@@ -339,7 +339,7 @@ declare_pointers!(PlayerDataPointers {
     bell_shrine_enclave: UnityPointer<3> = UnityPointer::new("GameManager", 0, &["_instance", "playerData", "bellShrineEnclave"]),
     defeated_zap_core_enemy: UnityPointer<3> = UnityPointer::new("GameManager", 0, &["_instance", "playerData", "defeatedZapCoreEnemy"]),
     skull_king_defeated: UnityPointer<3> = UnityPointer::new("GameManager", 0, &["_instance", "playerData", "skullKingDefeated"]),
-    sherma_healer_active: UnityPointer<3> = UnityPointer::new("GameManager", 0, &["_instance", "playerData", "ShermaHealerActive"]),
+    sherma_healer_active: UnityPointer<3> = UnityPointer::new("GameManager", 0, &["_instance", "playerData", "shermaHealerActive"]),
     city_merchant_saved: UnityPointer<3> = UnityPointer::new("GameManager", 0, &["_instance", "playerData", "cityMerchantSaved"]),
     enclave_merchant_saved: UnityPointer<3> = UnityPointer::new("GameManager", 0, &["_instance", "playerData", "enclaveMerchantSaved"]),
     caretaker_offered_snare_quest: UnityPointer<3> = UnityPointer::new("GameManager", 0, &["_instance", "playerData", "CaretakerOfferedSnareQuest"]),
