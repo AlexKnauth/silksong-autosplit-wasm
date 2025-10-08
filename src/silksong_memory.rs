@@ -25,13 +25,13 @@ static SILKSONG_NAMES: [&str; 2] = [
 // const PRE_MENU_INTRO: &str = "Pre_Menu_Intro";
 pub const MENU_TITLE: &str = "Menu_Title";
 pub const QUIT_TO_MENU: &str = "Quit_To_Menu";
-
+pub const PERMA_DEATH: &str = "PermaDeath";
 pub const OPENING_SEQUENCE: &str = "Opening_Sequence";
 pub static OPENING_SCENES: [&str; 1] = [OPENING_SEQUENCE];
 
 pub static DEATH_RESPAWN_MARKER_INIT: &str = "Death Respawn Marker Init";
 
-// static NON_PLAY_SCENES: [&str; 4] = [PRE_MENU_INTRO, MENU_TITLE, QUIT_TO_MENU, OPENING_SEQUENCE];
+// static NON_PLAY_SCENES: [&str; 5] = [PRE_MENU_INTRO, MENU_TITLE, QUIT_TO_MENU, OPENING_SEQUENCE, PERMA_DEATH];
 
 static DEBUG_SAVE_STATE_SCENE_NAMES: [&str; 1] = ["Demo Start"];
 
@@ -101,7 +101,7 @@ pub fn attach_silksong() -> Option<Process> {
 }
 
 pub fn is_menu(s: &str) -> bool {
-    s.is_empty() || s == MENU_TITLE || s == QUIT_TO_MENU // || s == PERMA_DEATH
+    s.is_empty() || s == MENU_TITLE || s == QUIT_TO_MENU || s == PERMA_DEATH
 }
 
 pub fn is_debug_save_state_scene(s: &str) -> bool {
@@ -185,6 +185,11 @@ declare_pointers!(GameManagerPointers {
         "GameManager",
         0,
         &["_instance", "<hero_ctrl>k__BackingField", "transitionState"],
+    ),
+    scene_load: UnityPointer<2> = UnityPointer::new(
+        "GameManager",
+        0,
+        &["_instance", "sceneLoad"],
     ),
     scene_load_activation_allowed: UnityPointer<3> = UnityPointer::new(
         "GameManager",
@@ -490,10 +495,13 @@ impl SceneStore {
 
     pub fn transition_now(&mut self, mem: &Memory, gm: &GameManagerPointers) -> bool {
         self.new_curr_scene_name(mem.read_string(&gm.scene_name).unwrap_or_default());
-        if mem
+        let scene_load_null: bool = mem
+            .deref(&gm.scene_load)
+            .is_ok_and(|a: Address64| a.is_null());
+        let scene_load_activation_allowed: bool = mem
             .deref(&gm.scene_load_activation_allowed)
-            .unwrap_or_default()
-        {
+            .unwrap_or_default();
+        if scene_load_null || scene_load_activation_allowed {
             self.new_next_scene_name(mem.read_string(&gm.next_scene_name).unwrap_or_default());
         }
 
