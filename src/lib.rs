@@ -558,7 +558,8 @@ async fn handle_splits(
                         state.segment_hits.resize(1, 0);
                         if settings.get_hit_counter() {
                             asr::timer::set_variable_int("segment hits", state.segment_hits[0]);
-                            if let Some(c) = state.comparison_hits.get(0) {
+                            // .first() = .get(0)
+                            if let Some(c) = state.comparison_hits.first() {
                                 asr::timer::set_variable_int("comparison hits", *c);
                                 asr::timer::set_variable(
                                     "delta hits",
