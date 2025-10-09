@@ -375,6 +375,13 @@ pub enum Split {
     EnterMemorium,
     // endregion: Memorium
 
+    // region: PutrifiedDucts
+    /// Enter Putrified Ducts (Transition)
+    ///
+    /// Splits when entering the Putrified Ducts
+    EnterPutrifiedDucts,
+    // endregion: PutrifiedDucts
+
     // region: TheCradle
     /// Lace 2 (Boss)
     ///
@@ -1344,6 +1351,12 @@ pub fn transition_splits(
             should_split(scenes.old == "Song_25" && scenes.current == "Arborium_01")
         }
         // endregion: Memorium
+
+        // region: PutrifiedDucts
+        Split::EnterPutrifiedDucts => {
+            should_split(scenes.old == "Arborium_11" && scenes.current == "Aqueduct_01")
+        }
+        // endregion: PutrifiedDucts
 
         // region: TheCradle
         Split::PaleNailsTrans => {
