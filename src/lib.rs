@@ -164,6 +164,7 @@ impl AutoSplitterState {
                     asr::timer::set_variable("hits", DASH);
                     asr::timer::set_variable("segment hits", DASH);
                 }
+                asr::timer::set_variable("percent", DASH);
                 self.look_for_teleporting = false;
                 self.last_game_state = GAME_STATE_INACTIVE;
                 #[cfg(debug_assertions)]
@@ -428,6 +429,7 @@ async fn main() {
     asr::timer::set_variable("pb hits", DASH);
     asr::timer::set_variable("comparison hits", DASH);
     asr::timer::set_variable("delta hits", DASH);
+    asr::timer::set_variable("percent", DASH);
 
     asr::print_message("Hello, World!");
 
@@ -572,6 +574,7 @@ async fn handle_splits(
                             asr::timer::set_variable("hits", DASH);
                             asr::timer::set_variable("segment hits", DASH);
                         }
+                        asr::timer::set_variable("percent", DASH);
                         state.look_for_teleporting = false;
                         state.last_game_state = GAME_STATE_INACTIVE;
                         #[cfg(debug_assertions)]
