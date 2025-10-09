@@ -2039,10 +2039,32 @@ pub fn continuous_splits(
         Split::VerdaniaLakeFountainOrbs => {
             should_split(mem.deref(&pd.summoned_lake_orbs).unwrap_or_default())
         }
-        Split::VerdaniaOrbsCollected => should_split(
-            mem.deref(&pd.clover_memory_orbs_collected_target)
-                .unwrap_or_default(),
-        ),
+        Split::VerdaniaOrbsCollected => {
+            let orb_02c: bool = mem.deref(&pd.orbs_02c).unwrap_or_default();
+            let orb_03: bool = mem.deref(&pd.orbs_03).unwrap_or_default();
+            let orb_06: bool = mem.deref(&pd.orbs_06).unwrap_or_default();
+            let orb_11: bool = mem.deref(&pd.orbs_11).unwrap_or_default();
+            let orb_16_b: bool = mem.deref(&pd.orbs_16_b).unwrap_or_default();
+            let orb_16_c: bool = mem.deref(&pd.orbs_16_c).unwrap_or_default();
+            let orb_21: bool = mem.deref(&pd.orbs_21).unwrap_or_default();
+            // C# ulong is an unsigned 64-bit int
+            let orb_18_a: u64 = mem.deref(&pd.orbs_18_a).unwrap_or_default();
+            let orb_18_b: u64 = mem.deref(&pd.orbs_18_b).unwrap_or_default();
+            let orb_18_c: u64 = mem.deref(&pd.orbs_18_c).unwrap_or_default();
+            let orb_18_d: u64 = mem.deref(&pd.orbs_18_d).unwrap_or_default();
+            let orb_18_e: u64 = mem.deref(&pd.orbs_18_e).unwrap_or_default();
+            let orb_19: u64 = mem.deref(&pd.orbs_19).unwrap_or_default();
+
+            let singles: usize = [orb_02c, orb_03, orb_06, orb_11, orb_16_b, orb_16_c, orb_21]
+                .into_iter()
+                .filter(|b| *b)
+                .count();
+            let multis: usize = [orb_18_a, orb_18_b, orb_18_c, orb_18_d, orb_18_e, orb_19]
+                .into_iter()
+                .fold(0, |acc, x| acc + (x.count_ones() as usize));
+            let total = singles + multis;
+            should_split(total >= 12)
+        }
         Split::Forebrothers => {
             should_split(mem.deref(&pd.defeated_dock_foremen).unwrap_or_default())
         }
