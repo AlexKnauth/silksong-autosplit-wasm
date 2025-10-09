@@ -9,7 +9,7 @@ pub mod splits;
 mod timer;
 mod unstable;
 
-use alloc::{boxed::Box, format, vec::Vec};
+use alloc::{boxed::Box, format, string::String, vec::Vec};
 use asr::{
     future::{next_tick, retry},
     settings::Gui,
@@ -49,6 +49,10 @@ fn this_script_name() -> &'static str {
 
 /// The dash symbol to use for generic dashes in text.
 pub const DASH: &str = "—";
+/// The minus symbol to use for negative numbers.
+const MINUS: &str = "−";
+/// The plus symbol to use for positive numbers.
+const PLUS: &str = "+";
 
 // --------------------------------------------------------
 
@@ -254,7 +258,7 @@ impl AutoSplitterState {
                         asr::timer::set_variable_int("segment hits", self.segment_hits[new_i]);
                         if let Some(c) = self.comparison_hits.get(new_i) {
                             asr::timer::set_variable_int("comparison hits", *c);
-                            asr::timer::set_variable_int("delta hits", self.hits - c);
+                            asr::timer::set_variable("delta hits", &delta_string(self.hits - c));
                         } else {
                             asr::timer::set_variable("comparison hits", DASH);
                             asr::timer::set_variable("delta hits", DASH);
@@ -595,7 +599,10 @@ async fn handle_splits(
                             asr::timer::set_variable_int("segment hits", state.segment_hits[new_i]);
                             if let Some(c) = state.comparison_hits.get(new_i) {
                                 asr::timer::set_variable_int("comparison hits", *c);
-                                asr::timer::set_variable_int("delta hits", state.hits - c);
+                                asr::timer::set_variable(
+                                    "delta hits",
+                                    &delta_string(state.hits - c),
+                                );
                             } else {
                                 asr::timer::set_variable("comparison hits", DASH);
                                 asr::timer::set_variable("delta hits", DASH);
@@ -615,7 +622,10 @@ async fn handle_splits(
                             asr::timer::set_variable_int("segment hits", state.segment_hits[new_i]);
                             if let Some(c) = state.comparison_hits.get(new_i) {
                                 asr::timer::set_variable_int("comparison hits", *c);
-                                asr::timer::set_variable_int("delta hits", state.hits - c);
+                                asr::timer::set_variable(
+                                    "delta hits",
+                                    &delta_string(state.hits - c),
+                                );
                             } else {
                                 asr::timer::set_variable("comparison hits", DASH);
                                 asr::timer::set_variable("delta hits", DASH);
@@ -639,7 +649,10 @@ async fn handle_splits(
                                 );
                                 if let Some(c) = state.comparison_hits.get(new_i) {
                                     asr::timer::set_variable_int("comparison hits", *c);
-                                    asr::timer::set_variable_int("delta hits", state.hits - c);
+                                    asr::timer::set_variable(
+                                        "delta hits",
+                                        &delta_string(state.hits - c),
+                                    );
                                 } else {
                                     asr::timer::set_variable("comparison hits", DASH);
                                     asr::timer::set_variable("delta hits", DASH);
@@ -822,7 +835,7 @@ fn add_hit(state: &mut AutoSplitterState) {
     state.segment_hits[i] += 1;
     asr::timer::set_variable_int("segment hits", state.segment_hits[i]);
     if let Some(c) = state.comparison_hits.get(i) {
-        asr::timer::set_variable_int("delta hits", state.hits - c);
+        asr::timer::set_variable("delta hits", &delta_string(state.hits - c));
     } else {
         asr::timer::set_variable("delta hits", DASH);
     }
@@ -855,4 +868,14 @@ pub fn is_timer_state_between_runs(s: TimerState) -> bool {
 
 pub fn str_take_right(s: &str, n: usize) -> &str {
     s.split_at(s.len().saturating_sub(n)).1
+}
+
+fn delta_string(i: i64) -> String {
+    if i.is_positive() {
+        format!("{}{}", PLUS, i)
+    } else if i.is_negative() {
+        format!("{}{}", MINUS, -i)
+    } else {
+        format!("{}", i)
+    }
 }
