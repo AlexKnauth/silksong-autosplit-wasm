@@ -1483,6 +1483,18 @@ pub fn transition_once_splits(
     }
 }
 
+fn mask_shard_split(mem: &Memory, pd: &PlayerDataPointers, shard: i32) -> bool {
+    const START_MASKS: i32 = 5;
+    let current_shards = shard % 4;
+    let additional_masks = shard / 4;
+
+    (mem.deref(&pd.max_health_base)
+        .is_ok_and(|n: i32| START_MASKS + additional_masks == n))
+        && (mem
+            .deref(&pd.heart_pieces)
+            .is_ok_and(|n: i32| n == current_shards))
+}
+
 pub fn continuous_splits(
     split: &Split,
     mem: &Memory,
@@ -1633,71 +1645,26 @@ pub fn continuous_splits(
         // endregion: NeedleUpgrade
 
         // region: MaskShards
-        Split::MaskShard1 => should_split(
-            mem.deref(&pd.heart_pieces).is_ok_and(|n: i32| n == 1)
-                && mem.deref(&pd.max_health_base).is_ok_and(|n: i32| n == 5),
-        ),
-        Split::MaskShard2 => should_split(
-            mem.deref(&pd.heart_pieces).is_ok_and(|n: i32| n == 2)
-                && mem.deref(&pd.max_health_base).is_ok_and(|n: i32| n == 5),
-        ),
-        Split::MaskShard3 => should_split(
-            mem.deref(&pd.heart_pieces).is_ok_and(|n: i32| n == 3)
-                && mem.deref(&pd.max_health_base).is_ok_and(|n: i32| n == 5),
-        ),
-        Split::Mask1 => should_split(mem.deref(&pd.max_health_base).is_ok_and(|n: i32| n == 6)),
-        Split::MaskShard5 => should_split(
-            mem.deref(&pd.heart_pieces).is_ok_and(|n: i32| n == 1)
-                && mem.deref(&pd.max_health_base).is_ok_and(|n: i32| n == 6),
-        ),
-        Split::MaskShard6 => should_split(
-            mem.deref(&pd.heart_pieces).is_ok_and(|n: i32| n == 2)
-                && mem.deref(&pd.max_health_base).is_ok_and(|n: i32| n == 6),
-        ),
-        Split::MaskShard7 => should_split(
-            mem.deref(&pd.heart_pieces).is_ok_and(|n: i32| n == 3)
-                && mem.deref(&pd.max_health_base).is_ok_and(|n: i32| n == 6),
-        ),
-        Split::Mask2 => should_split(mem.deref(&pd.max_health_base).is_ok_and(|n: i32| n == 7)),
-        Split::MaskShard9 => should_split(
-            mem.deref(&pd.heart_pieces).is_ok_and(|n: i32| n == 1)
-                && mem.deref(&pd.max_health_base).is_ok_and(|n: i32| n == 7),
-        ),
-        Split::MaskShard10 => should_split(
-            mem.deref(&pd.heart_pieces).is_ok_and(|n: i32| n == 2)
-                && mem.deref(&pd.max_health_base).is_ok_and(|n: i32| n == 7),
-        ),
-        Split::MaskShard11 => should_split(
-            mem.deref(&pd.heart_pieces).is_ok_and(|n: i32| n == 3)
-                && mem.deref(&pd.max_health_base).is_ok_and(|n: i32| n == 7),
-        ),
-        Split::Mask3 => should_split(mem.deref(&pd.max_health_base).is_ok_and(|n: i32| n == 8)),
-        Split::MaskShard13 => should_split(
-            mem.deref(&pd.heart_pieces).is_ok_and(|n: i32| n == 1)
-                && mem.deref(&pd.max_health_base).is_ok_and(|n: i32| n == 8),
-        ),
-        Split::MaskShard14 => should_split(
-            mem.deref(&pd.heart_pieces).is_ok_and(|n: i32| n == 2)
-                && mem.deref(&pd.max_health_base).is_ok_and(|n: i32| n == 8),
-        ),
-        Split::MaskShard15 => should_split(
-            mem.deref(&pd.heart_pieces).is_ok_and(|n: i32| n == 3)
-                && mem.deref(&pd.max_health_base).is_ok_and(|n: i32| n == 8),
-        ),
-        Split::Mask4 => should_split(mem.deref(&pd.max_health_base).is_ok_and(|n: i32| n == 9)),
-        Split::MaskShard17 => should_split(
-            mem.deref(&pd.heart_pieces).is_ok_and(|n: i32| n == 1)
-                && mem.deref(&pd.max_health_base).is_ok_and(|n: i32| n == 10),
-        ),
-        Split::MaskShard18 => should_split(
-            mem.deref(&pd.heart_pieces).is_ok_and(|n: i32| n == 2)
-                && mem.deref(&pd.max_health_base).is_ok_and(|n: i32| n == 10),
-        ),
-        Split::MaskShard19 => should_split(
-            mem.deref(&pd.heart_pieces).is_ok_and(|n: i32| n == 3)
-                && mem.deref(&pd.max_health_base).is_ok_and(|n: i32| n == 10),
-        ),
-        Split::Mask5 => should_split(mem.deref(&pd.max_health_base).is_ok_and(|n: i32| n == 10)),
+        Split::MaskShard1 => should_split(mask_shard_split(mem, pd, 1)),
+        Split::MaskShard2 => should_split(mask_shard_split(mem, pd, 2)),
+        Split::MaskShard3 => should_split(mask_shard_split(mem, pd, 3)),
+        Split::Mask1 => should_split(mask_shard_split(mem, pd, 4)),
+        Split::MaskShard5 => should_split(mask_shard_split(mem, pd, 5)),
+        Split::MaskShard6 => should_split(mask_shard_split(mem, pd, 6)),
+        Split::MaskShard7 => should_split(mask_shard_split(mem, pd, 7)),
+        Split::Mask2 => should_split(mask_shard_split(mem, pd, 8)),
+        Split::MaskShard9 => should_split(mask_shard_split(mem, pd, 9)),
+        Split::MaskShard10 => should_split(mask_shard_split(mem, pd, 10)),
+        Split::MaskShard11 => should_split(mask_shard_split(mem, pd, 11)),
+        Split::Mask3 => should_split(mask_shard_split(mem, pd, 12)),
+        Split::MaskShard13 => should_split(mask_shard_split(mem, pd, 13)),
+        Split::MaskShard14 => should_split(mask_shard_split(mem, pd, 14)),
+        Split::MaskShard15 => should_split(mask_shard_split(mem, pd, 15)),
+        Split::Mask4 => should_split(mask_shard_split(mem, pd, 16)),
+        Split::MaskShard17 => should_split(mask_shard_split(mem, pd, 17)),
+        Split::MaskShard18 => should_split(mask_shard_split(mem, pd, 18)),
+        Split::MaskShard19 => should_split(mask_shard_split(mem, pd, 19)),
+        Split::Mask5 => should_split(mask_shard_split(mem, pd, 20)),
         // endregion: MaskShards
 
         // region: SpoolFragments
