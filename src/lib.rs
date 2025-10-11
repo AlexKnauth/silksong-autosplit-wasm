@@ -510,6 +510,7 @@ async fn main() {
                 let _: bool = mem.deref(&gm.hazard_respawning).unwrap_or_default();
                 let _: bool = mem.deref(&gm.hero_recoil_frozen).unwrap_or_default();
                 let _: i32 = mem.deref(&gm.hero_transition_state).unwrap_or_default();
+                let _: Address64 = mem.deref(&gm.scene_load).unwrap_or_default();
                 let _: bool = mem
                     .deref(&gm.scene_load_activation_allowed)
                     .unwrap_or_default();
@@ -765,6 +766,9 @@ fn load_removal(state: &mut AutoSplitterState, mem: &Memory, gm: &GameManagerPoi
     // TODO: hazard_respawning
     let accepting_input: bool = mem.deref(&gm.accepting_input).unwrap_or_default();
     let hero_transition_state: i32 = mem.deref(&gm.hero_transition_state).unwrap_or_default();
+    let scene_load_null: bool = mem
+        .deref(&gm.scene_load)
+        .is_ok_and(|a: Address64| a.is_null());
     let scene_load_activation_allowed: bool = mem
         .deref(&gm.scene_load_activation_allowed)
         .unwrap_or_default();
@@ -778,7 +782,7 @@ fn load_removal(state: &mut AutoSplitterState, mem: &Memory, gm: &GameManagerPoi
             && !accepting_input
             && !state.mms_room_dupe)
         || ((game_state == GAME_STATE_EXITING_LEVEL
-            && scene_load_activation_allowed
+            && (scene_load_null || scene_load_activation_allowed)
             && !state.mms_room_dupe)
             || game_state == GAME_STATE_LOADING)
         || (hero_transition_state == HERO_TRANSITION_STATE_WAITING_TO_ENTER_LEVEL)
