@@ -12,7 +12,10 @@ mod unstable;
 use alloc::{boxed::Box, format, string::String, vec::Vec};
 use asr::{
     future::{next_tick, retry},
-    settings::Gui,
+    settings::{
+        gui::{Title, Widget},
+        Gui,
+    },
     timer::TimerState,
     Address64, Process,
 };
@@ -46,6 +49,8 @@ fn this_script_name() -> &'static str {
         .split_once("::")
         .map_or(MODULE_PATH, |(base, _)| base)
 }
+
+static CARGO_PKG_VERSION: &str = env!("CARGO_PKG_VERSION");
 
 /// The dash symbol to use for generic dashes in text.
 pub const DASH: &str = "—";
@@ -294,8 +299,24 @@ impl AutoSplitterState {
 
 const TICKS_PER_GUI: usize = 0x100;
 
+struct PkgVersion(Title);
+
+impl Widget for PkgVersion {
+    type Args = <Title as Widget>::Args;
+
+    fn register(key: &str, _: &str, args: Self::Args) -> Self {
+        let desc = format!("{} {}", this_script_name(), CARGO_PKG_VERSION);
+        Self(Title::register(key, &desc, args))
+    }
+
+    fn update_from(&mut self, settings_map: &asr::settings::Map, key: &str, args: Self::Args) {
+        self.0.update_from(settings_map, key, args);
+    }
+}
+
 #[derive(Gui)]
 struct Settings {
+    _pkg_version: PkgVersion,
     /// Hit Counter
     #[default = true]
     hit_counter: bool,
