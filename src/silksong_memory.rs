@@ -291,7 +291,9 @@ declare_pointers!(PlayerDataPointers {
     has_slab_key_b: UnityPointer<3> =  UnityPointer::new("GameManager", 0, &["_instance", "playerData", "HasSlabKeyB"]),
     has_slab_key_c: UnityPointer<3> =  UnityPointer::new("GameManager", 0, &["_instance", "playerData", "HasSlabKeyC"]),
     encountered_first_weaver: UnityPointer<3> =  UnityPointer::new("GameManager", 0, &["_instance", "playerData", "encounteredFirstWeaver"]),
-    defeated_first_weaver: UnityPointer<3> =  UnityPointer::new("GameManager", 0, &["_instance", "playerData", "defeatedFirstWeaver"]),
+    defeated_first_weaver: UnityPointer<3> = UnityPointer::new("GameManager", 0, &["_instance", "playerData", "defeatedFirstWeaver"]),
+    encountered_ant_trapper: UnityPointer<3> = UnityPointer::new("GameManager", 0, &["_instance", "playerData", "encounteredAntTrapper"]),
+    defeated_ant_trapper: UnityPointer<3> = UnityPointer::new("GameManager", 0, &["_instance", "playerData", "defeatedAntTrapper"]),
 
     savedflea_ant_03: UnityPointer<3> = UnityPointer::new("GameManager", 0, &["_instance", "playerData", "SavedFlea_Ant_03"]),
     savedflea_belltown_04: UnityPointer<3> = UnityPointer::new("GameManager", 0, &["_instance", "playerData", "SavedFlea_Belltown_04"]),

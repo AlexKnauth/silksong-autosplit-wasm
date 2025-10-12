@@ -176,6 +176,14 @@ pub enum Split {
     ///
     /// Splits when killing Fourth Chorus
     FourthChorus,
+    /// Gurr the Outcast Encountered (Boss)
+    ///
+    /// Splits when encountering Gurr the Outcast
+    GurrTheOutcastEncountered,
+    /// Gurr the Outcast (Boss)
+    ///
+    /// Splits when Gurr the Outcast is defeated
+    GurrTheOutcast,
     // endregion: FarFields
 
     // region: Greymoor
@@ -1571,6 +1579,12 @@ pub fn continuous_splits(
         // region: FarFields
         Split::DriftersCloak => should_split(mem.deref(&pd.has_brolly).unwrap_or_default()),
         Split::FourthChorus => should_split(mem.deref(&pd.defeated_song_golem).unwrap_or_default()),
+        Split::GurrTheOutcastEncountered => {
+            should_split(mem.deref(&pd.encountered_ant_trapper).unwrap_or_default())
+        }
+        Split::GurrTheOutcast => {
+            should_split(mem.deref(&pd.defeated_ant_trapper).unwrap_or_default())
+        }
         // endregion: FarFields
 
         // region: Greymoor
