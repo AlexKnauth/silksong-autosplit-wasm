@@ -152,7 +152,7 @@ pub enum Split {
     /// Enter Hunter's March (Transition)
     ///
     /// Splits on entering a Hunter's March transition with area text
-	/// (includes post-Skarrguard room and tall room)
+    /// (includes post-Skarrguard room and tall room)
     EnterHuntersMarch,
     /// Hunter's March - Post-Middle Arena (Transition)
     ///
@@ -439,7 +439,7 @@ pub enum Split {
     /// Enter Putrified Ducts (Transition)
     ///
     /// Splits when entering the Putrified Ducts in a room with area text
-	/// (excludes Huntress room, includes tall room)
+    /// (excludes Huntress room, includes tall room)
     EnterPutrifiedDucts,
     // endregion: PutrifiedDucts
 
