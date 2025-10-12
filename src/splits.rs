@@ -151,7 +151,8 @@ pub enum Split {
     // region: HuntersMarch
     /// Enter Hunter's March (Transition)
     ///
-    /// Splits on entering Hunter's March in the room after the Skarrguard encounter
+    /// Splits on entering a Hunter's March transition with area text
+	/// (includes post-Skarrguard room and tall room)
     EnterHuntersMarch,
     /// Hunter's March - Post-Middle Arena (Transition)
     ///
@@ -295,14 +296,13 @@ pub enum Split {
     // region: Bilewater
     /// Enter Bilewater (Transition)
     ///
-    /// Splits when entering Bilewater from Sinner's Road or Whispering Vaults
+    /// Splits when entering a Bilewater room with area text
+    /// (excludes outer Exhaust Organ room)
     EnterBilewater,
-
     /// Enter Exhaust Organ (Transition)
     ///
     /// Splits when entering the Exhaust Organ from Bilewater
     EnterExhaustOrgan,
-
     /// Phantom (Boss)
     ///
     /// Splits when killing Phantom
@@ -438,7 +438,8 @@ pub enum Split {
     // region: PutrifiedDucts
     /// Enter Putrified Ducts (Transition)
     ///
-    /// Splits when entering the Putrified Ducts
+    /// Splits when entering the Putrified Ducts in a room with area text
+	/// (excludes Huntress room, includes tall room)
     EnterPutrifiedDucts,
     // endregion: PutrifiedDucts
 
@@ -1309,9 +1310,10 @@ pub fn transition_splits(
         // endregion: Wormways
 
         // region: HuntersMarch
-        Split::EnterHuntersMarch => {
-            should_split(scenes.old == "Ant_02" && scenes.current == "Ant_03")
-        }
+        Split::EnterHuntersMarch => should_split(
+            (scenes.old == "Ant_02" && scenes.current == "Ant_03")
+                || (scenes.old == "Ant_05b" && scenes.current == "Ant_14"),
+        ),
         Split::HuntersMarchPostMiddleArenaTransition => {
             should_split(scenes.old == "Ant_04_mid" && scenes.current == "Ant_04")
         }
@@ -1387,7 +1389,9 @@ pub fn transition_splits(
         // region: Bilewater
         Split::EnterBilewater => should_split(
             (scenes.old == "Dust_06" && scenes.current == "Shadow_05")
-                || (scenes.old == "Library_07" && scenes.current == "Shadow_22"),
+                || (scenes.old == "Library_07" && scenes.current == "Shadow_22")
+                || (scenes.old == "Dust_09" && scenes.current == "Shadow_04")
+                || (scenes.old == "Aqueduct_04" && scenes.current == "Shadow_01"),
         ),
         Split::EnterExhaustOrgan => {
             should_split(scenes.old == "Dust_09" && scenes.current == "Organ_01")
@@ -1439,9 +1443,10 @@ pub fn transition_splits(
         // endregion: Memorium
 
         // region: PutrifiedDucts
-        Split::EnterPutrifiedDucts => {
-            should_split(scenes.old == "Arborium_11" && scenes.current == "Aqueduct_01")
-        }
+        Split::EnterPutrifiedDucts => should_split(
+            (scenes.old == "Arborium_11" && scenes.current == "Aqueduct_01")
+                || (scenes.old == "Aqueduct_04" && scenes.current == "Aqueduct_02"),
+        ),
         // endregion: PutrifiedDucts
 
         // region: TheCradle
