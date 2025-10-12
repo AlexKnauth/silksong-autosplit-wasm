@@ -310,6 +310,34 @@ pub enum Split {
     // endregion: Bilewater
 
     // region: TheSlab
+    /// Enter The Slab (Transition)
+    ///
+    /// Splits when entering the Slab's front entrance
+    EnterTheSlab,
+    /// Key of Indolent (Item)
+    ///
+    /// Splits when you obtain the Indolent slab key
+    SlabKeyIndolent,
+    /// Key of Heretic (Item)
+    ///
+    /// Splits when you obtain the Heretic slab key
+    SlabKeyHeretic,
+    /// Key of Apostate (Item)
+    ///
+    /// Splits when you obtain the Apostate slab key
+    SlabKeyApostate,
+    /// Enter First Sinner (Transition)
+    ///
+    /// Splits when entering the First Sinner's boss arena
+    EnterFirstSinner,
+    /// First Sinner Encountered (Boss)
+    ///
+    /// Splits when the First Sinner boss is activated the first time after binding
+    FirstSinnerEncountered,
+    /// First Sinner (Boss)
+    ///
+    /// Splits when defeating the First Sinner, after the memory sequence
+    FirstSinner,
     /// Rune Rage (Skill)
     ///
     /// Splits when obtaining Rune Rage
@@ -1349,6 +1377,10 @@ pub fn transition_splits(
         // endregion: Bilewater
 
         // region: TheSlab
+        Split::EnterTheSlab => should_split(scenes.old == "Slab_01" && scenes.current == "Slab_02"),
+        Split::EnterFirstSinner => {
+            should_split(scenes.old == "Slab_10c" && scenes.current == "Slab_10b")
+        }
         Split::RuneRageTrans => should_split(mem.deref(&pd.has_silk_bomb).unwrap_or_default()),
         // endregion: TheSlab
 
@@ -1577,6 +1609,15 @@ pub fn continuous_splits(
         // endregion: Bilewater
 
         // region: TheSlab
+        Split::SlabKeyIndolent => should_split(mem.deref(&pd.has_slab_key_a).unwrap_or_default()),
+        Split::SlabKeyHeretic => should_split(mem.deref(&pd.has_slab_key_b).unwrap_or_default()),
+        Split::SlabKeyApostate => should_split(mem.deref(&pd.has_slab_key_c).unwrap_or_default()),
+        Split::FirstSinnerEncountered => {
+            should_split(mem.deref(&pd.encountered_first_weaver).unwrap_or_default())
+        }
+        Split::FirstSinner => {
+            should_split(mem.deref(&pd.defeated_first_weaver).unwrap_or_default())
+        }
         Split::RuneRage => should_split(mem.deref(&pd.has_silk_bomb).unwrap_or_default()),
         // endregion: TheSlab
 
