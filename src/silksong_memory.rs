@@ -410,6 +410,7 @@ declare_pointers!(PlayerDataPointers {
     ballow_moved_to_diving_bell: UnityPointer<3> = UnityPointer::new("GameManager", 0, &["_instance", "playerData", "BallowMovedToDivingBell"]),
     black_thread_world: UnityPointer<3> = UnityPointer::new("GameManager", 0, &["_instance", "playerData", "blackThreadWorld"]),
     defeated_coral_drillers: UnityPointer<3> = UnityPointer::new("GameManager", 0, &["_instance", "playerData", "defeatedCoralDrillers"]),
+    encountered_lost_lace: UnityPointer<3> = UnityPointer::new("GameManager", 0, &["_instance", "playerData", "EncounteredLostLace"]),
     completion_percentage: UnityPointer<3> = UnityPointer::new("GameManager", 0, &["_instance", "playerData", "completionPercentage"]),
 });
 

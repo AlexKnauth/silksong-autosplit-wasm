@@ -1204,10 +1204,6 @@ pub enum Split {
     ///
     /// Splits after defeating Seth
     Seth,
-    /// Completed Abyss Escape (Event)
-    ///
-    /// Splits after completing the Abyss Escape
-    AbyssEscape,
     /// Ballow Moved (Event)
     ///
     /// Splits when Ballow moves to the Diving Bell
@@ -1217,6 +1213,29 @@ pub enum Split {
     /// Splits upon entering Act 3
     Act3Started,
     // endregion: Misc TE
+
+    // region: Abyss
+    /// Diving Bell Abyss Entry (Transition)
+    ///
+    /// Splits when the Diving Bell enters the Abyss
+    DivingBellAbyssTrans,
+    /// Enter Abyss (Transition)
+    ///
+    /// Splits when entering the Abyss in a room with area text
+    EnterAbyss,
+    /// Completed Abyss Escape (Event)
+    ///
+    /// Splits after completing the Abyss Escape
+    AbyssEscape,
+    /// Last Dive (Transition)
+    ///
+    /// Splits when beginning the Last Dive scene
+    LastDiveTrans,
+    /// Lost Lace Encountered (Boss)
+    ///
+    /// Splits when Lost Lace is encountered in the Abyss Cocoon
+    LostLaceEncountered,
+    // endregion: Abyss
 }
 
 impl StoreWidget for Split {
@@ -1516,6 +1535,20 @@ pub fn transition_splits(
             should_split(scenes.old == "Coral_Tower_01" && scenes.current == "Memory_Coral_Tower")
         }
         // endregion: MiscTE
+
+        // region: Abyss
+        Split::DivingBellAbyssTrans => should_split(
+            scenes.old == "Room_Diving_Bell"
+                && scenes.current.starts_with("Room_Diving_Bell_Abyss"),
+        ),
+        Split::EnterAbyss => should_split(
+            (scenes.old == "Abyss_03" && scenes.current == "Abyss_02")
+                || (scenes.old == "Abyss_11" && scenes.current == "Abyss_02b"),
+        ),
+        Split::LastDiveTrans => {
+            should_split(scenes.old == "Abyss_05" && scenes.current == "Last_Dive")
+        }
+        // endregion: Abyss
 
         // else
         _ => should_split(false),
@@ -2204,15 +2237,22 @@ pub fn continuous_splits(
         ),
         Split::SoulSnareReady => should_split(mem.deref(&pd.soul_snare_ready).unwrap_or_default()),
         Split::Seth => should_split(mem.deref(&pd.defeated_seth).unwrap_or_default()),
-        Split::AbyssEscape => {
-            should_split(mem.deref(&pd.completed_abyss_ascent).unwrap_or_default())
-        }
+
         Split::BallowMoved => should_split(
             mem.deref(&pd.ballow_moved_to_diving_bell)
                 .unwrap_or_default(),
         ),
         Split::Act3Started => should_split(mem.deref(&pd.black_thread_world).unwrap_or_default()),
         // endregion: MiscTE
+
+        // region: Abyss
+        Split::AbyssEscape => {
+            should_split(mem.deref(&pd.completed_abyss_ascent).unwrap_or_default())
+        }
+        Split::LostLaceEncountered => {
+            should_split(mem.deref(&pd.encountered_lost_lace).unwrap_or_default())
+        }
+        // endregion: Abyss
 
         // else
         _ => should_split(false),
