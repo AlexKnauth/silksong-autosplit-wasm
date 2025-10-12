@@ -356,6 +356,17 @@ pub enum Split {
     RuneRageTrans,
     // endregion: TheSlab
 
+    // region: MountFay
+    /// Enter Mount Fay (Transition)
+    ///
+    /// Splits when entering Mount Fay
+    EnterMountFay,
+    /// Enter Brightvein (Transition)
+    ///
+    /// Splits when entering the Brightvein sub-area
+    EnterBrightvein,
+    // endregion: MountFay
+
     // region: Acts
     /// Act 2 Started (Event)
     ///
@@ -1391,6 +1402,15 @@ pub fn transition_splits(
         }
         Split::RuneRageTrans => should_split(mem.deref(&pd.has_silk_bomb).unwrap_or_default()),
         // endregion: TheSlab
+
+        // region: MountFay
+        Split::EnterMountFay => {
+            should_split(scenes.old == "Slab_06" && scenes.current == "Peak_01")
+        }
+        Split::EnterBrightvein => {
+            should_split(scenes.old == "Peak_06b" && scenes.current == "Peak_06")
+        }
+        // endregion: MountFay
 
         // region: ChoralChambers
         Split::TrobbioTrans => should_split(mem.deref(&pd.defeated_trobbio).unwrap_or_default()),
