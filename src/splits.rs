@@ -265,6 +265,10 @@ pub enum Split {
     ///
     /// Splits when entering the Last Judge boss arena from the Blasted Steps
     EnterLastJudge,
+    /// Last Judge Encountered (Boss)
+    ///
+    /// Splits after the Last Judge boss fight is first encountered, post-needolin
+    LastJudgeEncountered,
     /// Last Judge (Boss)
     ///
     /// Splits when killing Last Judge
@@ -287,6 +291,10 @@ pub enum Split {
     ///
     /// Splits when entering The Mist
     EnterMist,
+    /// Mist Crossing (Transition)
+    ///
+    /// Splits when entering the Mist's midpoint crossing room
+    MistCrossing,
     /// Leave The Mist (Transition)
     ///
     /// Splits when leaving The Mist
@@ -365,6 +373,14 @@ pub enum Split {
     ///
     /// Splits when entering the Brightvein sub-area
     EnterBrightvein,
+    /// Upper Mount Fay (Transition)
+    ///
+    /// Splits when entering the upper portion of Mount Fay on the right
+    UpperMountFayTrans,
+    /// Faydown Cloak (Skill)
+    ///
+    /// Splits when you obtain Faydown Cloak (Double Jump)
+    FaydownCloak,
     // endregion: MountFay
 
     // region: Acts
@@ -1047,10 +1063,6 @@ pub enum Split {
     ///
     /// Splits when you find Fleatopias location
     SeenFleatopiaEmpty,
-    /// Faydown Cloak (Skill)
-    ///
-    /// Splits when you obtain Double Jump
-    FaydownCloak,
     /// Enter Bell Eater (Transition)
     ///
     /// Splits when entering the Bell Eater's arena
@@ -1107,6 +1119,10 @@ pub enum Split {
     /// Split when you obtain Conjoined Heart
     #[alias = "CollectedHeartClover"]
     HeartClover,
+    /// Enter Red Memory (Transition)
+    ///
+    /// Splits when beginning the Red Memory sequence
+    EnterRedMemory,
     /// Red Memory (Event)
     ///
     /// Splits on completing Red Memory
@@ -1400,6 +1416,9 @@ pub fn transition_splits(
             (scenes.old == "Dust_05" || scenes.old == "Shadow_04")
                 && scenes.current == "Dust_Maze_09_entrance",
         ),
+        Split::MistCrossing => should_split(
+            scenes.old.starts_with("Dust_Maze_0") && scenes.current == "Dust_Maze_crossing",
+        ),
         Split::LeaveMist => {
             should_split(scenes.old == "Dust_Maze_Last_Hall" && scenes.current == "Dust_09")
         }
@@ -1432,6 +1451,9 @@ pub fn transition_splits(
         }
         Split::EnterBrightvein => {
             should_split(scenes.old == "Peak_06b" && scenes.current == "Peak_06")
+        }
+        Split::UpperMountFayTrans => {
+            should_split(scenes.old == "Peak_01" && scenes.current == "Peak_07")
         }
         // endregion: MountFay
 
@@ -1533,6 +1555,9 @@ pub fn transition_splits(
         }
         Split::EnterKhannMemory => {
             should_split(scenes.old == "Coral_Tower_01" && scenes.current == "Memory_Coral_Tower")
+        }
+        Split::EnterRedMemory => {
+            should_split(scenes.old == "Tut_04" && scenes.current == "Memory_Red")
         }
         // endregion: MiscTE
 
@@ -1672,6 +1697,9 @@ pub fn continuous_splits(
 
         // region: BlastedSteps
         Split::NeedleStrike => should_split(mem.deref(&pd.has_charge_slash).unwrap_or_default()),
+        Split::LastJudgeEncountered => {
+            should_split(mem.deref(&pd.encountered_last_judge).unwrap_or_default())
+        }
         Split::LastJudge => should_split(mem.deref(&pd.defeated_last_judge).unwrap_or_default()),
         // endregion: BlastedSteps
 
@@ -1692,6 +1720,10 @@ pub fn continuous_splits(
         }
         Split::RuneRage => should_split(mem.deref(&pd.has_silk_bomb).unwrap_or_default()),
         // endregion: TheSlab
+
+        // region: MountFay
+        Split::FaydownCloak => should_split(mem.deref(&pd.has_double_jump).unwrap_or_default()),
+        // endregion: MountFay
 
         // region: Acts
         Split::Act2Started => should_split(mem.deref(&pd.act2_started).unwrap_or_default()),
@@ -2131,7 +2163,6 @@ pub fn continuous_splits(
         Split::SeenFleatopiaEmpty => {
             should_split(mem.deref(&pd.seen_fleatopia_empty).unwrap_or_default())
         }
-        Split::FaydownCloak => should_split(mem.deref(&pd.has_double_jump).unwrap_or_default()),
         Split::BeastlingCall => {
             should_split(mem.deref(&pd.has_fast_travel_teleport).unwrap_or_default())
         }

@@ -259,6 +259,7 @@ declare_pointers!(PlayerDataPointers {
     spinner_defeated: UnityPointer<3> = UnityPointer::new("GameManager", 0, &["_instance", "playerData", "spinnerDefeated"]),
     bell_shrine_bellhart: UnityPointer<3> = UnityPointer::new("GameManager", 0, &["_instance", "playerData", "bellShrineBellhart"]),
     bell_shrine_shellwood: UnityPointer<3> = UnityPointer::new("GameManager", 0, &["_instance", "playerData", "bellShrineShellwood"]),
+    encountered_last_judge: UnityPointer<3> = UnityPointer::new("GameManager", 0, &["_instance", "playerData", "encounteredLastJudge"]),
     defeated_last_judge: UnityPointer<3> = UnityPointer::new("GameManager", 0, &["_instance", "playerData", "defeatedLastJudge"]),
     defeated_phantom: UnityPointer<3> = UnityPointer::new("GameManager", 0, &["_instance", "playerData", "defeatedPhantom"]),
     act2_started: UnityPointer<3> = UnityPointer::new("GameManager", 0, &["_instance", "playerData", "act2Started"]),
