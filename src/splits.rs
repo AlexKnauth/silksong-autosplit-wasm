@@ -391,6 +391,14 @@ pub enum Split {
     // endregion: Acts
 
     // region: CogworkCore
+    /// Enter Cogwork Dancers (Transition)
+    ///
+    /// Splits when entering the Cogwork Dancers boss arena
+    EnterCogworkDancers,
+    /// Cogwork Dancers Encountered (Boss)
+    ///
+    /// Splits when first encountering the Cogwork Dancers boss
+    CogworkDancersEncountered,
     /// Cogwork Dancers (Boss)
     ///
     /// Splits when killing Cogwork Dancers
@@ -1212,6 +1220,14 @@ pub enum Split {
     ///
     /// Splits when the Soul Snare becomes ready
     SoulSnareReady,
+    /// Enter Destroyed Cogworks (Transition)
+    ///
+    /// Splits when entering the destroyed portion of Cogworks
+    EnterDestroyedCogworks,
+    /// Destroyed Cogworks Void Arena (Mini Boss)
+    ///
+    /// Splits when completing the Destroyed Cogworks void arena
+    DestroyedCogworksVoidArena,
     /// Enter Seth (Transition)
     ///
     /// Splits when entering Seth's boss arena
@@ -1461,6 +1477,12 @@ pub fn transition_splits(
         Split::TrobbioTrans => should_split(mem.deref(&pd.defeated_trobbio).unwrap_or_default()),
         //endregion: ChoralChambers
 
+        // region: CogworkCore
+        Split::EnterCogworkDancers => should_split(
+            (scenes.old == "Hang_07" || scenes.old == "Song_25") && scenes.current == "Cog_Dancers",
+        ),
+        // endregion: CogworkCore
+
         // region: WhisperingVaults
         Split::EnterWhisperingVaults => should_split(
             (scenes.old == "Library_02" && scenes.current == "Library_01")
@@ -1537,6 +1559,10 @@ pub fn transition_splits(
         // region: MiscTE
         Split::EnterBellEater => should_split(
             scenes.old != "Bellway_Centipede_Arena" && scenes.current == "Bellway_Centipede_Arena",
+        ),
+        Split::EnterDestroyedCogworks => should_split(
+            (scenes.old == "Song_Tower_Destroyed" && scenes.current == "Cog_09_Destroyed")
+                || (scenes.old == "Song_25" && scenes.current == "Cog_10_Destroyed"),
         ),
         Split::EnterSeth => {
             should_split(scenes.old == "Under_27" && scenes.current == "Shellwood_22")
@@ -1730,6 +1756,10 @@ pub fn continuous_splits(
         // endregion: Acts
 
         // region: CogworkCore
+        Split::CogworkDancersEncountered => should_split(
+            mem.deref(&pd.encountered_cogwork_dancers)
+                .unwrap_or_default(),
+        ),
         Split::CogworkDancers => {
             should_split(mem.deref(&pd.defeated_cogwork_dancers).unwrap_or_default())
         }
@@ -2267,8 +2297,11 @@ pub fn continuous_splits(
                 .unwrap_or_default(),
         ),
         Split::SoulSnareReady => should_split(mem.deref(&pd.soul_snare_ready).unwrap_or_default()),
+        Split::DestroyedCogworksVoidArena => should_split(
+            mem.deref(&pd.completed_cog_10_abyss_battle)
+                .unwrap_or_default(),
+        ),
         Split::Seth => should_split(mem.deref(&pd.defeated_seth).unwrap_or_default()),
-
         Split::BallowMoved => should_split(
             mem.deref(&pd.ballow_moved_to_diving_bell)
                 .unwrap_or_default(),
