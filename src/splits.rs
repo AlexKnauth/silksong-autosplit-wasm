@@ -1491,9 +1491,10 @@ pub fn transition_splits(
         // endregion: WhisperingVaults
 
         // region: HighHalls
-        Split::EnterHighHalls => {
-            should_split(scenes.old == "Hang_01" && scenes.current == "Hang_02")
-        }
+        Split::EnterHighHalls => should_split(
+            (scenes.old == "Hang_01" && scenes.current == "Hang_02")
+                || (scenes.old == "Hang_07" && scenes.current == "Hang_06"),
+        ),
         Split::EnterHighHallsArena => {
             should_split(scenes.old == "Hang_06" && scenes.current == "Hang_04")
         }
