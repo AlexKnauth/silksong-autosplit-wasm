@@ -1446,9 +1446,11 @@ pub fn transition_splits(
         // endregion: BlastedSteps
 
         // region: SinnersRoad
-        Split::EnterSinnersRoad => {
-            should_split(scenes.old == "Greymoor_03" && scenes.current == "Dust_01")
-        }
+        Split::EnterSinnersRoad => should_split(
+            (scenes.old == "Greymoor_03" && scenes.current == "Dust_01")
+                || (scenes.old == "Dust_Maze_08_completed" && scenes.current == "Dust_05")
+                || (scenes.old == "Shadow_05" && scenes.current == "Dust_06"),
+        ),
         // endregion: SinnersRoad
 
         // region: TheMist
