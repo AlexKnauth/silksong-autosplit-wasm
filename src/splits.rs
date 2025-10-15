@@ -214,6 +214,21 @@ pub enum Split {
     ThreadStormTrans,
     // endregion: Greymoor
 
+    // region: WispThicket
+    /// Enter Wisp Thicket (Transition)
+    ///
+    /// Splits when entering the Wisp Thicket from Greymoor
+    EnterWispThicket,
+    /// Enter Father of the Flame (Transition)
+    ///
+    /// Splits when entering the arena for the Father of the Flame boss
+    EnterFatherOfTheFlame,
+    /// Father of the Flame (Boss)
+    ///
+    /// Splits when defeating Father of the Flame
+    FatherOfTheFlame,
+    // endregion: WispThicket
+
     // region: Shellwood
     /// Enter Shellwood (Transition)
     ///
@@ -1390,6 +1405,15 @@ pub fn transition_splits(
         }
         // endregion: Greymoor
 
+        // region: WispThicket
+        Split::EnterWispThicket => {
+            should_split(scenes.old == "Greymoor_06" && scenes.current == "Wisp_04")
+        }
+        Split::EnterFatherOfTheFlame => {
+            should_split(scenes.old == "Wisp_02" && scenes.current == "Belltown_08")
+        }
+        // endregion: WispThicket
+
         // region: Bellhart
         Split::EnterBellhart => should_split(
             (scenes.old == "Belltown_06"
@@ -1707,6 +1731,12 @@ pub fn continuous_splits(
         ),
         Split::ThreadStorm => should_split(mem.deref(&pd.has_thread_sphere).unwrap_or_default()),
         // endregion: Greymoor
+
+        // region: WispThicket
+        Split::FatherOfTheFlame => {
+            should_split(mem.deref(&pd.defeated_wisp_pyre_effigy).unwrap_or_default())
+        }
+        // endregion: WispThicket
 
         // region: Shellwood
         Split::ClingGrip => should_split(mem.deref(&pd.has_wall_jump).unwrap_or_default()),

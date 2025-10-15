@@ -294,6 +294,7 @@ declare_pointers!(PlayerDataPointers {
     tool_pouch_upgrades: UnityPointer<3> = UnityPointer::new("GameManager", 0, &["_instance", "playerData", "ToolPouchUpgrades"]),
     tool_kit_upgrades: UnityPointer<3> = UnityPointer::new("GameManager", 0, &["_instance", "playerData", "ToolKitUpgrades"]),
 
+    defeated_wisp_pyre_effigy: UnityPointer<3> =  UnityPointer::new("GameManager", 0, &["_instance", "playerData", "defeatedWispPyreEffigy"]),
     has_slab_key_a: UnityPointer<3> =  UnityPointer::new("GameManager", 0, &["_instance", "playerData", "HasSlabKeyA"]),
     has_slab_key_b: UnityPointer<3> =  UnityPointer::new("GameManager", 0, &["_instance", "playerData", "HasSlabKeyB"]),
     has_slab_key_c: UnityPointer<3> =  UnityPointer::new("GameManager", 0, &["_instance", "playerData", "HasSlabKeyC"]),
