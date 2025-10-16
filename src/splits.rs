@@ -89,6 +89,10 @@ pub enum Split {
     ///
     /// Splits when buying the Bone Bottom simple key from Pebb
     BoneBottomSimpleKey,
+    /// Enter Weavenest Atla (Transition)
+    ///
+    /// Splits on entering Weavenest Atla
+    EnterWeavenestAtla,
     // endregion: MossLands
 
     // region: Marrow
@@ -212,6 +216,10 @@ pub enum Split {
     ///
     /// Splits on the transition after obtaining Thread Storm
     ThreadStormTrans,
+    /// Halfway Basement (Transition)
+    ///
+    /// Splits after entering the basement in Halfway Home
+    EnterHalfwayHomeBasement,
     // endregion: Greymoor
 
     // region: WispThicket
@@ -299,6 +307,10 @@ pub enum Split {
     ///
     /// Splits when entering Sinner's Road from Greymoor
     EnterSinnersRoad,
+    /// Lugoli (Boss)
+    ///
+    /// Splits after defeating Lugoli
+    Lugoli,
     // endregion: SinnersRoad
 
     // region: TheMist
@@ -338,6 +350,10 @@ pub enum Split {
     ///
     /// Splits on the transition after obtaining Cross Stitch
     CrossStitchTrans,
+    /// Trail's End (Transition)
+    ///
+    /// Splits on the transition out of the room to complete Trail's End
+    TrailsEndTrans,
     // endregion: Bilewater
 
     // region: TheSlab
@@ -357,6 +373,10 @@ pub enum Split {
     ///
     /// Splits when you obtain the Apostate slab key
     SlabKeyApostate,
+    /// Broodmother (Boss)
+    ///
+    /// Splits after defeating the Broodmother
+    Broodmother,
     /// Enter First Sinner (Transition)
     ///
     /// Splits when entering the First Sinner's boss arena
@@ -433,6 +453,10 @@ pub enum Split {
     // endregion: WhisperingVaults
 
     // region: ChoralChambers
+    /// Enter Songclave (Transition)
+    ///
+    /// Splits when entering Songclave
+    EnterSongclave,
     /// Trobbio (Boss)
     ///
     /// Splits when killing Trobbio
@@ -441,6 +465,14 @@ pub enum Split {
     ///
     /// Splits on the transition after killing Trobbio
     TrobbioTrans,
+    /// Met Gourmand Servant (Event)
+    ///
+    /// Splits after talking to Loyal Mergwin the first time
+    MetGourmandServant,
+    /// Gourmand Given Meat (Event)
+    ///
+    /// Splits after giving the Courier's Rasher to Loyal Mergwin
+    GourmandGivenMeat,
     // endregion: ChoralChambers
 
     // region: Underworks
@@ -449,6 +481,13 @@ pub enum Split {
     /// Splits when obtaining Clawline (Harpoon Dash)
     Clawline,
     // endregion: Underworks
+
+    // region: Whiteward
+    /// Enter Whiteward (Transition)
+    ///
+    /// Splits when entering Whiteward in a room with area text
+    EnterWhiteward,
+    // endregion: Whiteward
 
     // region: HighHalls
     /// Enter High Halls (Transition)
@@ -1351,6 +1390,9 @@ pub fn transition_splits(
         Split::EnterMosshome => {
             should_split(scenes.old == "Bone_05" && scenes.current == "Mosstown_01")
         }
+        Split::EnterWeavenestAtla => {
+            should_split(scenes.old == "Tut_01b" && scenes.current == "Weave_04")
+        }
         // endregion: MossLands
 
         // region: Marrow
@@ -1402,6 +1444,9 @@ pub fn transition_splits(
         ),
         Split::ThreadStormTrans => {
             should_split(mem.deref(&pd.has_thread_sphere).unwrap_or_default())
+        }
+        Split::EnterHalfwayHomeBasement => {
+            should_split(scenes.old == "Halfway_01" && scenes.current == "Ant_08")
         }
         // endregion: Greymoor
 
@@ -1477,6 +1522,9 @@ pub fn transition_splits(
             should_split(scenes.old == "Dust_09" && scenes.current == "Organ_01")
         }
         Split::CrossStitchTrans => should_split(mem.deref(&pd.has_parry).unwrap_or_default()),
+        Split::TrailsEndTrans => {
+            should_split(scenes.old == "Shadow_24" && scenes.current == "Shadow_19")
+        }
         // endregion: Bilewater
 
         // region: TheSlab
@@ -1500,6 +1548,10 @@ pub fn transition_splits(
         // endregion: MountFay
 
         // region: ChoralChambers
+        Split::EnterSongclave => should_split(
+            (scenes.old == "Song_Enclave_Tube" || scenes.old == "Song_25" || scenes.old == "Library_02" || scenes.old == "Library_04")
+                && scenes.current == "Song_Enclave"
+        ),
         Split::TrobbioTrans => should_split(mem.deref(&pd.defeated_trobbio).unwrap_or_default()),
         //endregion: ChoralChambers
 
@@ -1508,6 +1560,12 @@ pub fn transition_splits(
             (scenes.old == "Hang_07" || scenes.old == "Song_25") && scenes.current == "Cog_Dancers",
         ),
         // endregion: CogworkCore
+
+        // region: Whiteward
+        Split::EnterWhiteward => should_split(
+            scenes.old == "Ward_01" && (scenes.current == "Ward_02" || scenes.current == "Ward_02b")
+        ),
+        // endregion: Whiteward
 
         // region: WhisperingVaults
         Split::EnterWhisperingVaults => should_split(
@@ -1762,6 +1820,10 @@ pub fn continuous_splits(
         Split::LastJudge => should_split(mem.deref(&pd.defeated_last_judge).unwrap_or_default()),
         // endregion: BlastedSteps
 
+        // region: SinnersRoad
+        Split::Lugoli => should_split(mem.deref(&pd.defeated_roach_keeper_chef).unwrap_or_default()),
+        // endregion: SinnersRoad
+
         // region: Bilewater
         Split::Phantom => should_split(mem.deref(&pd.defeated_phantom).unwrap_or_default()),
         Split::CrossStitch => should_split(mem.deref(&pd.has_parry).unwrap_or_default()),
@@ -1771,6 +1833,7 @@ pub fn continuous_splits(
         Split::SlabKeyIndolent => should_split(mem.deref(&pd.has_slab_key_a).unwrap_or_default()),
         Split::SlabKeyHeretic => should_split(mem.deref(&pd.has_slab_key_b).unwrap_or_default()),
         Split::SlabKeyApostate => should_split(mem.deref(&pd.has_slab_key_c).unwrap_or_default()),
+        Split::Broodmother => should_split(mem.deref(&pd.defeated_brood_mother).unwrap_or_default()),
         Split::FirstSinnerEncountered => {
             should_split(mem.deref(&pd.encountered_first_weaver).unwrap_or_default())
         }
@@ -1806,6 +1869,8 @@ pub fn continuous_splits(
         // endregion: WhisperingVaults
 
         // region: ChoralChambers
+        Split::MetGourmandServant => should_split(mem.deref(&pd.met_gourmand_servant).unwrap_or_default()),
+        Split::GourmandGivenMeat => should_split(mem.deref(&pd.gourmand_given_meat).unwrap_or_default()),
         Split::Trobbio => should_split(mem.deref(&pd.defeated_trobbio).unwrap_or_default()),
         //endregion: ChoralChambers
 
