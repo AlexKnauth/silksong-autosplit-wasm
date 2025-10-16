@@ -465,14 +465,14 @@ pub enum Split {
     ///
     /// Splits on the transition after killing Trobbio
     TrobbioTrans,
-    /// Met Gourmand Servant (Event)
+    /// Met Mergwin (NPC)
     ///
     /// Splits after talking to Loyal Mergwin the first time
-    MetGourmandServant,
-    /// Gourmand Given Meat (Event)
+    MetMergwin,
+    /// Given Courier's Rasher (Event)
     ///
     /// Splits after giving the Courier's Rasher to Loyal Mergwin
-    GourmandGivenMeat,
+    GivenCouriersRasher,
     // endregion: ChoralChambers
 
     // region: Underworks
@@ -1856,8 +1856,8 @@ pub fn continuous_splits(
         // endregion: WhisperingVaults
 
         // region: ChoralChambers
-        Split::MetGourmandServant => should_split(mem.deref(&pd.met_gourmand_servant).unwrap_or_default()),
-        Split::GourmandGivenMeat => should_split(mem.deref(&pd.gourmand_given_meat).unwrap_or_default()),
+        Split::MetMergwin => should_split(mem.deref(&pd.met_gourmand_servant).unwrap_or_default()),
+        Split::GivenCouriersRasher => should_split(mem.deref(&pd.gourmand_given_meat).unwrap_or_default()),
         Split::Trobbio => should_split(mem.deref(&pd.defeated_trobbio).unwrap_or_default()),
         //endregion: ChoralChambers
 
