@@ -482,13 +482,6 @@ pub enum Split {
     Clawline,
     // endregion: Underworks
 
-    // region: Whiteward
-    /// Enter Whiteward (Transition)
-    ///
-    /// Splits when entering Whiteward in a room with area text
-    EnterWhiteward,
-    // endregion: Whiteward
-
     // region: HighHalls
     /// Enter High Halls (Transition)
     ///
@@ -1560,12 +1553,6 @@ pub fn transition_splits(
             (scenes.old == "Hang_07" || scenes.old == "Song_25") && scenes.current == "Cog_Dancers",
         ),
         // endregion: CogworkCore
-
-        // region: Whiteward
-        Split::EnterWhiteward => should_split(
-            scenes.old == "Ward_01" && (scenes.current == "Ward_02" || scenes.current == "Ward_02b")
-        ),
-        // endregion: Whiteward
 
         // region: WhisperingVaults
         Split::EnterWhisperingVaults => should_split(
