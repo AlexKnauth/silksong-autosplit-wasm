@@ -499,6 +499,34 @@ pub enum Split {
     HighHallsArena,
     // endregion: HighHalls
 
+    // region: Whiteward
+    /// Enter Whiteward (Transition)
+    ///
+    /// Splits when entering the upper portion of Whiteward from the Choral Chambers
+    EnterWhiteward,
+    /// Post-Whiteward Elevator (Transition)
+    ///
+    /// Splits when taking any transition further into Whiteward past the elevator
+    PostWhitewardElevatorTrans,
+    /// Collected Whiteward Key (Item)
+    ///
+    /// Splits when you collect the Whiteward Key
+    #[alias = "CollectedWhiteWardKey"]
+    CollectedWhitewardKey,
+    /// Collected Surgeon's Key (Item)
+    ///
+    /// Splits when you collect the Surgeon's Key
+    CollectedSurgeonsKey,
+    /// The Unravelled Encountered (Boss)
+    ///
+    /// Splits when The Unravelled boss first appears
+    TheUnravelledEncountered,
+    /// The Unravelled (Boss)
+    ///
+    /// Splits when The Unravelled is defeated
+    TheUnravelled,
+    // endregion: Whiteward
+
     // region: Memorium
     /// Enter Memorium (Transition)
     ///
@@ -1227,10 +1255,6 @@ pub enum Split {
     ///
     /// Splits after selling the first relic to Scrounge
     SoldRelic,
-    /// Collected WhiteWard Key (Item)
-    ///
-    /// Splits when you collect the WhiteWard Key
-    CollectedWhiteWardKey,
     /// Pavo Time Passed (Event)
     ///
     /// Splits after meeting the Belltown Greeter and time has passed
@@ -1571,6 +1595,20 @@ pub fn transition_splits(
         }
         // endregion: HighHalls
 
+        // region: Whiteward
+        Split::EnterWhiteward => {
+            should_split(scenes.old == "Song_05" && scenes.current == "Ward_01")
+        }
+        Split::PostWhitewardElevatorTrans => should_split(
+            (scenes.old == "Ward_01")
+                && (scenes.current == "Ward_02"
+                    || scenes.current == "Ward_02b"
+                    || scenes.current == "Ward_05"
+                    || scenes.current == "Ward_04"
+                    || scenes.current == "Ward_03"),
+        ),
+        // endregion: Whiteward
+
         // region: Memorium
         Split::EnterMemorium => {
             should_split(scenes.old == "Song_25" && scenes.current == "Arborium_01")
@@ -1868,6 +1906,19 @@ pub fn continuous_splits(
         // region: HighHalls
         Split::HighHallsArena => should_split(mem.deref(&pd.hang04_battle).unwrap_or_default()),
         //endregion: HighHalls
+
+        // region: Whiteward
+        Split::CollectedWhitewardKey => {
+            should_split(mem.deref(&pd.collected_ward_key).unwrap_or_default())
+        }
+        Split::CollectedSurgeonsKey => {
+            should_split(mem.deref(&pd.collected_ward_boss_key).unwrap_or_default())
+        }
+        Split::TheUnravelledEncountered => {
+            should_split(mem.deref(&pd.ward_boss_encountered).unwrap_or_default())
+        }
+        Split::TheUnravelled => should_split(mem.deref(&pd.ward_boss_defeated).unwrap_or_default()),
+        // endregion: Whiteward
 
         // region: TheCradle
         Split::Lace2 => should_split(mem.deref(&pd.defeated_lace_tower).unwrap_or_default()),
@@ -2356,9 +2407,6 @@ pub fn continuous_splits(
             mem.deref(&pd.belltown_relic_dealer_gave_relic)
                 .unwrap_or_default(),
         ),
-        Split::CollectedWhiteWardKey => {
-            should_split(mem.deref(&pd.collected_ward_key).unwrap_or_default())
-        }
         Split::PavoTimePassed => should_split(
             mem.deref(&pd.belltown_greeter_met_time_passed)
                 .unwrap_or_default(),
