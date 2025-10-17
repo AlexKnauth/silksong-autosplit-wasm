@@ -1566,8 +1566,11 @@ pub fn transition_splits(
 
         // region: ChoralChambers
         Split::EnterSongclave => should_split(
-            (scenes.old == "Song_Enclave_Tube" || scenes.old == "Song_25" || scenes.old == "Library_02" || scenes.old == "Library_04")
-                && scenes.current == "Song_Enclave"
+            (scenes.old == "Song_Enclave_Tube"
+                || scenes.old == "Song_25"
+                || scenes.old == "Library_02"
+                || scenes.old == "Library_04")
+                && scenes.current == "Song_Enclave",
         ),
         Split::TrobbioTrans => should_split(mem.deref(&pd.defeated_trobbio).unwrap_or_default()),
         //endregion: ChoralChambers
@@ -1846,7 +1849,10 @@ pub fn continuous_splits(
         // endregion: BlastedSteps
 
         // region: SinnersRoad
-        Split::Lugoli => should_split(mem.deref(&pd.defeated_roach_keeper_chef).unwrap_or_default()),
+        Split::Lugoli => should_split(
+            mem.deref(&pd.defeated_roach_keeper_chef)
+                .unwrap_or_default(),
+        ),
         // endregion: SinnersRoad
 
         // region: Bilewater
@@ -1858,7 +1864,9 @@ pub fn continuous_splits(
         Split::SlabKeyIndolent => should_split(mem.deref(&pd.has_slab_key_a).unwrap_or_default()),
         Split::SlabKeyHeretic => should_split(mem.deref(&pd.has_slab_key_b).unwrap_or_default()),
         Split::SlabKeyApostate => should_split(mem.deref(&pd.has_slab_key_c).unwrap_or_default()),
-        Split::Broodmother => should_split(mem.deref(&pd.defeated_brood_mother).unwrap_or_default()),
+        Split::Broodmother => {
+            should_split(mem.deref(&pd.defeated_brood_mother).unwrap_or_default())
+        }
         Split::FirstSinnerEncountered => {
             should_split(mem.deref(&pd.encountered_first_weaver).unwrap_or_default())
         }
@@ -1895,7 +1903,9 @@ pub fn continuous_splits(
 
         // region: ChoralChambers
         Split::MetMergwin => should_split(mem.deref(&pd.met_gourmand_servant).unwrap_or_default()),
-        Split::GivenCouriersRasher => should_split(mem.deref(&pd.gourmand_given_meat).unwrap_or_default()),
+        Split::GivenCouriersRasher => {
+            should_split(mem.deref(&pd.gourmand_given_meat).unwrap_or_default())
+        }
         Split::Trobbio => should_split(mem.deref(&pd.defeated_trobbio).unwrap_or_default()),
         //endregion: ChoralChambers
 
