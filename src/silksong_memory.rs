@@ -414,7 +414,6 @@ declare_pointers!(PlayerDataPointers {
     gourmand_given_meat: UnityPointer<3> = UnityPointer::new("GameManager", 0, &["_instance", "playerData", "GourmandGivenMeat"]),
     belltown_greeter_met_time_passed: UnityPointer<3> = UnityPointer::new("GameManager", 0, &["_instance", "playerData", "BelltownGreeterMetTimePassed"]),
     bell_shrine_enclave: UnityPointer<3> = UnityPointer::new("GameManager", 0, &["_instance", "playerData", "bellShrineEnclave"]),
-    defeated_zap_core_enemy: UnityPointer<3> = UnityPointer::new("GameManager", 0, &["_instance", "playerData", "defeatedZapCoreEnemy"]),
     skull_king_defeated: UnityPointer<3> = UnityPointer::new("GameManager", 0, &["_instance", "playerData", "skullKingDefeated"]),
     sherma_healer_active: UnityPointer<3> = UnityPointer::new("GameManager", 0, &["_instance", "playerData", "shermaHealerActive"]),
     city_merchant_saved: UnityPointer<3> = UnityPointer::new("GameManager", 0, &["_instance", "playerData", "cityMerchantSaved"]),
@@ -426,6 +425,9 @@ declare_pointers!(PlayerDataPointers {
     ballow_moved_to_diving_bell: UnityPointer<3> = UnityPointer::new("GameManager", 0, &["_instance", "playerData", "BallowMovedToDivingBell"]),
     black_thread_world: UnityPointer<3> = UnityPointer::new("GameManager", 0, &["_instance", "playerData", "blackThreadWorld"]),
     defeated_coral_drillers: UnityPointer<3> = UnityPointer::new("GameManager", 0, &["_instance", "playerData", "defeatedCoralDrillers"]),
+    defeated_zap_core_enemy: UnityPointer<3> = UnityPointer::new("GameManager", 0, &["_instance", "playerData", "defeatedZapCoreEnemy"]),
+    defeated_coral_driller_solo: UnityPointer<3> = UnityPointer::new("GameManager", 0, &["_instance", "playerData", "defeatedCoralDrillerSolo"]),
+    defeated_grey_warrior: UnityPointer<3> = UnityPointer::new("GameManager", 0, &["_instance", "playerData", "defeatedGreyWarrior"]),
     encountered_lost_lace: UnityPointer<3> = UnityPointer::new("GameManager", 0, &["_instance", "playerData", "EncounteredLostLace"]),
     completion_percentage: UnityPointer<3> = UnityPointer::new("GameManager", 0, &["_instance", "playerData", "completionPercentage"]),
 });

@@ -276,6 +276,11 @@ pub enum Split {
     ///
     /// Splits when entering the Blasted Steps from Shellwood, where the area text appears
     EnterBlastedSteps,
+    /// Great Conchflies (Boss)
+    ///
+    /// Splits after defeating the Great Conchflies (two-enemy encounter) boss
+    #[alias = "Conchflies1"]
+    GreatConchflies,
     /// Needle Strike (Skill)
     ///
     /// Splits when obtaining Needle Strike (Charge Slash)
@@ -417,6 +422,29 @@ pub enum Split {
     /// Splits when you obtain Faydown Cloak (Double Jump)
     FaydownCloak,
     // endregion: MountFay
+
+    // region: SandsOfKarak
+    /// Enter Sands of Karak (Transition)
+    ///
+    /// Splits when entering Sands of Karak
+    EnterSandsOfKarak,
+    /// Enter Voltnest (Transition)
+    ///
+    /// Splits when entering the Voltnest subregion
+    EnterVoltnest,
+    /// Voltvyrm (Boss)
+    ///
+    /// Splits after defeating Voltvyrm
+    Voltvyrm,
+    /// Raging Conchfly (Boss)
+    ///
+    /// Splits when the Raging Conchfly (single-enemy second encounter) is defeated
+    RagingConchfly,
+    /// Watcher at the Edge (Boss)
+    ///
+    /// Splits when Watcher at the Edge is defeated
+    WatcherAtTheEdge,
+    // endregion: SandsOfKarak
 
     // region: Acts
     /// Act 2 Started (Event)
@@ -1231,10 +1259,6 @@ pub enum Split {
     ///
     /// Splits after defeating Groal
     Groal,
-    /// Conchflies 1 (Boss)
-    ///
-    /// Splits after defeating Conchflies 1
-    Conchflies1,
     ///  Savage Beastfly 1 (Boss)
     ///
     /// Splits after defeating the Beastfly in the Chapel
@@ -1263,10 +1287,6 @@ pub enum Split {
     ///
     /// Splits when ringing the Songclave Bell Shrine
     SongclaveBell,
-    /// Voltvyrm (Boss)
-    ///
-    /// Splits after defeating Voltvyrm
-    Voltvyrm,
     /// Skull Tyrant (Boss)
     ///
     /// Splits after defeating the Skull Tyrant
@@ -1496,6 +1516,9 @@ pub fn transition_splits(
         Split::EnterBlastedSteps => {
             should_split(scenes.old == "Coral_19" && scenes.current == "Coral_02")
         }
+        Split::GreatConchflies => {
+            should_split(mem.deref(&pd.defeated_coral_drillers).unwrap_or_default())
+        }
         Split::NeedleStrikeTrans => {
             should_split(mem.deref(&pd.has_charge_slash).unwrap_or_default())
         }
@@ -1563,6 +1586,17 @@ pub fn transition_splits(
             should_split(scenes.old == "Peak_01" && scenes.current == "Peak_07")
         }
         // endregion: MountFay
+
+        // region: SandsOfKarak
+        Split::EnterSandsOfKarak => should_split(
+            (scenes.old == "Coral_25" && scenes.current == "Coral_23")
+                || (scenes.old == "Coral_35" && scenes.current == "Coral_35b")
+                || (scenes.old == "Coral_38" && scenes.current == "Coral_26"),
+        ),
+        Split::EnterVoltnest => {
+            should_split(scenes.old == "Coral_35b" && scenes.current == "Coral_29")
+        }
+        // endregion: SandsOfKarak
 
         // region: ChoralChambers
         Split::EnterSongclave => should_split(
@@ -1879,6 +1913,17 @@ pub fn continuous_splits(
         // region: MountFay
         Split::FaydownCloak => should_split(mem.deref(&pd.has_double_jump).unwrap_or_default()),
         // endregion: MountFay
+
+        // region: SandsOfKarak
+        Split::RagingConchfly => should_split(
+            mem.deref(&pd.defeated_coral_driller_solo)
+                .unwrap_or_default(),
+        ),
+        Split::Voltvyrm => should_split(mem.deref(&pd.defeated_zap_core_enemy).unwrap_or_default()),
+        Split::WatcherAtTheEdge => {
+            should_split(mem.deref(&pd.defeated_grey_warrior).unwrap_or_default())
+        }
+        // endregion: SandsOfKarak
 
         // region: Acts
         Split::Act2Started => should_split(mem.deref(&pd.act2_started).unwrap_or_default()),
@@ -2398,9 +2443,6 @@ pub fn continuous_splits(
         Split::SavageBeastfly1 => {
             should_split(mem.deref(&pd.defeated_bone_flyer_giant).unwrap_or_default())
         }
-        Split::Conchflies1 => {
-            should_split(mem.deref(&pd.defeated_coral_drillers).unwrap_or_default())
-        }
         Split::SavageBeastfly2 => should_split(
             mem.deref(&pd.defeated_bone_flyer_giant_golem_scene)
                 .unwrap_or_default(),
@@ -2424,7 +2466,6 @@ pub fn continuous_splits(
         Split::SongclaveBell => {
             should_split(mem.deref(&pd.bell_shrine_enclave).unwrap_or_default())
         }
-        Split::Voltvyrm => should_split(mem.deref(&pd.defeated_zap_core_enemy).unwrap_or_default()),
         Split::SkullTyrant1 => should_split(mem.deref(&pd.skull_king_defeated).unwrap_or_default()),
         Split::ShermaReturned => {
             should_split(mem.deref(&pd.sherma_healer_active).unwrap_or_default())
