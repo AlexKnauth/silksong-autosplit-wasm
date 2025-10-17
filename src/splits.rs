@@ -468,14 +468,14 @@ pub enum Split {
     // endregion: HighHalls
 
     // region: Whiteward
-    /// Enter Upper Whiteward (Transition)
-    ///
-    /// Splits when entering the upper portion of Whiteward from the Choral Chambers
-    EnterUpperWhiteward,
     /// Enter Whiteward (Transition)
     ///
-    /// Splits when entering Whiteward, on the transition after riding the elevator
+    /// Splits when entering the upper portion of Whiteward from the Choral Chambers
     EnterWhiteward,
+    /// Enter Lower Whiteward (Transition)
+    ///
+    /// Splits when entering the lower portion of Whiteward, after the elevator ride
+    EnterLowerWhiteward,
     /// Collected Whiteward Key (Item)
     ///
     /// Splits when you collect the Whiteward Key
@@ -1551,10 +1551,10 @@ pub fn transition_splits(
         // endregion: HighHalls
 
         // region: Whiteward
-        Split::EnterUpperWhiteward => {
+        Split::EnterWhiteward => {
             should_split(scenes.old == "Song_05" && scenes.current == "Ward_01")
         }
-        Split::EnterWhiteward => {
+        Split::EnterLowerWhiteward => {
             should_split(scenes.old == "Ward_01" && scenes.current == "Ward_02")
         }
         // endregion: Whiteward
