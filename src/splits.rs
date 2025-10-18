@@ -281,6 +281,10 @@ pub enum Split {
     /// Splits after defeating the Great Conchflies (two-enemy encounter) boss
     #[alias = "Conchflies1"]
     GreatConchflies,
+    /// Great Conchflies (Transition)
+    ///
+    /// Splits on the transition after defeating the Great Conchflies boss
+    GreatConchfliesTrans,
     /// Needle Strike (Skill)
     ///
     /// Splits when obtaining Needle Strike (Charge Slash)
@@ -347,6 +351,10 @@ pub enum Split {
     ///
     /// Splits when killing Phantom
     Phantom,
+    /// Phantom (Transition)
+    ///
+    /// Splits on the transition after killing Phantom
+    PhantomTrans,
     /// Cross Stitch (Skill)
     ///
     /// Splits when obtaining Cross Stitch
@@ -440,6 +448,10 @@ pub enum Split {
     ///
     /// Splits when the Raging Conchfly (single-enemy second encounter) is defeated
     RagingConchfly,
+    /// Raging Conchfly (Transition)
+    ///
+    /// Splits on the transition after defeating Raging Conchfly
+    RagingConchflyTrans,
     /// Watcher at the Edge (Boss)
     ///
     /// Splits when Watcher at the Edge is defeated
@@ -1516,7 +1528,7 @@ pub fn transition_splits(
         Split::EnterBlastedSteps => {
             should_split(scenes.old == "Coral_19" && scenes.current == "Coral_02")
         }
-        Split::GreatConchflies => {
+        Split::GreatConchfliesTrans => {
             should_split(mem.deref(&pd.defeated_coral_drillers).unwrap_or_default())
         }
         Split::NeedleStrikeTrans => {
@@ -1561,6 +1573,7 @@ pub fn transition_splits(
         Split::EnterExhaustOrgan => {
             should_split(scenes.old == "Dust_09" && scenes.current == "Organ_01")
         }
+        Split::PhantomTrans => should_split(mem.deref(&pd.defeated_phantom).unwrap_or_default()),
         Split::CrossStitchTrans => should_split(mem.deref(&pd.has_parry).unwrap_or_default()),
         Split::TrailsEndTrans => {
             should_split(scenes.old == "Shadow_24" && scenes.current == "Shadow_19")
@@ -1596,6 +1609,10 @@ pub fn transition_splits(
         Split::EnterVoltnest => {
             should_split(scenes.old == "Coral_35b" && scenes.current == "Coral_29")
         }
+        Split::RagingConchflyTrans => should_split(
+            mem.deref(&pd.defeated_coral_driller_solo)
+                .unwrap_or_default(),
+        ),
         // endregion: SandsOfKarak
 
         // region: ChoralChambers
@@ -1888,6 +1905,9 @@ pub fn continuous_splits(
 
         // region: BlastedSteps
         Split::NeedleStrike => should_split(mem.deref(&pd.has_charge_slash).unwrap_or_default()),
+        Split::GreatConchflies => {
+            should_split(mem.deref(&pd.defeated_coral_drillers).unwrap_or_default())
+        }
         Split::LastJudgeEncountered => {
             should_split(mem.deref(&pd.encountered_last_judge).unwrap_or_default())
         }
