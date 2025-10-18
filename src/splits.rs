@@ -1791,6 +1791,18 @@ fn mask_shard_split(mem: &Memory, pd: &PlayerDataPointers, shard: i32) -> bool {
             .is_ok_and(|n: i32| n == current_shards))
 }
 
+fn spool_shard_split(mem: &Memory, pd: &PlayerDataPointers, shard: i32) -> bool {
+    const START_SPOOLS: i32 = 9;
+    let current_shards = shard % 2;
+    let additional_spools = shard / 2;
+
+    (mem.deref(&pd.silk_max)
+        .is_ok_and(|n: i32| START_SPOOLS + additional_spools == n))
+        && (mem
+            .deref(&pd.silk_spool_parts)
+            .is_ok_and(|n: i32| n == current_shards))
+}
+
 pub fn continuous_splits(
     split: &Split,
     mem: &Memory,
@@ -2034,78 +2046,24 @@ pub fn continuous_splits(
         // endregion: MaskShards
 
         // region: SpoolFragments
-        Split::SpoolFragment1 => should_split(
-            mem.deref(&pd.silk_max).is_ok_and(|n: i32| n == 9)
-                && mem.deref(&pd.silk_spool_parts).is_ok_and(|n: i32| n == 1),
-        ),
-        Split::Spool1 => should_split(
-            mem.deref(&pd.silk_max).is_ok_and(|n: i32| n == 10)
-                && mem.deref(&pd.silk_spool_parts).is_ok_and(|n: i32| n == 0),
-        ),
-        Split::SpoolFragment3 => should_split(
-            mem.deref(&pd.silk_max).is_ok_and(|n: i32| n == 10)
-                && mem.deref(&pd.silk_spool_parts).is_ok_and(|n: i32| n == 1),
-        ),
-        Split::Spool2 => should_split(
-            mem.deref(&pd.silk_max).is_ok_and(|n: i32| n == 11)
-                && mem.deref(&pd.silk_spool_parts).is_ok_and(|n: i32| n == 0),
-        ),
-        Split::SpoolFragment5 => should_split(
-            mem.deref(&pd.silk_max).is_ok_and(|n: i32| n == 11)
-                && mem.deref(&pd.silk_spool_parts).is_ok_and(|n: i32| n == 1),
-        ),
-        Split::Spool3 => should_split(
-            mem.deref(&pd.silk_max).is_ok_and(|n: i32| n == 12)
-                && mem.deref(&pd.silk_spool_parts).is_ok_and(|n: i32| n == 0),
-        ),
-        Split::SpoolFragment7 => should_split(
-            mem.deref(&pd.silk_max).is_ok_and(|n: i32| n == 12)
-                && mem.deref(&pd.silk_spool_parts).is_ok_and(|n: i32| n == 1),
-        ),
-        Split::Spool4 => should_split(
-            mem.deref(&pd.silk_max).is_ok_and(|n: i32| n == 13)
-                && mem.deref(&pd.silk_spool_parts).is_ok_and(|n: i32| n == 0),
-        ),
-        Split::SpoolFragment9 => should_split(
-            mem.deref(&pd.silk_max).is_ok_and(|n: i32| n == 13)
-                && mem.deref(&pd.silk_spool_parts).is_ok_and(|n: i32| n == 1),
-        ),
-        Split::Spool5 => should_split(
-            mem.deref(&pd.silk_max).is_ok_and(|n: i32| n == 14)
-                && mem.deref(&pd.silk_spool_parts).is_ok_and(|n: i32| n == 0),
-        ),
-        Split::SpoolFragment11 => should_split(
-            mem.deref(&pd.silk_max).is_ok_and(|n: i32| n == 14)
-                && mem.deref(&pd.silk_spool_parts).is_ok_and(|n: i32| n == 1),
-        ),
-        Split::Spool6 => should_split(
-            mem.deref(&pd.silk_max).is_ok_and(|n: i32| n == 15)
-                && mem.deref(&pd.silk_spool_parts).is_ok_and(|n: i32| n == 0),
-        ),
-        Split::SpoolFragment13 => should_split(
-            mem.deref(&pd.silk_max).is_ok_and(|n: i32| n == 15)
-                && mem.deref(&pd.silk_spool_parts).is_ok_and(|n: i32| n == 1),
-        ),
-        Split::Spool7 => should_split(
-            mem.deref(&pd.silk_max).is_ok_and(|n: i32| n == 16)
-                && mem.deref(&pd.silk_spool_parts).is_ok_and(|n: i32| n == 0),
-        ),
-        Split::SpoolFragment15 => should_split(
-            mem.deref(&pd.silk_max).is_ok_and(|n: i32| n == 16)
-                && mem.deref(&pd.silk_spool_parts).is_ok_and(|n: i32| n == 1),
-        ),
-        Split::Spool8 => should_split(
-            mem.deref(&pd.silk_max).is_ok_and(|n: i32| n == 17)
-                && mem.deref(&pd.silk_spool_parts).is_ok_and(|n: i32| n == 0),
-        ),
-        Split::SpoolFragment17 => should_split(
-            mem.deref(&pd.silk_max).is_ok_and(|n: i32| n == 17)
-                && mem.deref(&pd.silk_spool_parts).is_ok_and(|n: i32| n == 1),
-        ),
-        Split::Spool9 => should_split(
-            mem.deref(&pd.silk_max).is_ok_and(|n: i32| n == 18)
-                && mem.deref(&pd.silk_spool_parts).is_ok_and(|n: i32| n == 0),
-        ),
+        Split::SpoolFragment1 => should_split(spool_shard_split(mem, pd, 1)),
+        Split::Spool1 => should_split(spool_shard_split(mem, pd, 2)),
+        Split::SpoolFragment3 => should_split(spool_shard_split(mem, pd, 3)),
+        Split::Spool2 => should_split(spool_shard_split(mem, pd, 4)),
+        Split::SpoolFragment5 => should_split(spool_shard_split(mem, pd, 5)),
+        Split::Spool3 => should_split(spool_shard_split(mem, pd, 6)),
+        Split::SpoolFragment7 => should_split(spool_shard_split(mem, pd, 7)),
+        Split::Spool4 => should_split(spool_shard_split(mem, pd, 8)),
+        Split::SpoolFragment9 => should_split(spool_shard_split(mem, pd, 9)),
+        Split::Spool5 => should_split(spool_shard_split(mem, pd, 10)),
+        Split::SpoolFragment11 => should_split(spool_shard_split(mem, pd, 11)),
+        Split::Spool6 => should_split(spool_shard_split(mem, pd, 12)),
+        Split::SpoolFragment13 => should_split(spool_shard_split(mem, pd, 13)),
+        Split::Spool7 => should_split(spool_shard_split(mem, pd, 14)),
+        Split::SpoolFragment15 => should_split(spool_shard_split(mem, pd, 15)),
+        Split::Spool8 => should_split(spool_shard_split(mem, pd, 16)),
+        Split::SpoolFragment17 => should_split(spool_shard_split(mem, pd, 17)),
+        Split::Spool9 => should_split(spool_shard_split(mem, pd, 18)),
         // endregion SpoolFragments
 
         // region: ToolPouchLevels
