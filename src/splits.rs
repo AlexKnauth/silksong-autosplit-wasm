@@ -478,6 +478,10 @@ pub enum Split {
     ///
     /// Splits when killing Cogwork Dancers
     CogworkDancers,
+    /// Second Sentinel Awoken (Event)
+    ///
+    /// Splits when using the Cogheart to activate Second Sentinel
+    SecondSentinelAwoken,
     // endregion: CogworkCore
 
     // region: WhisperingVaults
@@ -537,6 +541,18 @@ pub enum Split {
     /// Splits when completing the High Halls Arena
     #[alias = "HighHallsGauntlet"]
     HighHallsArena,
+    /// Enter Second Sentinel (Transition)
+    ///
+    /// Splits when entering the arena for the Second Sentinel boss fight
+    EnterSecondSentinel,
+    /// Second Sentinel Encountered (Boss)
+    ///
+    /// Splits when the Second Sentinel boss encounter begins the first time
+    SecondSentinelBossEncountered,
+    /// Second Sentinel (Boss)
+    ///
+    /// Splits when Second Sentinel is defeated
+    SecondSentinel,
     // endregion: HighHalls
 
     // region: Whiteward
@@ -1647,6 +1663,9 @@ pub fn transition_splits(
         Split::EnterHighHallsArena => {
             should_split(scenes.old == "Hang_06" && scenes.current == "Hang_04")
         }
+        Split::EnterSecondSentinel => {
+            should_split(scenes.old == "Hang_08" && scenes.current == "Hang_17b")
+        }
         // endregion: HighHalls
 
         // region: Whiteward
@@ -1969,6 +1988,9 @@ pub fn continuous_splits(
         Split::CogworkDancers => {
             should_split(mem.deref(&pd.defeated_cogwork_dancers).unwrap_or_default())
         }
+        Split::SecondSentinelAwoken => {
+            should_split(mem.deref(&pd.woke_song_chevalier).unwrap_or_default())
+        }
         // endregion: CogworkCore
 
         // region: WhisperingVaults
@@ -1992,6 +2014,14 @@ pub fn continuous_splits(
 
         // region: HighHalls
         Split::HighHallsArena => should_split(mem.deref(&pd.hang04_battle).unwrap_or_default()),
+        Split::SecondSentinelBossEncountered => should_split(
+            mem.deref(&pd.encountered_song_chevalier_boss)
+                .unwrap_or_default(),
+        ),
+        Split::SecondSentinel => should_split(
+            mem.deref(&pd.defeated_song_chevalier_boss)
+                .unwrap_or_default(),
+        ),
         //endregion: HighHalls
 
         // region: Whiteward
