@@ -1222,6 +1222,14 @@ pub enum Split {
     ///
     /// Splits when entering Nyleth's memory
     EnterNylethMemory,
+    /// Nyleth Encountered (Boss)
+    ///
+    /// Splits when Nyleth is encountered for the first time
+    NylethEncountered,
+    /// Nyleth (Boss)
+    ///
+    /// Splits when Nyleth is defeated
+    Nyleth,
     /// Nyleth's Heart (Item)
     ///
     /// Splits when you obtain Nyleth's Heart
@@ -1231,6 +1239,14 @@ pub enum Split {
     ///
     /// Splits when entering Khann's Coral Tower memory
     EnterKhannMemory,
+    /// Khann Encountered (Boss)
+    ///
+    /// Splits when Khann is first met at the top of the Coral Tower memory
+    KhannEncountered,
+    /// Crust King Khann (Boss)
+    ///
+    /// Splits when Crust King Khann is defeated
+    CrustKingKhann,
     /// Khann's Heart (Item)
     ///
     /// Splits when you obtain Khann's Heart
@@ -1240,6 +1256,10 @@ pub enum Split {
     ///
     /// Splits when entering Karmelita's memory
     EnterKarmelitaMemory,
+    /// Skarrsinger Karmelita (Boss)
+    ///
+    /// Splits when Skarrsinger Karmelita is defeated
+    SkarrsingerKarmelita,
     /// Karmelita's Heart (Item)
     ///
     /// Splits when you obtain Karmelita's Heart
@@ -1253,6 +1273,18 @@ pub enum Split {
     ///
     /// Splits when entering the room containing the Clover Dancers boss
     EnterVerdaniaCastle,
+    /// Palestag (Boss)
+    ///
+    /// Splits when the Palestag boss is defeated
+    Palestag,
+    /// Clover Dancers Encountered (Boss)
+    ///
+    /// Splits when the Clover Dancers boss fight begins for the first time
+    CloverDancersEncountered,
+    /// Clover Dancers (Boss)
+    ///
+    /// Splits when the Clover Dancers boss is defeated
+    CloverDancers,
     /// Clover Dancer's Heart (Item)
     ///
     /// Split when you obtain Conjoined Heart
@@ -2400,12 +2432,35 @@ pub fn continuous_splits(
             mem.deref(&pd.has_needolin_memory_powerup)
                 .unwrap_or_default(),
         ),
+        Split::NylethEncountered => {
+            should_split(mem.deref(&pd.encountered_flower_queen).unwrap_or_default())
+        }
+        Split::Nyleth => should_split(mem.deref(&pd.defeated_flower_queen).unwrap_or_default()),
         Split::HeartNyleth => {
             should_split(mem.deref(&pd.collected_heart_flower).unwrap_or_default())
         }
+        Split::KhannEncountered => {
+            should_split(mem.deref(&pd.encountered_coral_king).unwrap_or_default())
+        }
+        Split::CrustKingKhann => {
+            should_split(mem.deref(&pd.defeated_coral_king).unwrap_or_default())
+        }
         Split::HeartKhann => should_split(mem.deref(&pd.collected_heart_coral).unwrap_or_default()),
+        Split::SkarrsingerKarmelita => {
+            should_split(mem.deref(&pd.defeated_ant_queen).unwrap_or_default())
+        }
         Split::HeartKarmelita => {
             should_split(mem.deref(&pd.collected_heart_hunter).unwrap_or_default())
+        }
+        Split::Palestag => {
+            should_split(mem.deref(&pd.defeated_white_cloverstag).unwrap_or_default())
+        }
+        Split::CloverDancersEncountered => should_split(
+            mem.deref(&pd.encountered_clover_dancers)
+                .unwrap_or_default(),
+        ),
+        Split::CloverDancers => {
+            should_split(mem.deref(&pd.defeated_clover_dancers).unwrap_or_default())
         }
         Split::HeartClover => {
             should_split(mem.deref(&pd.collected_heart_clover).unwrap_or_default())
