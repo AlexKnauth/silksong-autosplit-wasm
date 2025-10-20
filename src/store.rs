@@ -37,6 +37,13 @@ pub struct Store {
 }
 
 impl Store {
+    pub fn new() -> Self {
+        Self {
+            bools: BTreeMap::new(),
+            i32s: BTreeMap::new(),
+        }
+    }
+
     fn get_bool(&mut self, key: &str) -> Option<&Pair<bool>> {
         let v = self.bools.get_mut(key)?;
         v.interested = true;
@@ -82,5 +89,11 @@ impl Store {
             v.update();
             v.interested = false;
         }
+    }
+}
+
+impl Default for Store {
+    fn default() -> Self {
+        Store::new()
     }
 }
