@@ -376,6 +376,8 @@ declare_pointers!(PlayerDataPointers {
     unlocked_dust_cage: UnityPointer<3> = pdp("UnlockedDustCage"),
     green_prince_location: UnityPointer<3> = pdp("GreenPrinceLocation"),
     seen_fleatopia_empty: UnityPointer<3> = pdp("SeenFleatopiaEmpty"),
+    flea_games_started: UnityPointer<3> = pdp("FleaGamesStarted"),
+    flea_games_ended: UnityPointer<3> = pdp("FleaGamesEnded"),
     has_charge_slash: UnityPointer<3> = pdp("hasChargeSlash"),
     has_double_jump: UnityPointer<3> = pdp("hasDoubleJump"),
     has_super_jump: UnityPointer<3> = pdp("hasSuperJump"),

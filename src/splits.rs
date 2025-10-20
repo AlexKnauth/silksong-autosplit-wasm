@@ -596,6 +596,14 @@ pub enum Split {
     /// Splits when entering the Putrified Ducts in a room with area text
     /// (excludes Huntress room, includes tall room)
     EnterPutrifiedDucts,
+    /// Flea Festival Begin (Event)
+    ///
+    /// Splits when starting the Flea Festival in Fleatopia
+    FleaFestivalBegin,
+    /// Flea Festival End (Event)
+    ///
+    /// Splits when the Flea Festival has ended
+    FleaFestivalEnd,
     // endregion: PutrifiedDucts
 
     // region: TheCradle
@@ -2068,6 +2076,13 @@ pub fn continuous_splits(
         }
         Split::TheUnravelled => should_split(mem.deref(&pd.ward_boss_defeated).unwrap_or_default()),
         // endregion: Whiteward
+
+        // region: PutrifiedDucts
+        Split::FleaFestivalBegin => {
+            should_split(mem.deref(&pd.flea_games_started).unwrap_or_default())
+        }
+        Split::FleaFestivalEnd => should_split(mem.deref(&pd.flea_games_ended).unwrap_or_default()),
+        // endregion: PutrifiedDucts
 
         // region: TheCradle
         Split::Lace2 => should_split(mem.deref(&pd.defeated_lace_tower).unwrap_or_default()),
