@@ -11,6 +11,8 @@ mod timer;
 mod unstable;
 
 use alloc::{boxed::Box, format, string::String, vec::Vec};
+#[cfg(feature = "split-index")]
+use asr::watcher::Pair;
 use asr::{
     future::{next_tick, retry},
     settings::{
@@ -35,6 +37,7 @@ use crate::{
         HERO_TRANSITION_STATE_WAITING_TO_ENTER_LEVEL, MENU_TITLE, NON_MENU_GAME_STATES,
         OPENING_SCENES, QUIT_TO_MENU, UI_STATE_CUTSCENE, UI_STATE_PAUSED, UI_STATE_PLAYING,
     },
+    store::Store,
     timer::SplitterAction,
 };
 
@@ -63,18 +66,14 @@ const PLUS: &str = "+";
 // --------------------------------------------------------
 
 struct AutoSplitterState {
+    /// Store
+    store: Box<Store>,
     /// The timer state.
     timer_state: TimerState,
-    /// The last observed asr::timer::state.
-    /// Just in case asr::timer::state is a tad out-of-date.
-    last_timer_state: TimerState,
     /// The split index.
     /// None: NotRunning
     /// Some: Running, Paused, or Ended
     split_index: Option<u64>,
-    /// The last observed split index.
-    /// Just in case asr::timer::current_split_index is a tad out-of-date.
-    last_split_index: Option<u64>,
     segments_splitted: Vec<bool>,
     look_for_teleporting: bool,
     #[cfg(debug_assertions)]
@@ -98,16 +97,18 @@ struct AutoSplitterState {
 
 impl AutoSplitterState {
     fn new() -> AutoSplitterState {
-        let timer_state = asr::timer::state();
-        let split_index = unstable::timer_current_split_index();
+        let mut store = Box::new(Store::new());
+        let timer_state = store
+            .get_timer_state_current()
+            .unwrap_or(TimerState::Unknown);
+        let split_index = store.get_split_index_current();
         let mut segments_splitted = Vec::new();
         segments_splitted.resize(split_index.unwrap_or_default() as usize, false);
         let comparison_hits = Settings::get_comparison_hits().unwrap_or_default();
         AutoSplitterState {
+            store,
             timer_state,
-            last_timer_state: timer_state,
             split_index,
-            last_split_index: split_index,
             segments_splitted,
             look_for_teleporting: false,
             #[cfg(debug_assertions)]
@@ -131,17 +132,19 @@ impl AutoSplitterState {
     }
 
     fn update(&mut self, settings: &Settings) {
-        let new_state = asr::timer::state();
-        let new_index = unstable::timer_current_split_index();
-        if (new_state == self.timer_state && new_index == self.split_index)
-            || (new_state == self.last_timer_state && new_index == self.last_split_index)
+        self.store.update_all();
+        let Some(state_pair) = self.store.get_timer_state_pair() else {
+            return;
+        };
+        let index_pair = self.store.get_split_index_pair();
+        if (state_pair.unchanged() && index_pair.is_none_or(|p| p.unchanged()))
+            || (state_pair.current == self.timer_state
+                && index_pair.is_none_or(|p| p.current == self.split_index))
         {
-            self.last_timer_state = new_state;
-            self.last_split_index = new_index;
             return;
         }
 
-        match new_state {
+        match state_pair.current {
             TimerState::NotRunning
                 if self.timer_state == TimerState::Running
                     || self.timer_state == TimerState::Paused
@@ -186,7 +189,9 @@ impl AutoSplitterState {
             }
             TimerState::Running if is_timer_state_between_runs(self.timer_state) => {
                 // Start
-                let new_i = new_index.unwrap_or_default() as usize;
+                let new_i = index_pair
+                    .map(|p| p.current.unwrap_or_default())
+                    .unwrap_or_default() as usize;
                 self.segment_hits.resize(new_i + 1, 0);
                 if settings.get_hit_counter() {
                     asr::timer::set_variable_int("segment hits", self.segment_hits[new_i]);
@@ -210,19 +215,14 @@ impl AutoSplitterState {
                     || self.timer_state == TimerState::Paused =>
             {
                 // End
-                #[cfg(not(feature = "split-index"))]
-                {
-                    // TODO: use last_split_index here but also other places on legacy / not-split-index
+                if let Some(p) = index_pair {
+                    if p.old < p.current {
+                        self.split_index = p.current
+                    } else {
+                        self.split_index = Some(p.old.unwrap_or_default() + 1)
+                    }
+                } else {
                     self.split_index = Some(self.split_index.unwrap_or_default() + 1);
-                }
-                #[cfg(feature = "split-index")]
-                match new_index {
-                    Some(new_idx) if self.last_split_index.unwrap_or_default() < new_idx => {
-                        self.split_index = Some(new_idx)
-                    }
-                    _ => {
-                        self.split_index = Some(self.last_split_index.unwrap_or_default() + 1);
-                    }
                 }
                 if settings.get_hit_counter() {
                     if let Some(index) = self.split_index {
@@ -237,8 +237,12 @@ impl AutoSplitterState {
             }
             _ => {
                 #[cfg(feature = "split-index")]
-                if let (Some(new_index), Some(old_index)) = (&new_index, &self.split_index) {
-                    let new_i = *new_index as usize;
+                if let Some(Pair {
+                    current: Some(new_index),
+                    old: Some(old_index),
+                }) = index_pair
+                {
+                    let new_i = new_index as usize;
                     if new_index < old_index {
                         // Undo
                         self.segment_hits[new_i] +=
@@ -255,7 +259,7 @@ impl AutoSplitterState {
                         }
                         self.segments_splitted.truncate(new_i);
                     } else if new_index > old_index {
-                        for old_idx in (*old_index)..(*new_index) {
+                        for old_idx in old_index..new_index {
                             let o_i = old_idx as usize;
                             let n_i = o_i + 1;
                             let splitted =
@@ -286,12 +290,10 @@ impl AutoSplitterState {
             }
         }
 
-        self.timer_state = new_state;
-        self.last_timer_state = new_state;
-        self.last_split_index = new_index;
+        self.timer_state = state_pair.current;
         #[cfg(feature = "split-index")]
-        {
-            self.split_index = new_index;
+        if let Some(p) = index_pair {
+            self.split_index = p.current;
         }
     }
 }
