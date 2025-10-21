@@ -8,7 +8,6 @@ mod silksong_memory;
 pub mod splits;
 mod store;
 mod timer;
-mod unstable;
 
 use alloc::{boxed::Box, format, string::String, vec::Vec};
 #[cfg(feature = "split-index")]
@@ -263,7 +262,7 @@ impl AutoSplitterState {
                             let o_i = old_idx as usize;
                             let n_i = o_i + 1;
                             let splitted =
-                                unstable::timer_segment_splitted(old_idx).unwrap_or_default();
+                                asr::timer::segment_splitted(old_idx).unwrap_or_default();
                             self.segments_splitted.push(splitted);
                             if splitted {
                                 // Split
