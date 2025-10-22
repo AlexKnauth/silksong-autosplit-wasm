@@ -1,4 +1,4 @@
-use alloc::{boxed::Box, vec, vec::Vec};
+use alloc::{vec, vec::Vec};
 use asr::{settings::Gui, watcher::Pair};
 use ugly_widget::{
     radio_button::{options_str, RadioButtonOptions},
@@ -7,7 +7,7 @@ use ugly_widget::{
 
 use crate::{
     silksong_memory::{
-        is_debug_save_state_scene, is_menu, Env, SceneStore, DEATH_RESPAWN_MARKER_INIT,
+        get_health, is_debug_save_state_scene, is_menu, Env, SceneStore, DEATH_RESPAWN_MARKER_INIT,
         GAME_STATE_PLAYING, MENU_TITLE, NON_MENU_GAME_STATES, OPENING_SCENES,
     },
     store::Store,
@@ -1901,11 +1901,7 @@ pub fn continuous_splits(split: &Split, e: &Env, store: &mut Store) -> SplitterA
         Split::ManualSplit => SplitterAction::ManualSplit,
         Split::PlayerDeath => should_split(
             store
-                .get_i32_pair_bang(
-                    "health",
-                    Box::new(|e| e?.mem.deref(&e?.pd.health).ok()),
-                    Some(e),
-                )
+                .get_i32_pair_bang("health", &get_health, Some(e))
                 .is_some_and(|p| p.changed_to(&0)),
         ),
         // endregion: Start, End, and Menu

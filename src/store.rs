@@ -1,19 +1,21 @@
-use alloc::{boxed::Box, collections::BTreeMap};
+use alloc::collections::BTreeMap;
 use asr::{
     timer::TimerState,
     watcher::{Pair, Watcher},
 };
 
-use crate::silksong_memory::Env;
+#[cfg(feature = "split-index")]
+use crate::silksong_memory::get_timer_current_split_index;
+use crate::silksong_memory::{get_timer_state, Env};
 
-struct StoreValue<A> {
+struct StoreValue<A: 'static> {
     watcher: Watcher<A>,
     interested: bool,
-    get: Box<dyn Fn(Option<&Env>) -> Option<A>>,
+    get: &'static dyn Fn(Option<&Env>) -> Option<A>,
 }
 
 impl<A: Clone> StoreValue<A> {
-    fn new(get: Box<dyn Fn(Option<&Env>) -> Option<A>>, env: Option<&Env>) -> Self {
+    fn new(get: &'static dyn Fn(Option<&Env>) -> Option<A>, env: Option<&Env>) -> Self {
         let mut watcher = Watcher::new();
         if let Some(value) = get(env) {
             watcher.update_infallible(value);
@@ -43,12 +45,9 @@ pub struct Store {
 impl Store {
     pub fn new() -> Self {
         Self {
-            timer_state: StoreValue::new(Box::new(|_| Some(asr::timer::state())), None),
+            timer_state: StoreValue::new(&get_timer_state, None),
             #[cfg(feature = "split-index")]
-            split_index: StoreValue::new(
-                Box::new(|_| Some(asr::timer::current_split_index())),
-                None,
-            ),
+            split_index: StoreValue::new(&get_timer_current_split_index, None),
             bools: BTreeMap::new(),
             i32s: BTreeMap::new(),
         }
@@ -91,7 +90,7 @@ impl Store {
     pub fn get_bool_pair_bang(
         &mut self,
         key: &'static str,
-        get: Box<dyn Fn(Option<&Env>) -> Option<bool>>,
+        get: &'static dyn Fn(Option<&Env>) -> Option<bool>,
         env: Option<&Env>,
     ) -> Option<Pair<bool>> {
         if !self.bools.contains_key(key) {
@@ -103,7 +102,7 @@ impl Store {
     pub fn get_i32_pair_bang(
         &mut self,
         key: &'static str,
-        get: Box<dyn Fn(Option<&Env>) -> Option<i32>>,
+        get: &'static dyn Fn(Option<&Env>) -> Option<i32>,
         env: Option<&Env>,
     ) -> Option<Pair<i32>> {
         if !self.i32s.contains_key(key) {

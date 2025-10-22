@@ -30,11 +30,12 @@ use ugly_widget::{
 
 use crate::{
     silksong_memory::{
-        attach_silksong, Env, GameManagerPointers, Memory, PlayerDataPointers, SceneStore,
-        GAME_STATE_CUTSCENE, GAME_STATE_ENTERING_LEVEL, GAME_STATE_EXITING_LEVEL,
-        GAME_STATE_INACTIVE, GAME_STATE_LOADING, GAME_STATE_MAIN_MENU, GAME_STATE_PLAYING,
-        HERO_TRANSITION_STATE_WAITING_TO_ENTER_LEVEL, MENU_TITLE, NON_MENU_GAME_STATES,
-        OPENING_SCENES, QUIT_TO_MENU, UI_STATE_CUTSCENE, UI_STATE_PAUSED, UI_STATE_PLAYING,
+        attach_silksong, get_game_state, get_health, Env, GameManagerPointers, Memory,
+        PlayerDataPointers, SceneStore, GAME_STATE_CUTSCENE, GAME_STATE_ENTERING_LEVEL,
+        GAME_STATE_EXITING_LEVEL, GAME_STATE_INACTIVE, GAME_STATE_LOADING, GAME_STATE_MAIN_MENU,
+        GAME_STATE_PLAYING, HERO_TRANSITION_STATE_WAITING_TO_ENTER_LEVEL, MENU_TITLE,
+        NON_MENU_GAME_STATES, OPENING_SCENES, QUIT_TO_MENU, UI_STATE_CUTSCENE, UI_STATE_PAUSED,
+        UI_STATE_PLAYING,
     },
     store::Store,
     timer::SplitterAction,
@@ -521,16 +522,12 @@ async fn main() {
                 let _: Address64 = mem.deref(&gm.scene_name).unwrap_or_default();
                 let _: i32 = mem.deref(&gm.ui_state_vanilla).unwrap_or_default();
                 let _: i32 = mem.deref(&pd.health).unwrap_or_default();
-                state.store.get_i32_pair_bang(
-                    "game_state",
-                    Box::new(|e| e?.mem.deref(&e?.gm.game_state).ok()),
-                    Some(&env),
-                );
-                state.store.get_i32_pair_bang(
-                    "health",
-                    Box::new(|e| e?.mem.deref(&e?.pd.health).ok()),
-                    Some(&env),
-                );
+                state
+                    .store
+                    .get_i32_pair_bang("game_state", &get_game_state, Some(&env));
+                state
+                    .store
+                    .get_i32_pair_bang("health", &get_health, Some(&env));
                 next_tick().await;
                 asr::print_message("Initialized load removal pointers");
                 next_tick().await;
