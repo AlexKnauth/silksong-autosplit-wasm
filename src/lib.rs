@@ -30,7 +30,7 @@ use ugly_widget::{
 
 use crate::{
     silksong_memory::{
-        attach_silksong, GameManagerPointers, Memory, PlayerDataPointers, SceneStore,
+        attach_silksong, Env, GameManagerPointers, Memory, PlayerDataPointers, SceneStore,
         GAME_STATE_CUTSCENE, GAME_STATE_ENTERING_LEVEL, GAME_STATE_EXITING_LEVEL,
         GAME_STATE_INACTIVE, GAME_STATE_LOADING, GAME_STATE_MAIN_MENU, GAME_STATE_PLAYING,
         HERO_TRANSITION_STATE_WAITING_TO_ENTER_LEVEL, MENU_TITLE, NON_MENU_GAME_STATES,
@@ -130,8 +130,8 @@ impl AutoSplitterState {
         }
     }
 
-    fn update(&mut self, settings: &Settings) {
-        self.store.update_all();
+    fn update(&mut self, settings: &Settings, env: Option<&Env>) {
+        self.store.update_all(env);
         let Some(state_pair) = self.store.get_timer_state_pair() else {
             return;
         };
@@ -505,6 +505,7 @@ async fn main() {
                 next_tick().await;
                 let gm = Box::new(GameManagerPointers::new());
                 let pd = Box::new(PlayerDataPointers::new());
+                let env = Env::new(&mem, &pd, &gm);
                 let _: bool = mem.deref(&gm.accepting_input).unwrap_or_default();
                 let _: Address64 = mem.deref(&gm.entry_gate_name).unwrap_or_default();
                 let _: i32 = mem.deref(&gm.game_state).unwrap_or_default();
@@ -520,6 +521,16 @@ async fn main() {
                 let _: Address64 = mem.deref(&gm.scene_name).unwrap_or_default();
                 let _: i32 = mem.deref(&gm.ui_state_vanilla).unwrap_or_default();
                 let _: i32 = mem.deref(&pd.health).unwrap_or_default();
+                state.store.get_i32_pair_bang(
+                    "game_state",
+                    Box::new(|e| e?.mem.deref(&e?.gm.game_state).ok()),
+                    Some(&env),
+                );
+                state.store.get_i32_pair_bang(
+                    "health",
+                    Box::new(|e| e?.mem.deref(&e?.pd.health).ok()),
+                    Some(&env),
+                );
                 next_tick().await;
                 asr::print_message("Initialized load removal pointers");
                 next_tick().await;
@@ -532,12 +543,12 @@ async fn main() {
                         settings.load_update_store_if_unchanged();
                         ticks_since_gui = 0;
                     }
-                    state.update(&settings);
+                    state.update(&settings, Some(&env));
 
                     // TODO: Do something on every tick.
-                    handle_splits(&settings, &mut state, &mem, &gm, &pd, &mut scene_store).await;
-                    load_removal(&mut state, &mem, &gm);
-                    handle_hits(&settings, &mut state, &mem, &gm, &pd);
+                    handle_splits(&settings, &mut state, &env, &mut scene_store).await;
+                    load_removal(&mut state, &env);
+                    handle_hits(&settings, &mut state, &env);
                     handle_percent(&mem, &gm, &pd);
                     next_tick().await;
                 }
@@ -549,7 +560,7 @@ async fn main() {
 async fn wait_attach_silksong(gui: &mut Settings, state: &mut AutoSplitterState) -> Process {
     retry(|| {
         gui.load_update_store_if_unchanged();
-        state.update(gui);
+        state.update(gui, None);
         attach_silksong()
     })
     .await
@@ -560,12 +571,10 @@ async fn wait_attach_silksong(gui: &mut Settings, state: &mut AutoSplitterState)
 async fn handle_splits(
     settings: &Settings,
     state: &mut AutoSplitterState,
-    mem: &Memory<'_>,
-    gm: &GameManagerPointers,
-    pd: &PlayerDataPointers,
+    env: &Env<'_>,
     ss: &mut SceneStore,
 ) {
-    let trans_now = ss.transition_now(mem, gm);
+    let trans_now = ss.transition_now(env);
     loop {
         match state.timer_state {
             TimerState::NotRunning => {
@@ -573,7 +582,7 @@ async fn handle_splits(
                 let Some(split) = settings.get_split(0) else {
                     break;
                 };
-                let a = splits::splits(&split, mem, gm, pd, trans_now, ss);
+                let a = splits::splits(&split, env, trans_now, ss, &mut state.store);
                 match a {
                     SplitterAction::Split => {
                         asr::timer::start();
@@ -605,7 +614,7 @@ async fn handle_splits(
                 else {
                     break;
                 };
-                let a = splits::splits(&split, mem, gm, pd, trans_now, ss);
+                let a = splits::splits(&split, env, trans_now, ss, &mut state.store);
                 match a {
                     SplitterAction::Reset => {
                         if settings.get_hit_counter() {
@@ -721,15 +730,15 @@ async fn handle_splits(
     }
 }
 
-fn load_removal(state: &mut AutoSplitterState, mem: &Memory, gm: &GameManagerPointers) {
+fn load_removal(state: &mut AutoSplitterState, e: &Env) {
     // only remove loads if timer is running
     if asr::timer::state() != TimerState::Running {
         return;
     }
 
-    let ui_state: i32 = mem.deref(&gm.ui_state_vanilla).unwrap_or_default();
-    let scene_name = mem.read_string(&gm.scene_name).unwrap_or_default();
-    let next_scene = mem.read_string(&gm.next_scene_name).unwrap_or_default();
+    let ui_state: i32 = e.mem.deref(&e.gm.ui_state_vanilla).unwrap_or_default();
+    let scene_name = e.mem.read_string(&e.gm.scene_name).unwrap_or_default();
+    let next_scene = e.mem.read_string(&e.gm.next_scene_name).unwrap_or_default();
 
     let loading_menu = (scene_name != MENU_TITLE && next_scene.is_empty())
         || (scene_name != MENU_TITLE && next_scene == MENU_TITLE)
@@ -737,19 +746,20 @@ fn load_removal(state: &mut AutoSplitterState, mem: &Memory, gm: &GameManagerPoi
 
     // TODO: teleporting, look_for_teleporting
 
-    let game_state: i32 = mem.deref(&gm.game_state).unwrap_or_default();
+    let game_state = state.store.get_i32_pair("game_state").unwrap_or_default();
 
-    if game_state == GAME_STATE_PLAYING && state.last_game_state == GAME_STATE_MAIN_MENU {
+    if game_state.current == GAME_STATE_PLAYING && game_state.old == GAME_STATE_MAIN_MENU {
         state.look_for_teleporting = true;
     }
     if state.look_for_teleporting
-        && (game_state != GAME_STATE_PLAYING && game_state != GAME_STATE_ENTERING_LEVEL)
+        && (game_state.current != GAME_STATE_PLAYING
+            && game_state.current != GAME_STATE_ENTERING_LEVEL)
     {
         state.look_for_teleporting = false;
     }
 
-    if game_state == GAME_STATE_LOADING
-        && state.last_game_state == GAME_STATE_CUTSCENE
+    if game_state.current == GAME_STATE_LOADING
+        && game_state.old == GAME_STATE_CUTSCENE
         && OPENING_SCENES.contains(&scene_name.as_str())
     {
         #[cfg(debug_assertions)]
@@ -757,7 +767,7 @@ fn load_removal(state: &mut AutoSplitterState, mem: &Memory, gm: &GameManagerPoi
             asr::print_message("mms_room_dupe: true");
         }
         state.mms_room_dupe = true;
-    } else if game_state == GAME_STATE_PLAYING {
+    } else if game_state.current == GAME_STATE_PLAYING {
         #[cfg(debug_assertions)]
         if state.mms_room_dupe {
             asr::print_message("mms_room_dupe: false");
@@ -766,27 +776,30 @@ fn load_removal(state: &mut AutoSplitterState, mem: &Memory, gm: &GameManagerPoi
     }
 
     // TODO: hazard_respawning
-    let accepting_input: bool = mem.deref(&gm.accepting_input).unwrap_or_default();
-    let hero_transition_state: i32 = mem.deref(&gm.hero_transition_state).unwrap_or_default();
-    let scene_load_null: bool = mem
-        .deref(&gm.scene_load)
+    let accepting_input: bool = e.mem.deref(&e.gm.accepting_input).unwrap_or_default();
+    let hero_transition_state: i32 = e.mem.deref(&e.gm.hero_transition_state).unwrap_or_default();
+    let scene_load_null: bool = e
+        .mem
+        .deref(&e.gm.scene_load)
         .is_ok_and(|a: Address64| a.is_null());
-    let scene_load_activation_allowed: bool = mem
-        .deref(&gm.scene_load_activation_allowed)
+    let scene_load_activation_allowed: bool = e
+        .mem
+        .deref(&e.gm.scene_load_activation_allowed)
         .unwrap_or_default();
     // TODO: tile_map_dirty, uses_scene_transition_routine
 
     let is_game_time_paused = (state.look_for_teleporting)
-        || ((game_state == GAME_STATE_PLAYING || game_state == GAME_STATE_ENTERING_LEVEL)
+        || ((game_state.current == GAME_STATE_PLAYING
+            || game_state.current == GAME_STATE_ENTERING_LEVEL)
             && ui_state != UI_STATE_PLAYING)
-        || (game_state != GAME_STATE_PLAYING
-            && game_state != GAME_STATE_CUTSCENE
+        || (game_state.current != GAME_STATE_PLAYING
+            && game_state.current != GAME_STATE_CUTSCENE
             && !accepting_input
             && !state.mms_room_dupe)
-        || ((game_state == GAME_STATE_EXITING_LEVEL
+        || ((game_state.current == GAME_STATE_EXITING_LEVEL
             && (scene_load_null || scene_load_activation_allowed)
             && !state.mms_room_dupe)
-            || game_state == GAME_STATE_LOADING)
+            || game_state.current == GAME_STATE_LOADING)
         || (hero_transition_state == HERO_TRANSITION_STATE_WAITING_TO_ENTER_LEVEL)
         || (ui_state != UI_STATE_PLAYING
             && (loading_menu
@@ -809,10 +822,9 @@ fn load_removal(state: &mut AutoSplitterState, mem: &Memory, gm: &GameManagerPoi
     }
 
     #[cfg(debug_assertions)]
-    if game_state != state.last_game_state {
-        asr::print_message(&format!("game_state: {}", game_state));
+    if game_state.changed() {
+        asr::print_message(&format!("game_state: {}", game_state.current));
     }
-    state.last_game_state = game_state;
 
     #[cfg(debug_assertions)]
     {
@@ -831,13 +843,7 @@ fn load_removal(state: &mut AutoSplitterState, mem: &Memory, gm: &GameManagerPoi
     }
 }
 
-fn handle_hits(
-    settings: &Settings,
-    state: &mut AutoSplitterState,
-    mem: &Memory,
-    gm: &GameManagerPointers,
-    pd: &PlayerDataPointers,
-) {
+fn handle_hits(settings: &Settings, state: &mut AutoSplitterState, e: &Env) {
     // only count hits if hit counter is true
     if !settings.get_hit_counter() {
         return;
@@ -847,7 +853,7 @@ fn handle_hits(
         return;
     }
 
-    let recoil: bool = mem.deref(&gm.hero_recoil_frozen).unwrap_or_default();
+    let recoil: bool = e.mem.deref(&e.gm.hero_recoil_frozen).unwrap_or_default();
     if !state.last_recoil && recoil {
         add_hit(state);
         #[cfg(debug_assertions)]
@@ -855,7 +861,7 @@ fn handle_hits(
     }
     state.last_recoil = recoil;
 
-    let hazard: bool = mem.deref(&gm.hazard_death).unwrap_or_default();
+    let hazard: bool = e.mem.deref(&e.gm.hazard_death).unwrap_or_default();
     if !state.last_hazard && hazard {
         add_hit(state);
         #[cfg(debug_assertions)]
@@ -863,8 +869,8 @@ fn handle_hits(
     }
     state.last_hazard = hazard;
 
-    let maybe_health: Option<i32> = mem.deref(&pd.health).ok();
-    let game_state: i32 = mem.deref(&gm.game_state).unwrap_or_default();
+    let maybe_health: Option<i32> = e.mem.deref(&e.pd.health).ok();
+    let game_state: i32 = e.mem.deref(&e.gm.game_state).unwrap_or_default();
     let health_0 = maybe_health == Some(0) && game_state == GAME_STATE_PLAYING;
     if !state.last_health_0 && health_0 {
         add_hit(state);

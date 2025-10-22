@@ -1,23 +1,21 @@
-use alloc::{
-    boxed::Box,
-    collections::BTreeMap,
-    string::{String, ToString},
-};
+use alloc::{boxed::Box, collections::BTreeMap};
 use asr::{
     timer::TimerState,
     watcher::{Pair, Watcher},
 };
 
+use crate::silksong_memory::Env;
+
 struct StoreValue<A> {
     watcher: Watcher<A>,
     interested: bool,
-    get: Box<dyn Fn() -> Option<A>>,
+    get: Box<dyn Fn(Option<&Env>) -> Option<A>>,
 }
 
 impl<A: Clone> StoreValue<A> {
-    fn new(get: Box<dyn Fn() -> Option<A>>) -> Self {
+    fn new(get: Box<dyn Fn(Option<&Env>) -> Option<A>>, env: Option<&Env>) -> Self {
         let mut watcher = Watcher::new();
-        if let Some(value) = get() {
+        if let Some(value) = get(env) {
             watcher.update_infallible(value);
         }
         StoreValue {
@@ -27,8 +25,8 @@ impl<A: Clone> StoreValue<A> {
         }
     }
 
-    fn update(&mut self) {
-        if let Some(value) = (self.get)() {
+    fn update(&mut self, env: Option<&Env>) {
+        if let Some(value) = (self.get)(env) {
             self.watcher.update_infallible(value);
         }
     }
@@ -38,16 +36,19 @@ pub struct Store {
     timer_state: StoreValue<TimerState>,
     #[cfg(feature = "split-index")]
     split_index: StoreValue<Option<u64>>,
-    bools: BTreeMap<String, StoreValue<bool>>,
-    i32s: BTreeMap<String, StoreValue<i32>>,
+    bools: BTreeMap<&'static str, StoreValue<bool>>,
+    i32s: BTreeMap<&'static str, StoreValue<i32>>,
 }
 
 impl Store {
     pub fn new() -> Self {
         Self {
-            timer_state: StoreValue::new(Box::new(|| Some(asr::timer::state()))),
+            timer_state: StoreValue::new(Box::new(|_| Some(asr::timer::state())), None),
             #[cfg(feature = "split-index")]
-            split_index: StoreValue::new(Box::new(|| Some(asr::timer::current_split_index()))),
+            split_index: StoreValue::new(
+                Box::new(|_| Some(asr::timer::current_split_index())),
+                None,
+            ),
             bools: BTreeMap::new(),
             i32s: BTreeMap::new(),
         }
@@ -75,13 +76,13 @@ impl Store {
         None
     }
 
-    fn get_bool_pair(&mut self, key: &str) -> Option<Pair<bool>> {
+    pub fn get_bool_pair(&mut self, key: &str) -> Option<Pair<bool>> {
         let v = self.bools.get_mut(key)?;
         v.interested = true;
         v.watcher.pair.clone()
     }
 
-    fn get_i32_pair(&mut self, key: &str) -> Option<Pair<i32>> {
+    pub fn get_i32_pair(&mut self, key: &str) -> Option<Pair<i32>> {
         let v = self.i32s.get_mut(key)?;
         v.interested = true;
         v.watcher.pair.clone()
@@ -89,38 +90,40 @@ impl Store {
 
     pub fn get_bool_pair_bang(
         &mut self,
-        key: &str,
-        get: Box<dyn Fn() -> Option<bool>>,
+        key: &'static str,
+        get: Box<dyn Fn(Option<&Env>) -> Option<bool>>,
+        env: Option<&Env>,
     ) -> Option<Pair<bool>> {
         if !self.bools.contains_key(key) {
-            self.bools.insert(key.to_string(), StoreValue::new(get));
+            self.bools.insert(key, StoreValue::new(get, env));
         }
         self.get_bool_pair(key)
     }
 
     pub fn get_i32_pair_bang(
         &mut self,
-        key: &str,
-        get: Box<dyn Fn() -> Option<i32>>,
+        key: &'static str,
+        get: Box<dyn Fn(Option<&Env>) -> Option<i32>>,
+        env: Option<&Env>,
     ) -> Option<Pair<i32>> {
         if !self.i32s.contains_key(key) {
-            self.i32s.insert(key.to_string(), StoreValue::new(get));
+            self.i32s.insert(key, StoreValue::new(get, env));
         }
         self.get_i32_pair(key)
     }
 
-    pub fn update_all(&mut self) {
+    pub fn update_all(&mut self, env: Option<&Env>) {
         self.bools.retain(|_, v| v.interested);
         self.i32s.retain(|_, v| v.interested);
-        self.timer_state.update();
+        self.timer_state.update(env);
         #[cfg(feature = "split-index")]
-        self.split_index.update();
+        self.split_index.update(env);
         for v in self.bools.values_mut() {
-            v.update();
+            v.update(env);
             v.interested = false;
         }
         for v in self.i32s.values_mut() {
-            v.update();
+            v.update(env);
             v.interested = false;
         }
     }
