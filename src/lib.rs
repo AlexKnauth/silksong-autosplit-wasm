@@ -38,6 +38,7 @@ use crate::{
 };
 
 asr::async_main!(stable);
+#[cfg(target_os = "unknown")]
 asr::panic_handler!();
 
 // --------------------------------------------------------
