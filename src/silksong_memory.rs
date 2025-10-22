@@ -64,7 +64,7 @@ public enum GameState
     PRIMER
 }
 */
-pub const GAME_STATE_INACTIVE: i32 = 0;
+// pub const GAME_STATE_INACTIVE: i32 = 0;
 pub const GAME_STATE_MAIN_MENU: i32 = 1;
 pub const GAME_STATE_LOADING: i32 = 2;
 pub const GAME_STATE_ENTERING_LEVEL: i32 = 3;

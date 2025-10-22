@@ -32,10 +32,9 @@ use crate::{
     silksong_memory::{
         attach_silksong, get_game_state, get_health, Env, GameManagerPointers, Memory,
         PlayerDataPointers, SceneStore, GAME_STATE_CUTSCENE, GAME_STATE_ENTERING_LEVEL,
-        GAME_STATE_EXITING_LEVEL, GAME_STATE_INACTIVE, GAME_STATE_LOADING, GAME_STATE_MAIN_MENU,
-        GAME_STATE_PLAYING, HERO_TRANSITION_STATE_WAITING_TO_ENTER_LEVEL, MENU_TITLE,
-        NON_MENU_GAME_STATES, OPENING_SCENES, QUIT_TO_MENU, UI_STATE_CUTSCENE, UI_STATE_PAUSED,
-        UI_STATE_PLAYING,
+        GAME_STATE_EXITING_LEVEL, GAME_STATE_LOADING, GAME_STATE_MAIN_MENU, GAME_STATE_PLAYING,
+        HERO_TRANSITION_STATE_WAITING_TO_ENTER_LEVEL, MENU_TITLE, NON_MENU_GAME_STATES,
+        OPENING_SCENES, QUIT_TO_MENU, UI_STATE_CUTSCENE, UI_STATE_PAUSED, UI_STATE_PLAYING,
     },
     store::Store,
     timer::SplitterAction,
@@ -78,7 +77,6 @@ struct AutoSplitterState {
     look_for_teleporting: bool,
     #[cfg(debug_assertions)]
     last_ui_state: i32,
-    last_game_state: i32,
     #[cfg(debug_assertions)]
     last_hero_transition_state: i32,
     hits: i64,
@@ -113,7 +111,6 @@ impl AutoSplitterState {
             look_for_teleporting: false,
             #[cfg(debug_assertions)]
             last_ui_state: 0,
-            last_game_state: GAME_STATE_INACTIVE,
             #[cfg(debug_assertions)]
             last_hero_transition_state: 0,
             hits: 0,
@@ -181,7 +178,6 @@ impl AutoSplitterState {
                 asr::timer::set_variable("delta hits", DASH);
                 asr::timer::set_variable("percent", DASH);
                 self.look_for_teleporting = false;
-                self.last_game_state = GAME_STATE_INACTIVE;
                 #[cfg(debug_assertions)]
                 {
                     self.last_paused = false;
@@ -638,7 +634,6 @@ async fn handle_splits(
                         asr::timer::set_variable("delta hits", DASH);
                         asr::timer::set_variable("percent", DASH);
                         state.look_for_teleporting = false;
-                        state.last_game_state = GAME_STATE_INACTIVE;
                         #[cfg(debug_assertions)]
                         {
                             state.last_paused = false;
