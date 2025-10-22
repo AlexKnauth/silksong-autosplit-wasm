@@ -54,7 +54,7 @@ impl Store {
     }
 
     pub fn get_timer_state_pair(&mut self) -> Option<Pair<TimerState>> {
-        self.timer_state.watcher.pair.clone()
+        self.timer_state.watcher.pair
     }
 
     pub fn get_timer_state_current(&mut self) -> Option<TimerState> {
@@ -63,7 +63,7 @@ impl Store {
 
     pub fn get_split_index_pair(&mut self) -> Option<Pair<Option<u64>>> {
         #[cfg(feature = "split-index")]
-        return self.split_index.watcher.pair.clone();
+        return self.split_index.watcher.pair;
         #[allow(unreachable_code)]
         None
     }
@@ -78,13 +78,13 @@ impl Store {
     pub fn get_bool_pair(&mut self, key: &str) -> Option<Pair<bool>> {
         let v = self.bools.get_mut(key)?;
         v.interested = true;
-        v.watcher.pair.clone()
+        v.watcher.pair
     }
 
     pub fn get_i32_pair(&mut self, key: &str) -> Option<Pair<i32>> {
         let v = self.i32s.get_mut(key)?;
         v.interested = true;
-        v.watcher.pair.clone()
+        v.watcher.pair
     }
 
     pub fn get_bool_pair_bang(
