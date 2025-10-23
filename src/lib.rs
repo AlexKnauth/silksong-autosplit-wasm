@@ -743,20 +743,19 @@ fn load_removal(state: &mut AutoSplitterState, e: &Env) {
 
     // TODO: teleporting, look_for_teleporting
 
-    let game_state = state.store.get_i32_pair("game_state").unwrap_or_default();
+    let game_state: i32 = e.mem.deref(&e.gm.game_state).unwrap_or_default();
 
-    if game_state.current == GAME_STATE_PLAYING && game_state.old == GAME_STATE_MAIN_MENU {
+    if game_state == GAME_STATE_PLAYING && state.last_game_state == GAME_STATE_MAIN_MENU {
         state.look_for_teleporting = true;
     }
     if state.look_for_teleporting
-        && (game_state.current != GAME_STATE_PLAYING
-            && game_state.current != GAME_STATE_ENTERING_LEVEL)
+        && (game_state != GAME_STATE_PLAYING && game_state != GAME_STATE_ENTERING_LEVEL)
     {
         state.look_for_teleporting = false;
     }
 
-    if game_state.current == GAME_STATE_LOADING
-        && game_state.old == GAME_STATE_CUTSCENE
+    if game_state == GAME_STATE_LOADING
+        && state.last_game_state == GAME_STATE_CUTSCENE
         && OPENING_SCENES.contains(&scene_name.as_str())
     {
         #[cfg(debug_assertions)]
@@ -764,7 +763,7 @@ fn load_removal(state: &mut AutoSplitterState, e: &Env) {
             asr::print_message("mms_room_dupe: true");
         }
         state.mms_room_dupe = true;
-    } else if game_state.current == GAME_STATE_PLAYING {
+    } else if game_state == GAME_STATE_PLAYING {
         #[cfg(debug_assertions)]
         if state.mms_room_dupe {
             asr::print_message("mms_room_dupe: false");
@@ -786,17 +785,16 @@ fn load_removal(state: &mut AutoSplitterState, e: &Env) {
     // TODO: tile_map_dirty, uses_scene_transition_routine
 
     let is_game_time_paused = (state.look_for_teleporting)
-        || ((game_state.current == GAME_STATE_PLAYING
-            || game_state.current == GAME_STATE_ENTERING_LEVEL)
+        || ((game_state == GAME_STATE_PLAYING || game_state == GAME_STATE_ENTERING_LEVEL)
             && ui_state != UI_STATE_PLAYING)
-        || (game_state.current != GAME_STATE_PLAYING
-            && game_state.current != GAME_STATE_CUTSCENE
+        || (game_state != GAME_STATE_PLAYING
+            && game_state != GAME_STATE_CUTSCENE
             && !accepting_input
             && !state.mms_room_dupe)
-        || ((game_state.current == GAME_STATE_EXITING_LEVEL
+        || ((game_state == GAME_STATE_EXITING_LEVEL
             && (scene_load_null || scene_load_activation_allowed)
             && !state.mms_room_dupe)
-            || game_state.current == GAME_STATE_LOADING)
+            || game_state == GAME_STATE_LOADING)
         || (hero_transition_state == HERO_TRANSITION_STATE_WAITING_TO_ENTER_LEVEL)
         || (ui_state != UI_STATE_PLAYING
             && (loading_menu
@@ -819,9 +817,10 @@ fn load_removal(state: &mut AutoSplitterState, e: &Env) {
     }
 
     #[cfg(debug_assertions)]
-    if game_state.changed() {
-        asr::print_message(&format!("game_state: {}", game_state.current));
+    if game_state != state.last_game_state {
+        asr::print_message(&format!("game_state: {}", game_state));
     }
+    state.last_game_state = game_state;
 
     #[cfg(debug_assertions)]
     {
