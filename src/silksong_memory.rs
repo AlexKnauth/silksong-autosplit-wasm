@@ -10,6 +10,7 @@ use alloc::{
 use asr::{
     future::next_tick,
     game_engine::unity::mono::{self, UnityPointer},
+    timer::TimerState,
     watcher::Pair,
     Address64, Process,
 };
@@ -515,6 +516,20 @@ impl Memory<'_> {
 
 // --------------------------------------------------------
 
+pub struct Env<'a> {
+    pub mem: &'a Memory<'a>,
+    pub pd: &'a PlayerDataPointers,
+    pub gm: &'a GameManagerPointers,
+}
+
+impl<'a> Env<'a> {
+    pub fn new(mem: &'a Memory, pd: &'a PlayerDataPointers, gm: &'a GameManagerPointers) -> Self {
+        Self { mem, pd, gm }
+    }
+}
+
+// --------------------------------------------------------
+
 pub struct SceneStore {
     prev_scene_name: String,
     curr_scene_name: String,
@@ -576,7 +591,8 @@ impl SceneStore {
         }
     }
 
-    pub fn transition_now(&mut self, mem: &Memory, gm: &GameManagerPointers) -> bool {
+    pub fn transition_now(&mut self, e: &Env) -> bool {
+        let Env { mem, gm, .. } = e;
         self.new_curr_scene_name(mem.read_string(&gm.scene_name).unwrap_or_default());
         let scene_load_null: bool = mem
             .deref(&gm.scene_load)
@@ -633,3 +649,20 @@ impl Default for SceneStore {
 }
 
 // --------------------------------------------------------
+
+pub fn get_timer_state(_: Option<&Env>) -> Option<TimerState> {
+    Some(asr::timer::state())
+}
+
+#[cfg(feature = "split-index")]
+pub fn get_timer_current_split_index(_: Option<&Env>) -> Option<Option<u64>> {
+    Some(asr::timer::current_split_index())
+}
+
+pub fn get_game_state(e: Option<&Env>) -> Option<i32> {
+    e?.mem.deref(&e?.gm.game_state).ok()
+}
+
+pub fn get_health(e: Option<&Env>) -> Option<i32> {
+    e?.mem.deref(&e?.pd.health).ok()
+}
