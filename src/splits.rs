@@ -524,6 +524,10 @@ pub enum Split {
     ///
     /// Splits when obtaining Clawline (Harpoon Dash)
     Clawline,
+    /// Post-Clawline Arena (Transition)
+    ///
+    /// Splits when exiting the Cauldron through the clawline-locked arena transition
+    PostClawlineArenaTrans,
     // endregion: Underworks
 
     // region: HighHalls
@@ -609,8 +613,16 @@ pub enum Split {
     // region: TheCradle
     /// Lace 2 (Boss)
     ///
-    /// Splits when defeating Lace 2 in TheCradle
+    /// Splits when defeating Lace 2 in the Cradle
     Lace2,
+    /// Post-Lace 2 Arena (Transition)
+    ///
+    /// Splits when taking the transition after Lace 2's arena into the ventrica terminus
+    PostLace2ArenaTrans,
+    /// Enter The Cradle (Transition)
+    ///
+    /// Splits when entering the full Cradle area, past the ventrica terminus
+    EnterTheCradle,
     /// Pale Nails (Skill)
     ///
     /// Splits when obtaining Pale Nails
@@ -1680,7 +1692,13 @@ pub fn transition_splits(
                 && scenes.current == "Song_Enclave",
         ),
         Split::TrobbioTrans => should_split(mem.deref(&pd.defeated_trobbio).unwrap_or_default()),
-        //endregion: ChoralChambers
+        // endregion: ChoralChambers
+
+        // region: Underworks
+        Split::PostClawlineArenaTrans => {
+            should_split(scenes.old == "Under_18" && scenes.current == "Under_17")
+        }
+        // endregion: Underworks
 
         // region: CogworkCore
         Split::EnterCogworkDancers => should_split(
@@ -1736,6 +1754,12 @@ pub fn transition_splits(
         // endregion: PutrifiedDucts
 
         // region: TheCradle
+        Split::PostLace2ArenaTrans => {
+            should_split(scenes.old == "Song_Tower_01" && scenes.current == "Tube_Hub")
+        }
+        Split::EnterTheCradle => {
+            should_split(scenes.old == "Tube_Hub" && scenes.current == "Cradle_01")
+        }
         Split::PaleNailsTrans => {
             should_split(mem.deref(&pd.has_silk_boss_needle).unwrap_or_default())
         }
