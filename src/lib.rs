@@ -733,9 +733,11 @@ fn load_removal(state: &mut AutoSplitterState, e: &Env) {
         return;
     }
 
-    let ui_state: i32 = e.mem.deref(&e.gm.ui_state_vanilla).unwrap_or_default();
-    let scene_name = e.mem.read_string(&e.gm.scene_name).unwrap_or_default();
-    let next_scene = e.mem.read_string(&e.gm.next_scene_name).unwrap_or_default();
+    let Env { mem, gm, .. } = e;
+
+    let ui_state: i32 = mem.deref(&gm.ui_state_vanilla).unwrap_or_default();
+    let scene_name = mem.read_string(&gm.scene_name).unwrap_or_default();
+    let next_scene = mem.read_string(&gm.next_scene_name).unwrap_or_default();
 
     let loading_menu = (scene_name != MENU_TITLE && next_scene.is_empty())
         || (scene_name != MENU_TITLE && next_scene == MENU_TITLE)
@@ -743,7 +745,7 @@ fn load_removal(state: &mut AutoSplitterState, e: &Env) {
 
     // TODO: teleporting, look_for_teleporting
 
-    let game_state: i32 = e.mem.deref(&e.gm.game_state).unwrap_or_default();
+    let game_state: i32 = mem.deref(&gm.game_state).unwrap_or_default();
 
     if game_state == GAME_STATE_PLAYING && state.last_game_state == GAME_STATE_MAIN_MENU {
         state.look_for_teleporting = true;
@@ -772,15 +774,13 @@ fn load_removal(state: &mut AutoSplitterState, e: &Env) {
     }
 
     // TODO: hazard_respawning
-    let accepting_input: bool = e.mem.deref(&e.gm.accepting_input).unwrap_or_default();
-    let hero_transition_state: i32 = e.mem.deref(&e.gm.hero_transition_state).unwrap_or_default();
-    let scene_load_null: bool = e
-        .mem
-        .deref(&e.gm.scene_load)
+    let accepting_input: bool = mem.deref(&gm.accepting_input).unwrap_or_default();
+    let hero_transition_state: i32 = mem.deref(&gm.hero_transition_state).unwrap_or_default();
+    let scene_load_null: bool = mem
+        .deref(&gm.scene_load)
         .is_ok_and(|a: Address64| a.is_null());
-    let scene_load_activation_allowed: bool = e
-        .mem
-        .deref(&e.gm.scene_load_activation_allowed)
+    let scene_load_activation_allowed: bool = mem
+        .deref(&gm.scene_load_activation_allowed)
         .unwrap_or_default();
     // TODO: tile_map_dirty, uses_scene_transition_routine
 
@@ -849,7 +849,9 @@ fn handle_hits(settings: &Settings, state: &mut AutoSplitterState, e: &Env) {
         return;
     }
 
-    let recoil: bool = e.mem.deref(&e.gm.hero_recoil_frozen).unwrap_or_default();
+    let Env { mem, gm, pd } = e;
+
+    let recoil: bool = mem.deref(&gm.hero_recoil_frozen).unwrap_or_default();
     if !state.last_recoil && recoil {
         add_hit(state);
         #[cfg(debug_assertions)]
@@ -857,7 +859,7 @@ fn handle_hits(settings: &Settings, state: &mut AutoSplitterState, e: &Env) {
     }
     state.last_recoil = recoil;
 
-    let hazard: bool = e.mem.deref(&e.gm.hazard_death).unwrap_or_default();
+    let hazard: bool = mem.deref(&gm.hazard_death).unwrap_or_default();
     if !state.last_hazard && hazard {
         add_hit(state);
         #[cfg(debug_assertions)]
@@ -865,8 +867,8 @@ fn handle_hits(settings: &Settings, state: &mut AutoSplitterState, e: &Env) {
     }
     state.last_hazard = hazard;
 
-    let maybe_health: Option<i32> = e.mem.deref(&e.pd.health).ok();
-    let game_state: i32 = e.mem.deref(&e.gm.game_state).unwrap_or_default();
+    let maybe_health: Option<i32> = mem.deref(&pd.health).ok();
+    let game_state: i32 = mem.deref(&gm.game_state).unwrap_or_default();
     let health_0 = maybe_health == Some(0) && game_state == GAME_STATE_PLAYING;
     if !state.last_health_0 && health_0 {
         add_hit(state);
