@@ -592,17 +592,16 @@ impl SceneStore {
     }
 
     pub fn transition_now(&mut self, e: &Env) -> bool {
-        self.new_curr_scene_name(e.mem.read_string(&e.gm.scene_name).unwrap_or_default());
-        let scene_load_null: bool = e
-            .mem
-            .deref(&e.gm.scene_load)
+        let Env { mem, gm, .. } = e;
+        self.new_curr_scene_name(mem.read_string(&gm.scene_name).unwrap_or_default());
+        let scene_load_null: bool = mem
+            .deref(&gm.scene_load)
             .is_ok_and(|a: Address64| a.is_null());
-        let scene_load_activation_allowed: bool = e
-            .mem
-            .deref(&e.gm.scene_load_activation_allowed)
+        let scene_load_activation_allowed: bool = mem
+            .deref(&gm.scene_load_activation_allowed)
             .unwrap_or_default();
         if scene_load_null || scene_load_activation_allowed {
-            self.new_next_scene_name(e.mem.read_string(&e.gm.next_scene_name).unwrap_or_default());
+            self.new_next_scene_name(mem.read_string(&gm.next_scene_name).unwrap_or_default());
         }
 
         if self.new_data_next {
