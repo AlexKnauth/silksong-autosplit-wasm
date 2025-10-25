@@ -4,11 +4,12 @@ use ugly_widget::{
     radio_button::{options_str, RadioButtonOptions},
     store::StoreWidget,
 };
+use utf16_lit::utf16;
 
 use crate::{
     silksong_memory::{
-        get_at_bench, get_health, get_respawn_scene, is_discontinuity_scene, is_menu, Env,
-        SceneStore, CINEMATIC_STAG_TRAVEL, DEATH_RESPAWN_MARKER_INIT, GAME_STATE_PLAYING,
+        find_tool, get_at_bench, get_health, get_respawn_scene, is_discontinuity_scene, is_menu,
+        Env, SceneStore, CINEMATIC_STAG_TRAVEL, DEATH_RESPAWN_MARKER_INIT, GAME_STATE_PLAYING,
         MENU_TITLE, NON_MENU_GAME_STATES, OPENING_SCENES,
     },
     store::Store,
@@ -1472,6 +1473,245 @@ pub enum Split {
     /// Splits when Lost Lace is encountered in the Abyss Cocoon
     LostLaceEncountered,
     // endregion: Abyss
+
+    // region: Tools
+    /// Straight Pin (Tool)
+    ///
+    /// Splits when obtaining the Straight Pin
+    StraightPin,
+    /// Threefold Pin (Tool)
+    ///
+    /// Splits when obtaining the Threefold Pin
+    ThreefoldPin,
+    /// Sting Shard (Tool)
+    ///
+    /// Splits when obtaining the Sting Shard
+    StingShard,
+    /// Tacks (Tool)
+    ///
+    /// Splits when obtaining the Tacks
+    Tacks,
+    /// Longpin (Tool)
+    ///
+    /// Splits when obtaining the Longpin
+    Longpin,
+    /// Curveclaw (Tool)
+    ///
+    /// Splits when obtaining the Curveclaw
+    Curveclaw,
+    /// Curvesickle (Tool)
+    ///
+    /// Splits when upgrading the Curveclaw to the Curvesickle
+    Curvesickle,
+    /// Throwing Ring (Tool)
+    ///
+    /// Splits when obtaining the Throwing Ring
+    ThrowingRing,
+    /// Pimpillo (Tool)
+    ///
+    /// Splits when obtaining the Pimpillo
+    Pimpillo,
+    /// Conchcutter (Tool)
+    ///
+    /// Splits when obtaining the Conchcutter
+    Conchcutter,
+    /// Silkshot Forge (Tool)
+    ///
+    /// Splits when obtaining the Silkshot from the Forge Daughter
+    SilkshotForge,
+    /// Silkshot Architect (Tool)
+    ///
+    /// Splits when obtaining the Silkshot from the Twelfth Architect
+    SilkshotArchitect,
+    /// Silkshot Weaver (Tool)
+    ///
+    /// Splits when obtaining the Silkshot from Mount Fay
+    SilkshotWeaver,
+    /// Delver's Drill (Tool)
+    ///
+    /// Splits when obtaining the Delver's Drill
+    DelversDrill,
+    /// Cogwork Wheel (Tool)
+    ///
+    /// Splits when obtaining the Cogwork Wheel
+    CogworkWheel,
+    /// Cogfly (Tool)
+    ///
+    /// Splits when obtaining the Cogfly
+    Cogfly,
+    /// Rosary Cannon (Tool)
+    ///
+    /// Splits when obtaining the Rosary Cannon
+    RosaryCannon,
+    /// Voltvessels (Tool)
+    ///
+    /// Splits when obtaining the Voltvessels
+    Voltvessels,
+    /// Flintslate (Tool)
+    ///
+    /// Splits when obtaining the Flintslate
+    Flintslate,
+    /// Snare Setter (Tool)
+    ///
+    /// Splits when obtaining the Snare Setter
+    SnareSetter,
+    /// Flea Brew (Tool)
+    ///
+    /// Splits when obtaining the Flea Brew
+    FleaBrew,
+    /// Plasmium Phial (Tool)
+    ///
+    /// Splits when obtaining the Plasmium Phial
+    PlasmiumPhial,
+    /// Needle Phial (Tool)
+    ///
+    /// Splits when obtaining the Needle Phial
+    NeedlePhial,
+    /// Druid's Eye (Tool)
+    ///
+    /// Splits when obtaining the Druid's Eye
+    DruidsEye,
+    /// Druid's Eyes (Tool)
+    ///
+    /// Splits when upgrading the Druid's Eye to Druid's Eyes
+    DruidsEyes,
+    /// Magma Bell (Tool)
+    ///
+    /// Splits when obtaining the Magma Bell
+    MagmaBell,
+    /// Warding Bell (Tool)
+    ///
+    /// Splits when obtaining the Warding Bell
+    WardingBell,
+    /// Pollip Pouch (Tool)
+    ///
+    /// Splits when obtaining the Pollip Pouch
+    PollipPouch,
+    /// Fractured Mask (Tool)
+    ///
+    /// Splits when obtaining the Fractured Mask
+    FracturedMask,
+    /// Multibinder (Tool)
+    ///
+    /// Splits when obtaining the Multibinder
+    Multibinder,
+    /// Weavelight (Tool)
+    ///
+    /// Splits when obtaining the Weavelight
+    Weavelight,
+    /// Sawtooth Circlet (Tool)
+    ///
+    /// Splits when obtaining the Sawtooth Circlet
+    SawtoothCirclet,
+    /// Injector Band (Tool)
+    ///
+    /// Splits when obtaining the Injector Band
+    InjectorBand,
+    /// Spool Extender (Tool)
+    ///
+    /// Splits when obtaining the Spool Extender
+    SpoolExtender,
+    /// Reserve Bind (Tool)
+    ///
+    /// Splits when obtaining the Reserve Bind
+    ReserveBind,
+    /// Claw Mirror (Tool)
+    ///
+    /// Splits when obtaining the Claw Mirror
+    ClawMirror,
+    /// Claw Mirrors (Tool)
+    ///
+    /// Splits when upgrading the Claw Mirror to Claw Mirrors
+    ClawMirrors,
+    /// Memory Crystal (Tool)
+    ///
+    /// Splits when obtaining the Memory Crystal
+    MemoryCrystal,
+    /// Snitch Pick (Tool)
+    ///
+    /// Splits when obtaining the Snitch Pick
+    SnitchPick,
+    /// Volt Filament (Tool)
+    ///
+    /// Splits when obtaining the Volt Filament
+    VoltFilament,
+    /// Quick Sling (Tool)
+    ///
+    /// Splits when obtaining the Quick Sling
+    QuickSling,
+    /// Wreath of Purity (Tool)
+    ///
+    /// Splits when obtaining the Wreath of Purity
+    WreathofPurity,
+    /// Longclaw (Tool)
+    ///
+    /// Splits when obtaining the Longclaw
+    Longclaw,
+    /// Wispfire Lantern (Tool)
+    ///
+    /// Splits when obtaining the Wispfire Lantern
+    WispfireLantern,
+    /// Egg of Flealia (Tool)
+    ///
+    /// Splits when obtaining the Egg of Flealia
+    EggofFlealia,
+    /// Pin Badge (Tool)
+    ///
+    /// Splits when obtaining the Pin Badge
+    PinBadge,
+    /// Compass (Tool)
+    ///
+    /// Splits when obtaining the Compass
+    Compass,
+    /// Shard Pendant (Tool)
+    ///
+    /// Splits when obtaining the Shard Pendant
+    ShardPendant,
+    /// Magnetite Brooch (Tool)
+    ///
+    /// Splits when obtaining the Magnetite Brooch
+    MagnetiteBrooch,
+    /// Weighted Belt (Tool)
+    ///
+    /// Splits when obtaining the Weighted Belt
+    WeightedBelt,
+    /// Barbed Bracelet (Tool)
+    ///
+    /// Splits when obtaining the Barbed Bracelet
+    BarbedBracelet,
+    /// Dead Bug's Purse (Tool)
+    ///
+    /// Splits when obtaining the Dead Bug's Purse
+    DeadBugsPurse,
+    /// Shell Satchel (Tool)
+    ///
+    /// Splits when obtaining the Shell Satchel
+    ShellSatchel,
+    /// Magnetite Dice (Tool)
+    ///
+    /// Splits when obtaining the Magnetite Dice
+    MagnetiteDice,
+    /// Scuttlebrace (Tool)
+    ///
+    /// Splits when obtaining the Scuttlebrace
+    Scuttlebrace,
+    /// Ascendant's Grip (Tool)
+    ///
+    /// Splits when obtaining the Ascendant's Grip
+    AscendantsGrip,
+    /// Spider Strings (Tool)
+    ///
+    /// Splits when obtaining the Spider Strings
+    SpiderStrings,
+    /// Silkspeed Anklets (Tool)
+    ///
+    /// Splits when obtaining the Silkspeed Anklets
+    SilkspeedAnklets,
+    /// Thief's Mark (Tool)
+    ///
+    /// Splits when obtaining the Thief's Mark
+    ThiefsMark,
+    // endregion: Tools
 }
 
 impl StoreWidget for Split {
@@ -2691,6 +2931,70 @@ pub fn continuous_splits(split: &Split, e: &Env, store: &mut Store) -> SplitterA
             should_split(mem.deref(&pd.encountered_lost_lace).unwrap_or_default())
         }
         // endregion: Abyss
+
+        // region Tools
+        Split::StraightPin => should_split(find_tool(&utf16!("Straight Pin"), &mem, &pd)),
+        Split::ThreefoldPin => should_split(find_tool(&utf16!("Tri Pin"), &mem, &pd)),
+        Split::StingShard => should_split(find_tool(&utf16!("Sting Shard"), &mem, &pd)),
+        Split::Tacks => should_split(find_tool(&utf16!("Tack"), &mem, &pd)),
+        Split::Longpin => should_split(find_tool(&utf16!("Harpoon"), &mem, &pd)),
+        Split::Curveclaw => should_split(find_tool(&utf16!("Curve Claws"), &mem, &pd)),
+        Split::Curvesickle => should_split(find_tool(&utf16!("Curve Claws Upgraded"), &mem, &pd)),
+        Split::ThrowingRing => should_split(find_tool(&utf16!("Shakra Ring"), &mem, &pd)),
+        Split::Pimpillo => should_split(find_tool(&utf16!("Pimpilo"), &mem, &pd)),
+        Split::Conchcutter => should_split(find_tool(&utf16!("Conch Drill"), &mem, &pd)),
+        Split::SilkshotForge => should_split(find_tool(&utf16!("WebShot Forge"), &mem, &pd)),
+        Split::SilkshotArchitect => {
+            should_split(find_tool(&utf16!("WebShot Architect"), &mem, &pd))
+        }
+        Split::SilkshotWeaver => should_split(find_tool(&utf16!("WebShot Weaver"), &mem, &pd)),
+        Split::DelversDrill => should_split(find_tool(&utf16!("Screw Attack"), &mem, &pd)),
+        Split::CogworkWheel => should_split(find_tool(&utf16!("Cogwork Saw"), &mem, &pd)),
+        Split::Cogfly => should_split(find_tool(&utf16!("Cogwork Flier"), &mem, &pd)),
+        Split::RosaryCannon => should_split(find_tool(&utf16!("Rosary Cannon"), &mem, &pd)),
+        Split::Voltvessels => should_split(find_tool(&utf16!("Lightning Rod"), &mem, &pd)),
+        Split::Flintslate => should_split(find_tool(&utf16!("Flintstone"), &mem, &pd)),
+        Split::SnareSetter => should_split(find_tool(&utf16!("Silk Snare"), &mem, &pd)),
+        Split::FleaBrew => should_split(find_tool(&utf16!("Flea Brew"), &mem, &pd)),
+        Split::PlasmiumPhial => should_split(find_tool(&utf16!("Lifeblood Syringe"), &mem, &pd)),
+        Split::NeedlePhial => should_split(find_tool(&utf16!("Extractor"), &mem, &pd)),
+        Split::DruidsEye => should_split(find_tool(&utf16!("Mosscreep Tool 1"), &mem, &pd)),
+        Split::DruidsEyes => should_split(find_tool(&utf16!("Mosscreep Tool 2"), &mem, &pd)),
+        Split::MagmaBell => should_split(find_tool(&utf16!("Lava Charm"), &mem, &pd)),
+        Split::WardingBell => should_split(find_tool(&utf16!("Bell Bind"), &mem, &pd)),
+        Split::PollipPouch => should_split(find_tool(&utf16!("Poison Pouch"), &mem, &pd)),
+        Split::FracturedMask => should_split(find_tool(&utf16!("Fractured Mask"), &mem, &pd)),
+        Split::Multibinder => should_split(find_tool(&utf16!("Multibind"), &mem, &pd)),
+        Split::Weavelight => should_split(find_tool(&utf16!("White Ring"), &mem, &pd)),
+        Split::SawtoothCirclet => should_split(find_tool(&utf16!("Brolly Spike"), &mem, &pd)),
+        Split::InjectorBand => should_split(find_tool(&utf16!("Quickbind"), &mem, &pd)),
+        Split::SpoolExtender => should_split(find_tool(&utf16!("Spool Extender"), &mem, &pd)),
+        Split::ReserveBind => should_split(find_tool(&utf16!("Reserve Bind"), &mem, &pd)),
+        Split::ClawMirror => should_split(find_tool(&utf16!("Dazzle Bind"), &mem, &pd)),
+        Split::ClawMirrors => should_split(find_tool(&utf16!("Dazzle Bind Upgraded"), &mem, &pd)),
+        Split::MemoryCrystal => should_split(find_tool(&utf16!("Revenge Crystal"), &mem, &pd)),
+        Split::SnitchPick => should_split(find_tool(&utf16!("Thief Claw"), &mem, &pd)),
+        Split::VoltFilament => should_split(find_tool(&utf16!("Zap Imbuement"), &mem, &pd)),
+        Split::QuickSling => should_split(find_tool(&utf16!("Quick Sling"), &mem, &pd)),
+        Split::WreathofPurity => should_split(find_tool(&utf16!("Maggot Charm"), &mem, &pd)),
+        Split::Longclaw => should_split(find_tool(&utf16!("Longneedle"), &mem, &pd)),
+        Split::WispfireLantern => should_split(find_tool(&utf16!("Wisp Lantern"), &mem, &pd)),
+        Split::EggofFlealia => should_split(find_tool(&utf16!("Flea Charm"), &mem, &pd)),
+        Split::PinBadge => should_split(find_tool(&utf16!("Pinstress Tool"), &mem, &pd)),
+        Split::Compass => should_split(find_tool(&utf16!("Compass"), &mem, &pd)),
+        Split::ShardPendant => should_split(find_tool(&utf16!("Bone Necklace"), &mem, &pd)),
+        Split::MagnetiteBrooch => should_split(find_tool(&utf16!("Rosary Magnet"), &mem, &pd)),
+        Split::WeightedBelt => should_split(find_tool(&utf16!("Weighted Anklet"), &mem, &pd)),
+        Split::BarbedBracelet => should_split(find_tool(&utf16!("Barbed Wire"), &mem, &pd)),
+        Split::DeadBugsPurse => should_split(find_tool(&utf16!("Dead Mans Purse"), &mem, &pd)),
+        Split::ShellSatchel => should_split(find_tool(&utf16!("Shell Satchel"), &mem, &pd)),
+        Split::MagnetiteDice => should_split(find_tool(&utf16!("Magnetite Dice"), &mem, &pd)),
+        Split::Scuttlebrace => should_split(find_tool(&utf16!("Scuttlebrace"), &mem, &pd)),
+        Split::AscendantsGrip => should_split(find_tool(&utf16!("Wallcling"), &mem, &pd)),
+        Split::SpiderStrings => should_split(find_tool(&utf16!("Musician Charm"), &mem, &pd)),
+        Split::SilkspeedAnklets => should_split(find_tool(&utf16!("Sprintmaster"), &mem, &pd)),
+        Split::ThiefsMark => should_split(find_tool(&utf16!("Thief Charm"), &mem, &pd)),
+        // endregion Tools
 
         // else
         _ => should_split(false),
