@@ -106,6 +106,8 @@ public enum HeroTransitionState
 // HERO_TRANSITION_STATE 2, 3: Waiting to enter, Entering?
 pub const HERO_TRANSITION_STATE_WAITING_TO_ENTER_LEVEL: i32 = 2;
 
+pub const MAX_TOOL_ID_LENGTH: usize = 32; // The longest is 20 but I rounded up
+
 pub struct StringListOffsets {
     string_len: u64,
     string_contents: u64,
@@ -444,6 +446,9 @@ declare_pointers!(PlayerDataPointers {
     defeated_grey_warrior: UnityPointer<3> = pdp("defeatedGreyWarrior"),
     encountered_lost_lace: UnityPointer<3> = pdp("EncounteredLostLace"),
     completion_percentage: UnityPointer<3> = pdp("completionPercentage"),
+
+    tools_version: UnityPointer<5> = UnityPointer::new("GameManager", 0, &["_instance", "playerData", "Tools", "RuntimeData", "_version"]),
+    tools_entries: UnityPointer<5> = UnityPointer::new("GameManager", 0, &["_instance", "playerData", "Tools", "RuntimeData", "_entries"]),
 });
 
 // --------------------------------------------------------
@@ -633,3 +638,84 @@ impl Default for SceneStore {
 }
 
 // --------------------------------------------------------
+
+// TODO: Using this struct would increase tool split performance massively,
+// but there isn't a nice way to make stateful splits yet
+pub struct ToolFinder {
+    tool_utf16: &'static [u16],
+    last_checked_version: Option<i32>,
+    found: bool,
+}
+
+impl ToolFinder {
+    pub fn new(tool_utf16: &'static [u16]) -> ToolFinder {
+        assert!(tool_utf16.len() <= MAX_TOOL_ID_LENGTH);
+        ToolFinder {
+            tool_utf16,
+            last_checked_version: None,
+            found: false,
+        }
+    }
+
+    // I imagine this would be a trait method for stateful splits that returns SplitterAction
+    pub fn update(&mut self, mem: &Memory, pd: &PlayerDataPointers) -> bool {
+        if self.found {
+            return true;
+        }
+        let Ok(version) = mem.deref(&pd.tools_version) else {
+            return false;
+        };
+        if self.last_checked_version != Some(version) {
+            self.last_checked_version = Some(version);
+            self.found = find_tool(self.tool_utf16, mem, pd);
+            self.found
+        } else {
+            false
+        }
+    }
+}
+
+pub fn find_tool(tool_utf16: &[u16], mem: &Memory, pd: &PlayerDataPointers) -> bool {
+    let buf = &mut [0; MAX_TOOL_ID_LENGTH][..tool_utf16.len()];
+
+    let Ok(p_entries) = mem.deref::<Address64, _>(&pd.tools_entries) else {
+        return false;
+    };
+    let Ok(len_entries) = mem.process.read::<i32>(p_entries + 0x18) else {
+        return false;
+    };
+    if len_entries > 131 {
+        return false;
+    }
+
+    for i in 0..len_entries {
+        let Ok(p_string) = mem.process.read::<Address64>(p_entries + 0x28 + 0x18 * i) else {
+            continue;
+        };
+
+        let Ok(len_string) = mem
+            .process
+            .read::<i32>(p_string + mem.string_list_offsets.string_len)
+        else {
+            continue;
+        };
+
+        if len_string != tool_utf16.len() as i32 {
+            continue;
+        }
+
+        if mem
+            .process
+            .read_into_slice(p_string + mem.string_list_offsets.string_contents, buf)
+            .is_err()
+        {
+            continue;
+        }
+
+        if *buf == *tool_utf16 {
+            return true;
+        }
+    }
+
+    false
+}
