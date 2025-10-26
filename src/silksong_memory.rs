@@ -447,8 +447,10 @@ declare_pointers!(PlayerDataPointers {
     encountered_lost_lace: UnityPointer<3> = pdp("EncounteredLostLace"),
     completion_percentage: UnityPointer<3> = pdp("completionPercentage"),
 
-    tools_version: UnityPointer<5> = UnityPointer::new("GameManager", 0, &["_instance", "playerData", "Tools", "RuntimeData", "_version"]),
-    tools_entries: UnityPointer<5> = UnityPointer::new("GameManager", 0, &["_instance", "playerData", "Tools", "RuntimeData", "_entries"]),
+    // 0x18 is the offset to RuntimeData, asr currently struggles to resolve it by name
+    // consistently because it's part of a base class or something
+    tools_version: UnityPointer<5> = UnityPointer::new("GameManager", 0, &["_instance", "playerData", "Tools", "0x18", "_version"]),
+    tools_entries: UnityPointer<5> = UnityPointer::new("GameManager", 0, &["_instance", "playerData", "Tools", "0x18", "_entries"]),
 });
 
 // --------------------------------------------------------
