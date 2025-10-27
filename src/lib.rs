@@ -189,9 +189,11 @@ impl AutoSplitterState {
             }
             TimerState::Running if is_timer_state_between_runs(self.timer_state) => {
                 // Start
-                let new_i = index_pair
+                let new_index = index_pair
                     .map(|p| p.current.unwrap_or_default())
-                    .unwrap_or_default() as usize;
+                    .unwrap_or_default();
+                self.split_index = Some(new_index);
+                let new_i = new_index as usize;
                 self.segment_hits.resize(new_i + 1, 0);
                 if settings.get_hit_counter() {
                     asr::timer::set_variable_int("segment hits", self.segment_hits[new_i]);
