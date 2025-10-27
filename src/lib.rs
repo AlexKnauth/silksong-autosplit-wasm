@@ -445,9 +445,8 @@ fn asr_settings_normalize(m: &asr::settings::Map) -> Option<()> {
     let new_splits = asr::settings::List::new();
     let mut changed = false;
     let this_script = this_script_name();
-    if !m
-        .get("script_name")
-        .is_some_and(|v| v.get_string().unwrap_or_default() == this_script)
+    if m.get("script_name")
+        .is_none_or(|v| v.get_string().unwrap_or_default() != this_script)
     {
         changed = true;
         m.insert("script_name", this_script);
