@@ -427,6 +427,7 @@ declare_pointers!(PlayerDataPointers {
     ward_boss_defeated: UnityPointer<3> = pdp("wardBossDefeated"),
     met_gourmand_servant: UnityPointer<3> = pdp("MetGourmandServant"),
     gourmand_given_meat: UnityPointer<3> = pdp("GourmandGivenMeat"),
+    got_gourmand_reward: UnityPointer<3> = pdp("GotGourmandReward"),
     belltown_greeter_met_time_passed: UnityPointer<3> = pdp("BelltownGreeterMetTimePassed"),
     bell_shrine_enclave: UnityPointer<3> = pdp("bellShrineEnclave"),
     skull_king_defeated: UnityPointer<3> = pdp("skullKingDefeated"),

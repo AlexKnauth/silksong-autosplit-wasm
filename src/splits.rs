@@ -517,6 +517,10 @@ pub enum Split {
     ///
     /// Splits after giving the Courier's Rasher to Loyal Mergwin
     GivenCouriersRasher,
+    /// Great Taste Reward (Item)
+    ///
+    /// Splits when collecting the Pale Oil reward from the Great Taste of Pharloom wish
+    GreatTasteReward,
     // endregion: ChoralChambers
 
     // region: Underworks
@@ -2030,6 +2034,9 @@ pub fn continuous_splits(split: &Split, e: &Env, store: &mut Store) -> SplitterA
         Split::MetMergwin => should_split(mem.deref(&pd.met_gourmand_servant).unwrap_or_default()),
         Split::GivenCouriersRasher => {
             should_split(mem.deref(&pd.gourmand_given_meat).unwrap_or_default())
+        }
+        Split::GreatTasteReward => {
+            should_split(mem.deref(&pd.got_gourmand_reward).unwrap_or_default())
         }
         Split::Trobbio => should_split(mem.deref(&pd.defeated_trobbio).unwrap_or_default()),
         //endregion: ChoralChambers
