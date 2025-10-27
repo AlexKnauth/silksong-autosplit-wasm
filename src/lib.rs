@@ -751,9 +751,8 @@ fn load_removal(state: &mut AutoSplitterState, e: &Env) {
     let scene_name = mem.read_string(&gm.scene_name).unwrap_or_default();
     let next_scene = mem.read_string(&gm.next_scene_name).unwrap_or_default();
 
-    let loading_menu = (scene_name != MENU_TITLE && next_scene.is_empty())
-        || (scene_name != MENU_TITLE && next_scene == MENU_TITLE)
-        || (scene_name == QUIT_TO_MENU);
+    let loading_menu = (scene_name == QUIT_TO_MENU)
+        || (scene_name != MENU_TITLE && (next_scene.is_empty() || next_scene == MENU_TITLE));
 
     // TODO: teleporting, look_for_teleporting
 
