@@ -1100,6 +1100,10 @@ pub enum Split {
     ///
     /// Splits after unlocking Shellwood Bellway
     ShellwoodStation,
+    /// Bellway (Transition)
+    ///
+    /// Splits when riding the Bell Beast through the Bellways
+    BellwayTrans,
     // endregion: Bellways
 
     // region: Ventricas
@@ -1767,6 +1771,12 @@ pub fn transition_splits(split: &Split, scenes: &Pair<&str>, e: &Env) -> Splitte
             should_split(mem.deref(&pd.has_bound_crest_upgrader).unwrap_or_default())
         }
         // endregion: Crests
+
+        // region: Bellways
+        Split::BellwayTrans => should_split(
+            scenes.old == "Cinematic_Stag_travel" && scenes.current != "Cinematic_Stag_travel",
+        ),
+        // endregion: Bellway
 
         // region: MiscTE
         Split::EnterBellEater => should_split(
