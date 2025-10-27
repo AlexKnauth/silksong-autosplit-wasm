@@ -693,10 +693,14 @@ async fn handle_splits(
                     }
                     SplitterAction::ManualSplit => {
                         #[cfg(not(feature = "split-index"))]
-                        {
-                            let old_index = state.split_index.unwrap_or_default();
+                        if let Some(old_index) = state.split_index {
                             let old_i = old_index as usize;
                             let new_i = old_i + 1;
+                            // splits_len = number_of_segments + 1
+                            if !(new_i + 1 < settings.get_splits_len()) {
+                                break;
+                            }
+                            // new_i < number_of_segments
                             state.split_index = Some(old_index + 1);
                             state.segments_splitted.push(false);
                             state.segment_hits.insert(old_i, 0);
