@@ -478,6 +478,10 @@ pub enum Split {
     ///
     /// Splits when killing Cogwork Dancers
     CogworkDancers,
+    /// Enter Cogwork Core (Transition)
+    ///
+    /// Splits when entering the main region of Cogwork Core, above or below the Cogwork Dancers arena
+    EnterCogworkCore,
     /// Second Sentinel Awoken (Event)
     ///
     /// Splits when using the Cogheart to activate Second Sentinel
@@ -1674,6 +1678,14 @@ pub fn transition_splits(split: &Split, scenes: &Pair<&str>, e: &Env) -> Splitte
         // region: CogworkCore
         Split::EnterCogworkDancers => should_split(
             (scenes.old == "Hang_07" || scenes.old == "Song_25") && scenes.current == "Cog_Dancers",
+        ),
+        Split::EnterCogworkCore => should_split(
+            // main transition from dancers arena to either above or below
+            (scenes.old == "Cog_Dancers"
+                && (scenes.current == "Cog_04" || scenes.current == "Cog_08"))
+				// other transitions into lower core
+                || ((scenes.old == "Cog_05" || scenes.old == "Cog_06" || scenes.old == "Cog_07")
+                    && scenes.current == "Cog_04"),
         ),
         // endregion: CogworkCore
 
