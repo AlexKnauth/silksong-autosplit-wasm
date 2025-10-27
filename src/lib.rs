@@ -227,7 +227,7 @@ impl AutoSplitterState {
                     let old_index = self.split_index.unwrap_or_default();
                     // splits_len = n + 1
                     let splits_len = settings.get_splits_len() as u64;
-                    if old_index + 1 <= splits_len {
+                    if old_index < splits_len {
                         // old_index <= n
                         self.split_index = Some(splits_len - 1);
                         // split_index = n
