@@ -224,7 +224,14 @@ impl AutoSplitterState {
                         self.split_index = Some(p.old.unwrap_or_default() + 1)
                     }
                 } else {
-                    self.split_index = Some(self.split_index.unwrap_or_default() + 1);
+                    let old_index = self.split_index.unwrap_or_default();
+                    // splits_len = n + 1
+                    let splits_len = settings.get_splits_len() as u64;
+                    if old_index + 1 <= splits_len {
+                        // old_index <= n
+                        self.split_index = Some(splits_len - 1);
+                        // split_index = n
+                    }
                 }
                 if settings.get_hit_counter() {
                     if let Some(index) = self.split_index {
