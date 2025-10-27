@@ -88,7 +88,7 @@ public enum UIState
     OPTIONS
 }
 */
-// UI_STATE 1: Main Menu
+pub const UI_STATE_MAIN_MENU: i32 = 1;
 pub const UI_STATE_CUTSCENE: i32 = 3;
 pub const UI_STATE_PLAYING: i32 = 4;
 pub const UI_STATE_PAUSED: i32 = 5;
@@ -142,6 +142,50 @@ pub fn is_menu(s: &str) -> bool {
     s.is_empty() || s == MENU_TITLE || s == QUIT_TO_MENU || s == PERMA_DEATH
 }
 
+/*
+depending on Game version, MainMenuState may be either:
+```
+public enum MainMenuState
+{
+    LOGO,
+    MAIN_MENU,
+    OPTIONS_MENU,
+    GAMEPAD_MENU,
+    KEYBOARD_MENU,
+    SAVE_PROFILES,
+    ...
+}
+```
+or:
+```
+public enum MainMenuState
+{
+    LOGO,
+    MAIN_MENU,
+    OPTIONS_MENU,
+    GAMEPAD_MENU,
+    ADVANCED_GAMEPAD_MENU,
+    KEYBOARD_MENU,
+    SAVE_PROFILES,
+    ...
+}
+*/
+pub fn is_menu_state_save_profiles(menu_state: i32, version: &str) -> bool {
+    match menu_state {
+        5 => is_version_without_advanced_gamepad_menu(version),
+        6 => !is_version_without_advanced_gamepad_menu(version),
+        _ => false,
+    }
+}
+
+fn is_version_without_advanced_gamepad_menu(version: &str) -> bool {
+    let version_vec: Vec<&str> = version.split(".").collect();
+    match &version_vec[..] {
+        ["1", "0", revision] => revision.parse().is_ok_and(|r: i32| r < 29280),
+        _ => false,
+    }
+}
+
 pub fn is_discontinuity_scene(s: &str) -> bool {
     DISCONTINUITY_SCENE_NAMES.contains(&s)
 }
@@ -183,6 +227,11 @@ declare_pointers!(GameManagerPointers {
         "GameManager",
         0,
         &["_instance", "<ui>k__BackingField", "uiState"],
+    ),
+    menu_state_vanilla: UnityPointer<3> = UnityPointer::new(
+        "GameManager",
+        0,
+        &["_instance", "<ui>k__BackingField", "menuState"],
     ),
     accepting_input: UnityPointer<3> = UnityPointer::new(
         "GameManager",
@@ -246,6 +295,7 @@ fn pdp(key: &'static str) -> UnityPointer<3> {
 }
 
 declare_pointers!(PlayerDataPointers {
+    version: UnityPointer<3> = pdp("version"),
     disable_pause: UnityPointer<3> = pdp("disablePause"),
     health: UnityPointer<3> = pdp("health"),
     max_health_base: UnityPointer<3> = pdp("maxHealthBase"),

@@ -30,11 +30,12 @@ use ugly_widget::{
 
 use crate::{
     silksong_memory::{
-        attach_silksong, get_game_state, get_health, Env, GameManagerPointers, Memory,
-        PlayerDataPointers, SceneStore, GAME_STATE_CUTSCENE, GAME_STATE_ENTERING_LEVEL,
-        GAME_STATE_EXITING_LEVEL, GAME_STATE_INACTIVE, GAME_STATE_LOADING, GAME_STATE_MAIN_MENU,
-        GAME_STATE_PLAYING, HERO_TRANSITION_STATE_WAITING_TO_ENTER_LEVEL, MENU_TITLE,
-        NON_MENU_GAME_STATES, OPENING_SCENES, QUIT_TO_MENU, UI_STATE_CUTSCENE, UI_STATE_PAUSED,
+        attach_silksong, get_game_state, get_health, is_menu_state_save_profiles, Env,
+        GameManagerPointers, Memory, PlayerDataPointers, SceneStore, GAME_STATE_CUTSCENE,
+        GAME_STATE_ENTERING_LEVEL, GAME_STATE_EXITING_LEVEL, GAME_STATE_INACTIVE,
+        GAME_STATE_LOADING, GAME_STATE_MAIN_MENU, GAME_STATE_PLAYING,
+        HERO_TRANSITION_STATE_WAITING_TO_ENTER_LEVEL, MENU_TITLE, NON_MENU_GAME_STATES,
+        OPENING_SCENES, QUIT_TO_MENU, UI_STATE_CUTSCENE, UI_STATE_MAIN_MENU, UI_STATE_PAUSED,
         UI_STATE_PLAYING,
     },
     store::Store,
@@ -530,6 +531,8 @@ async fn main() {
                 let _: Address64 = mem.deref(&gm.next_scene_name).unwrap_or_default();
                 let _: Address64 = mem.deref(&gm.scene_name).unwrap_or_default();
                 let _: i32 = mem.deref(&gm.ui_state_vanilla).unwrap_or_default();
+                let _: i32 = mem.deref(&gm.menu_state_vanilla).unwrap_or_default();
+                let _: Address64 = mem.deref(&pd.version).unwrap_or_default();
                 let _: i32 = mem.deref(&pd.health).unwrap_or_default();
                 state
                     .store
@@ -746,9 +749,11 @@ fn load_removal(state: &mut AutoSplitterState, e: &Env) {
         return;
     }
 
-    let Env { mem, gm, .. } = e;
+    let Env { mem, gm, pd } = e;
 
     let ui_state: i32 = mem.deref(&gm.ui_state_vanilla).unwrap_or_default();
+    let menu_state: i32 = mem.deref(&gm.menu_state_vanilla).unwrap_or_default();
+    let version = mem.read_string(&pd.version).unwrap_or_default();
     let scene_name = mem.read_string(&gm.scene_name).unwrap_or_default();
     let next_scene = mem.read_string(&gm.next_scene_name).unwrap_or_default();
 
@@ -813,7 +818,11 @@ fn load_removal(state: &mut AutoSplitterState, e: &Env) {
                 || (ui_state != UI_STATE_PAUSED
                     && ui_state != UI_STATE_CUTSCENE
                     && (!next_scene.is_empty())))
-            && next_scene != scene_name);
+            && next_scene != scene_name)
+        || (game_state == GAME_STATE_MAIN_MENU
+            && ui_state == UI_STATE_MAIN_MENU
+            && scene_name == MENU_TITLE
+            && is_menu_state_save_profiles(menu_state, &version));
     if is_game_time_paused {
         asr::timer::pause_game_time();
     } else {
