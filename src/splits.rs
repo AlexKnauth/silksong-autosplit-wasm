@@ -1467,7 +1467,7 @@ pub fn menu_splits(split: &Split, scenes: &Pair<&str>, _e: &Env) -> SplitterActi
 }
 
 pub fn transition_splits(split: &Split, scenes: &Pair<&str>, e: &Env) -> SplitterAction {
-    let Env { mem, pd, .. } = e;
+    let Env { mem, pd, gm } = e;
     match split {
         // region: Start, End, and Menu
         Split::StartNewGame => {
@@ -1685,7 +1685,7 @@ pub fn transition_splits(split: &Split, scenes: &Pair<&str>, e: &Env) -> Splitte
 
         // region: Underworks
         Split::PostClawlineArenaTrans => {
-            let gate = mem.read_string(&e.gm.entry_gate_name).unwrap_or_default();
+            let gate = mem.read_string(&gm.entry_gate_name).unwrap_or_default();
             should_split(
                 gate == "bot2" && (scenes.old == "Under_18" && scenes.current == "Under_17"),
             )
