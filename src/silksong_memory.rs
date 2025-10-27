@@ -503,9 +503,10 @@ impl Memory<'_> {
             .process
             .read(a + self.string_list_offsets.string_len)
             .ok()?;
-        if !(n < 2048) {
+        if n >= 2048 {
             return None;
         }
+        // n < 2048
         let w: Vec<u16> = self
             .process
             .read_vec(a + self.string_list_offsets.string_contents, n as usize)
