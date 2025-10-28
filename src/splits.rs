@@ -374,6 +374,10 @@ pub enum Split {
     ///
     /// Splits when entering the Slab's front entrance
     EnterTheSlab,
+    /// Wardenfly Capture (Transition)
+    ///
+    /// Splits when entering the Slab after being captured by a Wardenfly
+    WardenflyCaptureTrans,
     /// Key of Indolent (Item)
     ///
     /// Splits when you obtain the Indolent slab key
@@ -1655,6 +1659,10 @@ pub fn transition_splits(split: &Split, scenes: &Pair<&str>, e: &Env) -> Splitte
 
         // region: TheSlab
         Split::EnterTheSlab => should_split(scenes.old == "Slab_01" && scenes.current == "Slab_02"),
+        Split::WardenflyCaptureTrans => {
+            let gate = mem.read_string(&gm.entry_gate_name).unwrap_or_default();
+            should_split(scenes.current == "Slab_03" && gate == "door_slabCaged")
+        }
         Split::EnterFirstSinner => {
             should_split(scenes.old == "Slab_10c" && scenes.current == "Slab_10b")
         }
