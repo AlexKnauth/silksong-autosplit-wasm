@@ -34,7 +34,8 @@ pub static DEATH_RESPAWN_MARKER_INIT: &str = "Death Respawn Marker Init";
 
 // static NON_PLAY_SCENES: [&str; 5] = [PRE_MENU_INTRO, MENU_TITLE, QUIT_TO_MENU, OPENING_SEQUENCE, PERMA_DEATH];
 
-static DEBUG_SAVE_STATE_SCENE_NAMES: [&str; 1] = ["Demo Start"];
+pub const CINEMATIC_STAG_TRAVEL: &str = "Cinematic_Stag_travel";
+static DISCONTINUITY_SCENE_NAMES: [&str; 2] = ["Demo Start", CINEMATIC_STAG_TRAVEL];
 
 static BAD_SCENE_NAMES: [&str; 11] = [
     "Untagged",
@@ -141,8 +142,8 @@ pub fn is_menu(s: &str) -> bool {
     s.is_empty() || s == MENU_TITLE || s == QUIT_TO_MENU || s == PERMA_DEATH
 }
 
-pub fn is_debug_save_state_scene(s: &str) -> bool {
-    DEBUG_SAVE_STATE_SCENE_NAMES.contains(&s)
+pub fn is_discontinuity_scene(s: &str) -> bool {
+    DISCONTINUITY_SCENE_NAMES.contains(&s)
 }
 
 // --------------------------------------------------------

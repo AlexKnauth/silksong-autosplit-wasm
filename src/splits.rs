@@ -7,8 +7,9 @@ use ugly_widget::{
 
 use crate::{
     silksong_memory::{
-        get_health, is_debug_save_state_scene, is_menu, Env, SceneStore, DEATH_RESPAWN_MARKER_INIT,
-        GAME_STATE_PLAYING, MENU_TITLE, NON_MENU_GAME_STATES, OPENING_SCENES,
+        get_health, is_discontinuity_scene, is_menu, Env, SceneStore, CINEMATIC_STAG_TRAVEL,
+        DEATH_RESPAWN_MARKER_INIT, GAME_STATE_PLAYING, MENU_TITLE, NON_MENU_GAME_STATES,
+        OPENING_SCENES,
     },
     store::Store,
     timer::{should_split, SplitterAction},
@@ -56,7 +57,7 @@ pub enum Split {
     /// Transition excluding discontinuities (Transition)
     ///
     /// Splits when entering a transition
-    /// (excludes discontinuities including save states and deaths)
+    /// (excludes discontinuities including save states, deaths, and bellway travel)
     TransitionExcludingDiscontinuities,
     // endregion: Start, End, and Menu
 
@@ -1495,8 +1496,8 @@ pub fn transition_splits(split: &Split, scenes: &Pair<&str>, e: &Env) -> Splitte
         // TODO: if there's anything like DreamGate in Silksong,
         // should TransitionExcludingDiscontinuities exclude that too?
         Split::TransitionExcludingDiscontinuities => should_split(
-            !(is_debug_save_state_scene(scenes.old)
-                || is_debug_save_state_scene(scenes.current)
+            !(is_discontinuity_scene(scenes.old)
+                || is_discontinuity_scene(scenes.current)
                 || mem.deref(&pd.health).is_ok_and(|h: i32| h == 0)),
         ),
         // endregion: Start, End, and Menu
@@ -1821,7 +1822,7 @@ pub fn transition_splits(split: &Split, scenes: &Pair<&str>, e: &Env) -> Splitte
 
         // region: Bellways
         Split::BellwayTrans => should_split(
-            scenes.old == "Cinematic_Stag_travel" && scenes.current != "Cinematic_Stag_travel",
+            scenes.old == CINEMATIC_STAG_TRAVEL && scenes.current != CINEMATIC_STAG_TRAVEL,
         ),
         // endregion: Bellway
 
