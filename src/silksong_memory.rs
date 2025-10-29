@@ -146,6 +146,10 @@ pub fn is_discontinuity_scene(s: &str) -> bool {
     DISCONTINUITY_SCENE_NAMES.contains(&s)
 }
 
+fn is_game_state_non_menu(gs: i32) -> bool {
+    NON_MENU_GAME_STATES.contains(&gs)
+}
+
 // --------------------------------------------------------
 
 macro_rules! declare_pointers {
@@ -246,6 +250,8 @@ declare_pointers!(PlayerDataPointers {
     health: UnityPointer<3> = pdp("health"),
     max_health_base: UnityPointer<3> = pdp("maxHealthBase"),
     heart_pieces: UnityPointer<3> = pdp("heartPieces"),
+    at_bench: UnityPointer<3> = pdp("atBench"),
+    respawn_scene: UnityPointer<3> = pdp("respawnScene"),
     defeated_moss_mother: UnityPointer<3> = pdp("defeatedMossMother"),
     has_needle_throw: UnityPointer<3> = pdp("hasNeedleThrow"),
     has_parry: UnityPointer<3> = pdp("hasParry"),
@@ -683,4 +689,16 @@ pub fn get_game_state(e: Option<&Env>) -> Option<i32> {
 
 pub fn get_health(e: Option<&Env>) -> Option<i32> {
     e?.mem.deref(&e?.pd.health).ok()
+}
+
+pub fn get_at_bench(e: Option<&Env>) -> Option<bool> {
+    e?.mem.deref(&e?.pd.at_bench).ok()
+}
+
+pub fn get_respawn_scene(e: Option<&Env>) -> Option<String> {
+    let Env { mem, pd, gm } = e?;
+    if !is_game_state_non_menu(mem.deref(&gm.game_state).ok()?) {
+        return None;
+    }
+    mem.read_string(&pd.respawn_scene)
 }

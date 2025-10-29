@@ -7,9 +7,9 @@ use ugly_widget::{
 
 use crate::{
     silksong_memory::{
-        get_health, is_discontinuity_scene, is_menu, Env, SceneStore, CINEMATIC_STAG_TRAVEL,
-        DEATH_RESPAWN_MARKER_INIT, GAME_STATE_PLAYING, MENU_TITLE, NON_MENU_GAME_STATES,
-        OPENING_SCENES,
+        get_at_bench, get_health, get_respawn_scene, is_discontinuity_scene, is_menu, Env,
+        SceneStore, CINEMATIC_STAG_TRAVEL, DEATH_RESPAWN_MARKER_INIT, GAME_STATE_PLAYING,
+        MENU_TITLE, NON_MENU_GAME_STATES, OPENING_SCENES,
     },
     store::Store,
     timer::{should_split, SplitterAction},
@@ -46,6 +46,10 @@ pub enum Split {
     ///
     /// Splits on the main menu
     Menu,
+    /// Any Bench (Bench)
+    ///
+    /// Splits when sitting on a bench
+    BenchAny,
     /// Death (Event)
     ///
     /// Splits when player HP is 0
@@ -266,6 +270,10 @@ pub enum Split {
     ///
     /// Splits when killing Widow
     Widow,
+    /// Main Menu w/ Needolin Memory (Menu)
+    ///
+    /// Splits on the main menu after waking up from the Needolin Memory
+    MenuNeedolinMemory,
     /// Bellhart Bell (Event)
     ///
     /// Splits when ringing the Bellhart Bell Shrine
@@ -1476,11 +1484,23 @@ impl StoreWidget for Split {
     }
 }
 
-pub fn menu_splits(split: &Split, scenes: &Pair<&str>, _e: &Env) -> SplitterAction {
+pub fn menu_splits(
+    split: &Split,
+    scenes: &Pair<&str>,
+    _e: &Env,
+    store: &mut Store,
+) -> SplitterAction {
     match split {
         // region: Start, End, and Menu
         Split::Menu => should_split(scenes.current == MENU_TITLE),
         // endregion: Start, End, and Menu
+
+        // region: Bellhart
+        Split::MenuNeedolinMemory => should_split(
+            scenes.current == MENU_TITLE
+                && store.get_string("respawn_scene").unwrap_or_default() == "Belltown_Shrine",
+        ),
+        // endregion: Bellhart
 
         // else
         _ => should_split(false),
@@ -1940,6 +1960,11 @@ pub fn continuous_splits(split: &Split, e: &Env, store: &mut Store) -> SplitterA
     match split {
         // region: Start, End, and Menu
         Split::ManualSplit => SplitterAction::ManualSplit,
+        Split::BenchAny => should_split(
+            store
+                .get_bool_pair_bang("at_bench", &get_at_bench, Some(e))
+                .is_some_and(|p| p.changed_to(&true)),
+        ),
         Split::PlayerDeath => should_split(
             store
                 .get_i32_pair_bang("health", &get_health, Some(e))
@@ -2009,6 +2034,10 @@ pub fn continuous_splits(split: &Split, e: &Env, store: &mut Store) -> SplitterA
 
         // region: Bellhart
         Split::Widow => should_split(mem.deref(&pd.spinner_defeated).unwrap_or_default()),
+        Split::MenuNeedolinMemory => {
+            store.get_string_bang("respawn_scene", &get_respawn_scene, Some(e));
+            should_split(false)
+        }
         Split::BellhartBell => {
             should_split(mem.deref(&pd.bell_shrine_bellhart).unwrap_or_default())
         }
@@ -2677,7 +2706,7 @@ pub fn splits(
         a2.or_else(|| {
             if trans_now {
                 if is_menu(scenes.old) || is_menu(scenes.current) {
-                    menu_splits(split, &scenes, env)
+                    menu_splits(split, &scenes, env, store)
                 } else {
                     transition_splits(split, &scenes, env)
                 }

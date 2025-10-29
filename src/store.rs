@@ -1,4 +1,7 @@
-use alloc::collections::BTreeMap;
+use alloc::{
+    collections::BTreeMap,
+    string::{String, ToString},
+};
 use asr::{
     timer::TimerState,
     watcher::{Pair, Watcher},
@@ -14,7 +17,7 @@ struct StoreValue<A: 'static> {
     get: &'static dyn Fn(Option<&Env>) -> Option<A>,
 }
 
-impl<A: Clone> StoreValue<A> {
+impl<A: Clone + Eq> StoreValue<A> {
     fn new(get: &'static dyn Fn(Option<&Env>) -> Option<A>, env: Option<&Env>) -> Self {
         let mut watcher = Watcher::new();
         if let Some(value) = get(env) {
@@ -27,9 +30,12 @@ impl<A: Clone> StoreValue<A> {
         }
     }
 
-    fn update(&mut self, env: Option<&Env>) {
+    /// Produces true if the value changed, false otherwise
+    fn update(&mut self, env: Option<&Env>) -> bool {
         if let Some(value) = (self.get)(env) {
-            self.watcher.update_infallible(value);
+            self.watcher.update_infallible(value).changed()
+        } else {
+            false
         }
     }
 }
@@ -40,6 +46,7 @@ pub struct Store {
     split_index: StoreValue<Option<u64>>,
     bools: BTreeMap<&'static str, StoreValue<bool>>,
     i32s: BTreeMap<&'static str, StoreValue<i32>>,
+    strings: BTreeMap<&'static str, StoreValue<String>>,
 }
 
 impl Store {
@@ -50,6 +57,7 @@ impl Store {
             split_index: StoreValue::new(&get_timer_current_split_index, None),
             bools: BTreeMap::new(),
             i32s: BTreeMap::new(),
+            strings: BTreeMap::new(),
         }
     }
 
@@ -87,6 +95,12 @@ impl Store {
         v.watcher.pair
     }
 
+    pub fn get_string(&mut self, key: &str) -> Option<String> {
+        let v = self.strings.get_mut(key)?;
+        v.interested = true;
+        Some(v.watcher.pair.as_ref()?.current.to_string())
+    }
+
     pub fn get_bool_pair_bang(
         &mut self,
         key: &'static str,
@@ -111,19 +125,39 @@ impl Store {
         self.get_i32_pair(key)
     }
 
+    pub fn get_string_bang(
+        &mut self,
+        key: &'static str,
+        get: &'static dyn Fn(Option<&Env>) -> Option<String>,
+        env: Option<&Env>,
+    ) -> Option<String> {
+        if !self.strings.contains_key(key) {
+            self.strings.insert(key, StoreValue::new(get, env));
+        }
+        self.get_string(key)
+    }
+
     pub fn update_all(&mut self, env: Option<&Env>) {
         self.bools.retain(|_, v| v.interested);
         self.i32s.retain(|_, v| v.interested);
+        self.strings.retain(|_, v| v.interested);
         self.timer_state.update(env);
         #[cfg(feature = "split-index")]
         self.split_index.update(env);
         for v in self.bools.values_mut() {
-            v.update(env);
-            v.interested = false;
+            if v.update(env) {
+                v.interested = false;
+            }
         }
         for v in self.i32s.values_mut() {
-            v.update(env);
-            v.interested = false;
+            if v.update(env) {
+                v.interested = false;
+            }
+        }
+        for v in self.strings.values_mut() {
+            if v.update(env) {
+                v.interested = false;
+            }
         }
     }
 }
