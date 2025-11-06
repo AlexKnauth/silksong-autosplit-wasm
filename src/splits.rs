@@ -1380,6 +1380,10 @@ pub enum Split {
     ///
     /// Splits when the Caravan Troupe moves to Greymoor
     CaravanTroupeGreymoor,
+    /// Caravan Troupe Blasted Steps (Event)
+    ///
+    /// Splits when the Caravan Troupe moves to Blasted Steps
+    CaravanTroupeBlastedSteps,
     /// Caravan Troupe Fleatopia (Event)
     ///
     /// Splits when the Caravan Troupe moves to Fleatopia
@@ -2632,6 +2636,10 @@ pub fn continuous_splits(split: &Split, e: &Env, store: &mut Store) -> SplitterA
         Split::CaravanTroupeGreymoor => should_split(
             mem.deref(&pd.caravan_troupe_location)
                 .is_ok_and(|n: i32| n >= 1),
+        ),
+        Split::CaravanTroupeBlastedSteps => should_split(
+            mem.deref(&pd.caravan_troupe_location)
+                .is_ok_and(|n: i32| n >= 2),
         ),
         Split::CaravanTroupeFleatopia => should_split(
             mem.deref(&pd.caravan_troupe_location)
