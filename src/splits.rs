@@ -1475,146 +1475,14 @@ pub enum Split {
     // endregion: Abyss
 
     // region: Tools
-    /// Straight Pin (Tool)
+    /// Ascendant's Grip (Tool)
     ///
-    /// Splits when obtaining the Straight Pin
-    StraightPin,
-    /// Threefold Pin (Tool)
+    /// Splits when obtaining the Ascendant's Grip
+    AscendantsGrip,
+    /// Barbed Bracelet (Tool)
     ///
-    /// Splits when obtaining the Threefold Pin
-    ThreefoldPin,
-    /// Sting Shard (Tool)
-    ///
-    /// Splits when obtaining the Sting Shard
-    StingShard,
-    /// Tacks (Tool)
-    ///
-    /// Splits when obtaining the Tacks
-    Tacks,
-    /// Longpin (Tool)
-    ///
-    /// Splits when obtaining the Longpin
-    Longpin,
-    /// Curveclaw (Tool)
-    ///
-    /// Splits when obtaining the Curveclaw
-    Curveclaw,
-    /// Curvesickle (Tool)
-    ///
-    /// Splits when upgrading the Curveclaw to the Curvesickle
-    Curvesickle,
-    /// Throwing Ring (Tool)
-    ///
-    /// Splits when obtaining the Throwing Ring
-    ThrowingRing,
-    /// Pimpillo (Tool)
-    ///
-    /// Splits when obtaining the Pimpillo
-    Pimpillo,
-    /// Conchcutter (Tool)
-    ///
-    /// Splits when obtaining the Conchcutter
-    Conchcutter,
-    /// Silkshot Forge (Tool)
-    ///
-    /// Splits when obtaining the Silkshot from the Forge Daughter
-    SilkshotForge,
-    /// Silkshot Architect (Tool)
-    ///
-    /// Splits when obtaining the Silkshot from the Twelfth Architect
-    SilkshotArchitect,
-    /// Silkshot Weaver (Tool)
-    ///
-    /// Splits when obtaining the Silkshot from Mount Fay
-    SilkshotWeaver,
-    /// Delver's Drill (Tool)
-    ///
-    /// Splits when obtaining the Delver's Drill
-    DelversDrill,
-    /// Cogwork Wheel (Tool)
-    ///
-    /// Splits when obtaining the Cogwork Wheel
-    CogworkWheel,
-    /// Cogfly (Tool)
-    ///
-    /// Splits when obtaining the Cogfly
-    Cogfly,
-    /// Rosary Cannon (Tool)
-    ///
-    /// Splits when obtaining the Rosary Cannon
-    RosaryCannon,
-    /// Voltvessels (Tool)
-    ///
-    /// Splits when obtaining the Voltvessels
-    Voltvessels,
-    /// Flintslate (Tool)
-    ///
-    /// Splits when obtaining the Flintslate
-    Flintslate,
-    /// Snare Setter (Tool)
-    ///
-    /// Splits when obtaining the Snare Setter
-    SnareSetter,
-    /// Flea Brew (Tool)
-    ///
-    /// Splits when obtaining the Flea Brew
-    FleaBrew,
-    /// Plasmium Phial (Tool)
-    ///
-    /// Splits when obtaining the Plasmium Phial
-    PlasmiumPhial,
-    /// Needle Phial (Tool)
-    ///
-    /// Splits when obtaining the Needle Phial
-    NeedlePhial,
-    /// Druid's Eye (Tool)
-    ///
-    /// Splits when obtaining the Druid's Eye
-    DruidsEye,
-    /// Druid's Eyes (Tool)
-    ///
-    /// Splits when upgrading the Druid's Eye to Druid's Eyes
-    DruidsEyes,
-    /// Magma Bell (Tool)
-    ///
-    /// Splits when obtaining the Magma Bell
-    MagmaBell,
-    /// Warding Bell (Tool)
-    ///
-    /// Splits when obtaining the Warding Bell
-    WardingBell,
-    /// Pollip Pouch (Tool)
-    ///
-    /// Splits when obtaining the Pollip Pouch
-    PollipPouch,
-    /// Fractured Mask (Tool)
-    ///
-    /// Splits when obtaining the Fractured Mask
-    FracturedMask,
-    /// Multibinder (Tool)
-    ///
-    /// Splits when obtaining the Multibinder
-    Multibinder,
-    /// Weavelight (Tool)
-    ///
-    /// Splits when obtaining the Weavelight
-    Weavelight,
-    /// Sawtooth Circlet (Tool)
-    ///
-    /// Splits when obtaining the Sawtooth Circlet
-    SawtoothCirclet,
-    /// Injector Band (Tool)
-    ///
-    /// Splits when obtaining the Injector Band
-    InjectorBand,
-    /// Spool Extender (Tool)
-    ///
-    /// Splits when obtaining the Spool Extender
-    SpoolExtender,
-    /// Reserve Bind (Tool)
-    ///
-    /// Splits when obtaining the Reserve Bind
-    ReserveBind,
+    /// Splits when obtaining the Barbed Bracelet
+    BarbedBracelet,
     /// Claw Mirror (Tool)
     ///
     /// Splits when obtaining the Claw Mirror
@@ -1623,94 +1491,226 @@ pub enum Split {
     ///
     /// Splits when upgrading the Claw Mirror to Claw Mirrors
     ClawMirrors,
-    /// Memory Crystal (Tool)
+    /// Cogfly (Tool)
     ///
-    /// Splits when obtaining the Memory Crystal
-    MemoryCrystal,
-    /// Snitch Pick (Tool)
+    /// Splits when obtaining the Cogfly
+    Cogfly,
+    /// Cogwork Wheel (Tool)
     ///
-    /// Splits when obtaining the Snitch Pick
-    SnitchPick,
-    /// Volt Filament (Tool)
-    ///
-    /// Splits when obtaining the Volt Filament
-    VoltFilament,
-    /// Quick Sling (Tool)
-    ///
-    /// Splits when obtaining the Quick Sling
-    QuickSling,
-    /// Wreath of Purity (Tool)
-    ///
-    /// Splits when obtaining the Wreath of Purity
-    WreathofPurity,
-    /// Longclaw (Tool)
-    ///
-    /// Splits when obtaining the Longclaw
-    Longclaw,
-    /// Wispfire Lantern (Tool)
-    ///
-    /// Splits when obtaining the Wispfire Lantern
-    WispfireLantern,
-    /// Egg of Flealia (Tool)
-    ///
-    /// Splits when obtaining the Egg of Flealia
-    EggofFlealia,
-    /// Pin Badge (Tool)
-    ///
-    /// Splits when obtaining the Pin Badge
-    PinBadge,
+    /// Splits when obtaining the Cogwork Wheel
+    CogworkWheel,
     /// Compass (Tool)
     ///
     /// Splits when obtaining the Compass
     Compass,
-    /// Shard Pendant (Tool)
+    /// Conchcutter (Tool)
     ///
-    /// Splits when obtaining the Shard Pendant
-    ShardPendant,
-    /// Magnetite Brooch (Tool)
+    /// Splits when obtaining the Conchcutter
+    Conchcutter,
+    /// Curveclaw (Tool)
     ///
-    /// Splits when obtaining the Magnetite Brooch
-    MagnetiteBrooch,
-    /// Weighted Belt (Tool)
+    /// Splits when obtaining the Curveclaw
+    Curveclaw,
+    /// Curvesickle (Tool)
     ///
-    /// Splits when obtaining the Weighted Belt
-    WeightedBelt,
-    /// Barbed Bracelet (Tool)
-    ///
-    /// Splits when obtaining the Barbed Bracelet
-    BarbedBracelet,
+    /// Splits when upgrading the Curveclaw to the Curvesickle
+    Curvesickle,
     /// Dead Bug's Purse (Tool)
     ///
     /// Splits when obtaining the Dead Bug's Purse
     DeadBugsPurse,
-    /// Shell Satchel (Tool)
+    /// Delver's Drill (Tool)
     ///
-    /// Splits when obtaining the Shell Satchel
-    ShellSatchel,
+    /// Splits when obtaining the Delver's Drill
+    DelversDrill,
+    /// Druid's Eye (Tool)
+    ///
+    /// Splits when obtaining the Druid's Eye
+    DruidsEye,
+    /// Druid's Eyes (Tool)
+    ///
+    /// Splits when upgrading the Druid's Eye to Druid's Eyes
+    DruidsEyes,
+    /// Egg of Flealia (Tool)
+    ///
+    /// Splits when obtaining the Egg of Flealia
+    EggofFlealia,
+    /// Flea Brew (Tool)
+    ///
+    /// Splits when obtaining the Flea Brew
+    FleaBrew,
+    /// Flintslate (Tool)
+    ///
+    /// Splits when obtaining the Flintslate
+    Flintslate,
+    /// Fractured Mask (Tool)
+    ///
+    /// Splits when obtaining the Fractured Mask
+    FracturedMask,
+    /// Injector Band (Tool)
+    ///
+    /// Splits when obtaining the Injector Band
+    InjectorBand,
+    /// Longclaw (Tool)
+    ///
+    /// Splits when obtaining the Longclaw
+    Longclaw,
+    /// Longpin (Tool)
+    ///
+    /// Splits when obtaining the Longpin
+    Longpin,
+    /// Magma Bell (Tool)
+    ///
+    /// Splits when obtaining the Magma Bell
+    MagmaBell,
+    /// Magnetite Brooch (Tool)
+    ///
+    /// Splits when obtaining the Magnetite Brooch
+    MagnetiteBrooch,
     /// Magnetite Dice (Tool)
     ///
     /// Splits when obtaining the Magnetite Dice
     MagnetiteDice,
+    /// Memory Crystal (Tool)
+    ///
+    /// Splits when obtaining the Memory Crystal
+    MemoryCrystal,
+    /// Multibinder (Tool)
+    ///
+    /// Splits when obtaining the Multibinder
+    Multibinder,
+    /// Needle Phial (Tool)
+    ///
+    /// Splits when obtaining the Needle Phial
+    NeedlePhial,
+    /// Pimpillo (Tool)
+    ///
+    /// Splits when obtaining the Pimpillo
+    Pimpillo,
+    /// Pin Badge (Tool)
+    ///
+    /// Splits when obtaining the Pin Badge
+    PinBadge,
+    /// Plasmium Phial (Tool)
+    ///
+    /// Splits when obtaining the Plasmium Phial
+    PlasmiumPhial,
+    /// Pollip Pouch (Tool)
+    ///
+    /// Splits when obtaining the Pollip Pouch
+    PollipPouch,
+    /// Quick Sling (Tool)
+    ///
+    /// Splits when obtaining the Quick Sling
+    QuickSling,
+    /// Reserve Bind (Tool)
+    ///
+    /// Splits when obtaining the Reserve Bind
+    ReserveBind,
+    /// Rosary Cannon (Tool)
+    ///
+    /// Splits when obtaining the Rosary Cannon
+    RosaryCannon,
+    /// Sawtooth Circlet (Tool)
+    ///
+    /// Splits when obtaining the Sawtooth Circlet
+    SawtoothCirclet,
     /// Scuttlebrace (Tool)
     ///
     /// Splits when obtaining the Scuttlebrace
     Scuttlebrace,
-    /// Ascendant's Grip (Tool)
+    /// Shard Pendant (Tool)
     ///
-    /// Splits when obtaining the Ascendant's Grip
-    AscendantsGrip,
-    /// Spider Strings (Tool)
+    /// Splits when obtaining the Shard Pendant
+    ShardPendant,
+    /// Shell Satchel (Tool)
     ///
-    /// Splits when obtaining the Spider Strings
-    SpiderStrings,
+    /// Splits when obtaining the Shell Satchel
+    ShellSatchel,
+    /// Silkshot Architect (Tool)
+    ///
+    /// Splits when obtaining the Silkshot from the Twelfth Architect
+    SilkshotArchitect,
+    /// Silkshot Forge (Tool)
+    ///
+    /// Splits when obtaining the Silkshot from the Forge Daughter
+    SilkshotForge,
+    /// Silkshot Weaver (Tool)
+    ///
+    /// Splits when obtaining the Silkshot from Mount Fay
+    SilkshotWeaver,
     /// Silkspeed Anklets (Tool)
     ///
     /// Splits when obtaining the Silkspeed Anklets
     SilkspeedAnklets,
+    /// Snare Setter (Tool)
+    ///
+    /// Splits when obtaining the Snare Setter
+    SnareSetter,
+    /// Snitch Pick (Tool)
+    ///
+    /// Splits when obtaining the Snitch Pick
+    SnitchPick,
+    /// Spider Strings (Tool)
+    ///
+    /// Splits when obtaining the Spider Strings
+    SpiderStrings,
+    /// Spool Extender (Tool)
+    ///
+    /// Splits when obtaining the Spool Extender
+    SpoolExtender,
+    /// Sting Shard (Tool)
+    ///
+    /// Splits when obtaining the Sting Shard
+    StingShard,
+    /// Straight Pin (Tool)
+    ///
+    /// Splits when obtaining the Straight Pin
+    StraightPin,
+    /// Tacks (Tool)
+    ///
+    /// Splits when obtaining the Tacks
+    Tacks,
     /// Thief's Mark (Tool)
     ///
     /// Splits when obtaining the Thief's Mark
     ThiefsMark,
+    /// Threefold Pin (Tool)
+    ///
+    /// Splits when obtaining the Threefold Pin
+    ThreefoldPin,
+    /// Throwing Ring (Tool)
+    ///
+    /// Splits when obtaining the Throwing Ring
+    ThrowingRing,
+    /// Volt Filament (Tool)
+    ///
+    /// Splits when obtaining the Volt Filament
+    VoltFilament,
+    /// Voltvessels (Tool)
+    ///
+    /// Splits when obtaining the Voltvessels
+    Voltvessels,
+    /// Warding Bell (Tool)
+    ///
+    /// Splits when obtaining the Warding Bell
+    WardingBell,
+    /// Weavelight (Tool)
+    ///
+    /// Splits when obtaining the Weavelight
+    Weavelight,
+    /// Weighted Belt (Tool)
+    ///
+    /// Splits when obtaining the Weighted Belt
+    WeightedBelt,
+    /// Wispfire Lantern (Tool)
+    ///
+    /// Splits when obtaining the Wispfire Lantern
+    WispfireLantern,
+    /// Wreath of Purity (Tool)
+    ///
+    /// Splits when obtaining the Wreath of Purity
+    WreathofPurity,
     // endregion: Tools
 }
 
