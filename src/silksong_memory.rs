@@ -678,8 +678,14 @@ impl Default for SceneStore {
     }
 }
 
+// --------------------------------------------------------
+
+pub fn get_tools_version(mem: &Memory, pd: &PlayerDataPointers) -> Option<i32> {
+    mem.deref(&pd.tools_version).ok()
+}
 
 pub fn find_tool(tool_utf16: &[u16], mem: &Memory, pd: &PlayerDataPointers) -> bool {
+    asr::print_message("Scanning tools...");
     const MAX_TOOL_ID_LENGTH: usize = 32; // The longest seems to be 20 but I rounded up
 
     let buf = &mut [0; MAX_TOOL_ID_LENGTH][..tool_utf16.len()];
@@ -718,7 +724,7 @@ pub fn find_tool(tool_utf16: &[u16], mem: &Memory, pd: &PlayerDataPointers) -> b
             continue;
         }
 
-        if buf == tool_utf16 {
+        if *buf == *tool_utf16 {
             return true;
         }
     }

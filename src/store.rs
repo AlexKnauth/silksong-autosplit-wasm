@@ -9,7 +9,7 @@ use asr::{
 
 #[cfg(feature = "split-index")]
 use crate::silksong_memory::get_timer_current_split_index;
-use crate::silksong_memory::{get_timer_state, Env};
+use crate::silksong_memory::{find_tool, get_timer_state, get_tools_version, Env};
 
 struct StoreValue<A: 'static> {
     watcher: Watcher<A>,
@@ -40,6 +40,56 @@ impl<A: Clone + Eq> StoreValue<A> {
     }
 }
 
+pub struct ToolCache {
+    version: Option<i32>,
+    tool: &'static [u16],
+    found: bool,
+}
+
+impl ToolCache {
+    fn new() -> Self {
+        ToolCache {
+            version: None,
+            tool: &[],
+            found: false,
+        }
+    }
+
+    fn update_version(&mut self, e: Option<&Env>) {
+        match e {
+            None => {
+                self.version = None;
+                self.tool = &[]
+            }
+            Some(Env { pd, mem, .. }) => {
+                let new = get_tools_version(mem, pd);
+                if self.version != new {
+                    self.version = new;
+                    self.tool = &[]
+                }
+            }
+        }
+    }
+
+    pub fn update_validity(&mut self, e: Option<&Env>) {
+        if !self.tool.is_empty() {
+            self.update_version(e)
+        }
+    }
+
+    pub fn has_tool(&mut self, tool_utf16: &'static [u16], e: &Env) -> bool {
+        self.update_version(Some(e));
+        if self.version == None {
+            return false;
+        }
+        if self.tool != tool_utf16 {
+            self.found = find_tool(tool_utf16, e.mem, e.pd);
+            self.tool = tool_utf16
+        }
+        self.found
+    }
+}
+
 pub struct Store {
     timer_state: StoreValue<TimerState>,
     #[cfg(feature = "split-index")]
@@ -47,6 +97,7 @@ pub struct Store {
     bools: BTreeMap<&'static str, StoreValue<bool>>,
     i32s: BTreeMap<&'static str, StoreValue<i32>>,
     strings: BTreeMap<&'static str, StoreValue<String>>,
+    tools: ToolCache,
 }
 
 impl Store {
@@ -58,6 +109,7 @@ impl Store {
             bools: BTreeMap::new(),
             i32s: BTreeMap::new(),
             strings: BTreeMap::new(),
+            tools: ToolCache::new(),
         }
     }
 
@@ -81,6 +133,10 @@ impl Store {
         return self.split_index.watcher.pair?.current;
         #[allow(unreachable_code)]
         None
+    }
+
+    pub fn has_tool(&mut self, tool_utf16: &'static [u16], e: &Env) -> bool {
+        self.tools.has_tool(tool_utf16, e)
     }
 
     pub fn get_bool_pair(&mut self, key: &str) -> Option<Pair<bool>> {
@@ -144,6 +200,7 @@ impl Store {
         self.timer_state.update(env);
         #[cfg(feature = "split-index")]
         self.split_index.update(env);
+        self.tools.update_validity(env);
         for v in self.bools.values_mut() {
             if v.update(env) {
                 v.interested = false;
