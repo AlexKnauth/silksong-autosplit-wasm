@@ -684,52 +684,42 @@ pub fn get_tools_version(mem: &Memory, pd: &PlayerDataPointers) -> Option<i32> {
     mem.deref(&pd.tools_version).ok()
 }
 
-pub fn find_tool(tool_utf16: &[u16], mem: &Memory, pd: &PlayerDataPointers) -> bool {
-    asr::print_message("Scanning tools...");
+pub fn find_tool(tool_utf16: &[u16], mem: &Memory, pd: &PlayerDataPointers) -> Option<()> {
+    asr::print_message("Scanning tools");
     const MAX_TOOL_ID_LENGTH: usize = 32; // The longest seems to be 20 but I rounded up
 
     let buf = &mut [0; MAX_TOOL_ID_LENGTH][..tool_utf16.len()];
 
-    let Ok(p_entries) = mem.deref::<Address64, _>(&pd.tools_entries) else {
-        return false;
-    };
-    let Ok(len_entries) = mem.process.read::<i32>(p_entries + 0x18) else {
-        return false;
-    };
+    let p_entries = mem.deref::<Address64, _>(&pd.tools_entries).ok()?;
+
+    let len_entries = mem.process.read::<i32>(p_entries + 0x18).ok()?;
+
     if len_entries > 131 {
-        return false;
+        return None;
     }
 
     for i in 0..len_entries {
-        let Ok(p_string) = mem.process.read::<Address64>(p_entries + 0x28 + 0x18 * i) else {
-            continue;
-        };
+        let p_string: Address64 = mem.process.read(p_entries + 0x28 + 0x18 * i).ok()?;
 
-        let Ok(len_string) = mem
+        let len_string: i32 = mem
             .process
-            .read::<i32>(p_string + mem.string_list_offsets.string_len)
-        else {
-            continue;
-        };
+            .read(p_string + mem.string_list_offsets.string_len)
+            .ok()?;
 
         if len_string != tool_utf16.len() as i32 {
             continue;
         }
 
-        if mem
-            .process
+        mem.process
             .read_into_slice(p_string + mem.string_list_offsets.string_contents, buf)
-            .is_err()
-        {
-            continue;
-        }
+            .ok()?;
 
-        if *buf == *tool_utf16 {
-            return true;
+        if buf == tool_utf16 {
+            return Some(());
         }
     }
 
-    false
+    None
 }
 
 // --------------------------------------------------------

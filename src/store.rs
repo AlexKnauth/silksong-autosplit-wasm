@@ -83,7 +83,7 @@ impl ToolCache {
             return false;
         }
         if self.tool != tool_utf16 {
-            self.found = find_tool(tool_utf16, e.mem, e.pd);
+            self.found = find_tool(tool_utf16, e.mem, e.pd).is_some();
             self.tool = tool_utf16
         }
         self.found
