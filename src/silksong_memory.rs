@@ -468,6 +468,12 @@ declare_pointers!(PlayerDataPointers {
     defeated_grey_warrior: UnityPointer<3> = pdp("defeatedGreyWarrior"),
     encountered_lost_lace: UnityPointer<3> = pdp("EncounteredLostLace"),
     completion_percentage: UnityPointer<3> = pdp("completionPercentage"),
+
+    // asr currently struggles to resolve these by name consistently
+    // _instance.playerData.Tools.RuntimeData._version
+    tools_version: UnityPointer<5> = UnityPointer::new("GameManager", 0, &["_instance", "playerData", "Tools", "0x18", "0x4c"]),
+    // _instance.playerData.Tools.RuntimeData._entries
+    tools_entries: UnityPointer<5> = UnityPointer::new("GameManager", 0, &["_instance", "playerData", "Tools", "0x18", "0x18"]),
 });
 
 // --------------------------------------------------------
@@ -670,6 +676,50 @@ impl Default for SceneStore {
     fn default() -> Self {
         Self::new()
     }
+}
+
+// --------------------------------------------------------
+
+pub fn get_tools_version(mem: &Memory, pd: &PlayerDataPointers) -> Option<i32> {
+    mem.deref(&pd.tools_version).ok()
+}
+
+pub fn find_tool(tool_utf16: &[u16], mem: &Memory, pd: &PlayerDataPointers) -> Option<()> {
+    asr::print_message("Scanning tools");
+    const MAX_TOOL_ID_LENGTH: usize = 32; // The longest seems to be 20 but I rounded up
+
+    let buf = &mut [0; MAX_TOOL_ID_LENGTH][..tool_utf16.len()];
+
+    let p_entries = mem.deref::<Address64, _>(&pd.tools_entries).ok()?;
+
+    let len_entries = mem.process.read::<i32>(p_entries + 0x18).ok()?;
+
+    if len_entries > 131 {
+        return None;
+    }
+
+    for i in 0..len_entries {
+        let p_string: Address64 = mem.process.read(p_entries + 0x28 + 0x18 * i).ok()?;
+
+        let len_string: i32 = mem
+            .process
+            .read(p_string + mem.string_list_offsets.string_len)
+            .ok()?;
+
+        if len_string != tool_utf16.len() as i32 {
+            continue;
+        }
+
+        mem.process
+            .read_into_slice(p_string + mem.string_list_offsets.string_contents, buf)
+            .ok()?;
+
+        if buf == tool_utf16 {
+            return Some(());
+        }
+    }
+
+    None
 }
 
 // --------------------------------------------------------
