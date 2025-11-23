@@ -301,6 +301,7 @@ declare_pointers!(PlayerDataPointers {
     completed_memory_witch: UnityPointer<3> = pdp("completedMemory_witch"),
     gained_curse: UnityPointer<3> = pdp("gainedCurse"),
     belltown_doctor_cured_curse: UnityPointer<3> = pdp("BelltownDoctorCuredCurse"),
+    belltown_doctor_convo: UnityPointer<3> = pdp("BelltownDoctorConvo"),
     completed_memory_shaman: UnityPointer<3> = pdp("completedMemory_shaman"),
     has_bound_crest_upgrader: UnityPointer<3> = pdp("HasBoundCrestUpgrader"),
     tool_pouch_upgrades: UnityPointer<3> = pdp("ToolPouchUpgrades"),

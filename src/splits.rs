@@ -225,6 +225,10 @@ pub enum Split {
     ///
     /// Splits after entering the basement in Halfway Home
     EnterHalfwayHomeBasement,
+    /// Yarnaby Slap (Event)
+    ///
+    /// Splits when the first dialogue box appears after slapping Yarnaby post Cursed Crest-cure
+    YarnabySlap,
     // endregion: Greymoor
 
     // region: WispThicket
@@ -2021,6 +2025,10 @@ pub fn continuous_splits(split: &Split, e: &Env, store: &mut Store) -> SplitterA
                 .unwrap_or_default(),
         ),
         Split::ThreadStorm => should_split(mem.deref(&pd.has_thread_sphere).unwrap_or_default()),
+        Split::YarnabySlap => {
+            let convo_level: i32 = mem.deref(&pd.belltown_doctor_convo).unwrap_or_default();
+            should_split(convo_level == 3)
+        }
         // endregion: Greymoor
 
         // region: WispThicket
