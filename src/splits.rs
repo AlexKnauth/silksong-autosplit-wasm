@@ -7,9 +7,10 @@ use ugly_widget::{
 
 use crate::{
     silksong_memory::{
-        get_at_bench, get_health, get_respawn_scene, is_discontinuity_scene, is_menu, Env,
-        SceneStore, CINEMATIC_STAG_TRAVEL, DEATH_RESPAWN_MARKER_INIT, GAME_STATE_PLAYING,
-        MENU_TITLE, NON_MENU_GAME_STATES, OPENING_SCENES,
+        get_at_bench, get_health, get_heart_pieces, get_max_health_base, get_respawn_scene,
+        is_discontinuity_scene, is_menu, Env, SceneStore, CINEMATIC_STAG_TRAVEL,
+        DEATH_RESPAWN_MARKER_INIT, GAME_STATE_PLAYING, MENU_TITLE, NON_MENU_GAME_STATES,
+        OPENING_SCENES,
     },
     store::Store,
     timer::{should_split, SplitterAction},
@@ -54,6 +55,10 @@ pub enum Split {
     ///
     /// Splits when player HP is 0
     PlayerDeath,
+    /// Mask Shard Obtain (Event)
+    ///
+    /// Splits when the player obtains a new mask shard
+    MaskShardObtain,
     /// Any Transition (Transition)
     ///
     /// Splits when entering a transition (only one will split per transition)
@@ -1986,6 +1991,15 @@ pub fn continuous_splits(split: &Split, e: &Env, store: &mut Store) -> SplitterA
                 .get_i32_pair_bang("health", &get_health, Some(e))
                 .is_some_and(|p| p.changed_to(&0)),
         ),
+        Split::MaskShardObtain => {
+            let max_hp_increased = store
+                .get_i32_pair_bang("max_health_base", &get_max_health_base, Some(e))
+                .is_some_and(|p| p.increased());
+            let shards_increased = store
+                .get_i32_pair_bang("heart_pieces", &get_heart_pieces, Some(e))
+                .is_some_and(|p| p.increased());
+            should_split(max_hp_increased || shards_increased)
+        }
         // endregion: Start, End, and Menu
 
         // region: MossLands

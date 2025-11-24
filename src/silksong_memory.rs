@@ -691,6 +691,14 @@ pub fn get_health(e: Option<&Env>) -> Option<i32> {
     e?.mem.deref(&e?.pd.health).ok()
 }
 
+pub fn get_max_health_base(e: Option<&Env>) -> Option<i32> {
+    e?.mem.deref(&e?.pd.max_health_base).ok()
+}
+
+pub fn get_heart_pieces(e: Option<&Env>) -> Option<i32> {
+    e?.mem.deref(&e?.pd.heart_pieces).ok()
+}
+
 pub fn get_at_bench(e: Option<&Env>) -> Option<bool> {
     e?.mem.deref(&e?.pd.at_bench).ok()
 }
