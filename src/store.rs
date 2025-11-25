@@ -79,7 +79,7 @@ impl ToolCache {
 
     pub fn has_tool(&mut self, tool_utf16: &'static [u16], e: &Env) -> bool {
         self.update_version(Some(e));
-        if self.version == None {
+        if self.version.is_none() {
             return false;
         }
         if self.tool != tool_utf16 {
