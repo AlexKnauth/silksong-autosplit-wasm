@@ -55,10 +55,6 @@ pub enum Split {
     ///
     /// Splits when player HP is 0
     PlayerDeath,
-    /// Mask Shard Obtain (Event)
-    ///
-    /// Splits when the player obtains a new mask shard
-    MaskShardObtain,
     /// Any Transition (Transition)
     ///
     /// Splits when entering a transition (only one will split per transition)
@@ -711,6 +707,10 @@ pub enum Split {
     // endregion: NeedleUpgrade
 
     // region: MaskShards
+    /// Mask Shard (Obtain)
+    ///
+    /// Splits when obtaining a Mask Shard or a complete Mask upgrade
+    OnObtainMaskShard,
     /// Mask Shard 1 (Fragment)
     ///
     /// Splits when getting 1st Mask Shard
@@ -1991,15 +1991,6 @@ pub fn continuous_splits(split: &Split, e: &Env, store: &mut Store) -> SplitterA
                 .get_i32_pair_bang("health", &get_health, Some(e))
                 .is_some_and(|p| p.changed_to(&0)),
         ),
-        Split::MaskShardObtain => {
-            let max_hp_increased = store
-                .get_i32_pair_bang("max_health_base", &get_max_health_base, Some(e))
-                .is_some_and(|p| p.increased());
-            let shards_increased = store
-                .get_i32_pair_bang("heart_pieces", &get_heart_pieces, Some(e))
-                .is_some_and(|p| p.increased());
-            should_split(max_hp_increased || shards_increased)
-        }
         // endregion: Start, End, and Menu
 
         // region: MossLands
@@ -2234,6 +2225,16 @@ pub fn continuous_splits(split: &Split, e: &Env, store: &mut Store) -> SplitterA
         // endregion: NeedleUpgrade
 
         // region: MaskShards
+        Split::OnObtainMaskShard => {
+            let max_hp_increased = store
+                .get_i32_pair_bang("max_health_base", &get_max_health_base, Some(e))
+                .is_some_and(|p| p.increased());
+            let shards_increased = store
+                .get_i32_pair_bang("heart_pieces", &get_heart_pieces, Some(e))
+                // sanity check: mask shards should go from 3 to 0 on mask completion
+                .is_some_and(|p| p.increased() && p.current < 4);
+            should_split(max_hp_increased || shards_increased)
+        }
         Split::MaskShard1 => should_split(mask_shard_split(e, 1)),
         Split::MaskShard2 => should_split(mask_shard_split(e, 2)),
         Split::MaskShard3 => should_split(mask_shard_split(e, 3)),
