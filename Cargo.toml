@@ -32,8 +32,8 @@ dlmalloc = { version = "0.2.4", features = ["global"] }
 # For utf16 literals to compare against strings in the game's memory.
 utf16_lit = { version = "2.0.2"}
 
-ugly_widget = { git = "https://github.com/AlexKnauth/hollowknight-autosplit-wasm", branch = "wipe-improper", version = "0.1.0" }
-ugly_widget_derive = { git = "https://github.com/AlexKnauth/hollowknight-autosplit-wasm", branch = "wipe-improper", version = "0.1.0" }
+ugly_widget = { git = "https://github.com/AlexKnauth/hollowknight-autosplit-wasm", version = "0.1.0" }
+ugly_widget_derive = { git = "https://github.com/AlexKnauth/hollowknight-autosplit-wasm", version = "0.1.0" }
 
 [target.'cfg(not(target_os = "unknown"))'.dev-dependencies]
 serde_json = { version = "1" }
