@@ -59,10 +59,6 @@ static CARGO_PKG_VERSION: &str = env!("CARGO_PKG_VERSION");
 
 /// The dash symbol to use for generic dashes in text.
 pub const DASH: &str = "—";
-/// The minus symbol to use for negative numbers.
-const MINUS: &str = "−";
-/// The plus symbol to use for positive numbers.
-const PLUS: &str = "+";
 
 // --------------------------------------------------------
 
@@ -942,11 +938,9 @@ pub fn str_take_right(s: &str, n: usize) -> &str {
 }
 
 fn delta_string(i: i64) -> String {
-    if i.is_positive() {
-        format!("{}{}", PLUS, i)
-    } else if i.is_negative() {
-        format!("{}{}", MINUS, -i)
+    if i == 0 {
+        "0".into()
     } else {
-        format!("{}", i)
+        format!("{:+}", i)
     }
 }
