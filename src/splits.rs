@@ -1809,9 +1809,7 @@ pub fn transition_splits(split: &Split, scenes: &Pair<&str>, e: &Env) -> Splitte
             should_split(mem.deref(&pd.defeated_moss_mother).unwrap_or_default())
         }
         Split::SilkSpearTrans => should_split(mem.deref(&pd.has_needle_throw).unwrap_or_default()),
-        Split::EnterBoneBottom => {
-            should_split(scenes.old != "Bonetown" && scenes.current == "Bonetown")
-        }
+        Split::EnterBoneBottom => should_split(scenes.changed_to(&"Bonetown")),
         Split::EnterMosshome => {
             should_split(scenes.old == "Bone_05" && scenes.current == "Mosstown_01")
         }
@@ -1960,7 +1958,7 @@ pub fn transition_splits(split: &Split, scenes: &Pair<&str>, e: &Env) -> Splitte
         Split::EnterTheSlab => should_split(scenes.old == "Slab_01" && scenes.current == "Slab_02"),
         Split::WardenflyCaptureTrans => {
             let gate = mem.read_string(&gm.entry_gate_name).unwrap_or_default();
-            should_split(scenes.current == "Slab_03" && gate == "door_slabCaged")
+            should_split(scenes.changed_to(&"Slab_03") && gate == "door_slabCaged")
         }
         Split::EnterFirstSinner => {
             should_split(scenes.old == "Slab_10c" && scenes.current == "Slab_10b")
@@ -2127,22 +2125,18 @@ pub fn transition_splits(split: &Split, scenes: &Pair<&str>, e: &Env) -> Splitte
         // endregion: Crests
 
         // region: Bellways
-        Split::BellwayTrans => should_split(
-            scenes.old == CINEMATIC_STAG_TRAVEL && scenes.current != CINEMATIC_STAG_TRAVEL,
-        ),
+        Split::BellwayTrans => should_split(scenes.changed_from(&CINEMATIC_STAG_TRAVEL)),
         // endregion: Bellway
 
         // region: Ventrica
         Split::VentricaTrans => {
             let gate = mem.read_string(&gm.entry_gate_name).unwrap_or_default();
-            should_split(gate == "door_tubeEnter" && (scenes.current != scenes.old))
+            should_split(gate == "door_tubeEnter" && scenes.changed())
         }
         // endregion: Ventrica
 
         // region: MiscTE
-        Split::EnterBellEater => should_split(
-            scenes.old != "Bellway_Centipede_Arena" && scenes.current == "Bellway_Centipede_Arena",
-        ),
+        Split::EnterBellEater => should_split(scenes.changed_to(&"Bellway_Centipede_Arena")),
         Split::EnterDestroyedCogworks => should_split(
             (scenes.old == "Song_Tower_Destroyed" && scenes.current == "Cog_09_Destroyed")
                 || (scenes.old == "Song_25" && scenes.current == "Cog_10_Destroyed"),
