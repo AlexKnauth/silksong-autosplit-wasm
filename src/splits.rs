@@ -1942,6 +1942,7 @@ pub fn transition_splits(split: &Split, scenes: &Pair<&str>, e: &Env) -> Splitte
             (scenes.old == "Dust_06" && scenes.current == "Shadow_05")
                 || (scenes.old == "Library_07" && scenes.current == "Shadow_22")
                 || (scenes.old == "Dust_09" && scenes.current == "Shadow_04")
+                || (scenes.old == "Bellway_Shadow" && scenes.current == "Shadow_04")
                 || (scenes.old == "Aqueduct_04" && scenes.current == "Shadow_01"),
         ),
         Split::EnterExhaustOrgan => {
