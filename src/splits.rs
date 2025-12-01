@@ -1498,6 +1498,10 @@ pub enum Split {
     ///
     /// Splits after completing the Abyss Escape
     AbyssEscape,
+    /// Reverse Abyss Escape (Transition)
+    ///
+    /// Splits when descending from the Abyss Escape room. Intended for glitched runs.
+    ReverseAbyssEscapeTrans,
     /// Last Dive (Transition)
     ///
     /// Splits when beginning the Last Dive scene
@@ -2174,6 +2178,9 @@ pub fn transition_splits(split: &Split, scenes: &Pair<&str>, e: &Env) -> Splitte
             (scenes.old == "Abyss_03" && scenes.current == "Abyss_02")
                 || (scenes.old == "Abyss_11" && scenes.current == "Abyss_02b"),
         ),
+        Split::ReverseAbyssEscapeTrans => {
+            should_split(scenes.old == "Abyss_09" && scenes.current == "Abyss_13")
+        }
         Split::LastDiveTrans => {
             should_split(scenes.old == "Abyss_05" && scenes.current == "Last_Dive")
         }
