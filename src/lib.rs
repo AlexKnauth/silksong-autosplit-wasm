@@ -202,6 +202,9 @@ impl AutoSplitterState {
                         asr::timer::set_variable("delta hits", DASH);
                     }
                 }
+                // InitializeGameTime
+                asr::timer::pause_game_time();
+                asr::timer::resume_game_time();
             }
             TimerState::Paused if self.timer_state == TimerState::Running => {
                 // Pause
@@ -587,6 +590,7 @@ async fn handle_splits(
                 let a = splits::splits(&split, env, trans_now, ss, &mut state.store);
                 match a {
                     SplitterAction::Split => {
+                        // Start
                         asr::timer::start();
                         state.timer_state = TimerState::Running;
                         state.split_index = Some(0);
@@ -605,6 +609,9 @@ async fn handle_splits(
                                 asr::timer::set_variable("delta hits", DASH);
                             }
                         }
+                        // InitializeGameTime
+                        asr::timer::pause_game_time();
+                        asr::timer::resume_game_time();
                         break;
                     }
                     _ => break,
