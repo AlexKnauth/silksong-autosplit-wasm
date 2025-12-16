@@ -524,6 +524,10 @@ pub enum Split {
     // endregion: WhisperingVaults
 
     // region: ChoralChambers
+    /// Enter Choral Chambers (Transition)
+    ///
+    /// Splits when entering the Choral Chambers
+    EnterChoralChambers,
     /// Enter Songclave (Transition)
     ///
     /// Splits when entering Songclave
@@ -1999,6 +2003,30 @@ pub fn transition_splits(split: &Split, scenes: &Pair<&str>, e: &Env) -> Splitte
         // endregion: SandsOfKarak
 
         // region: ChoralChambers
+        Split::EnterChoralChambers => {
+            // first, run the check that may require another read from memory
+            if scenes.old == "Library_02" && scenes.current == "Song_20b" {
+                let gate = mem.read_string(&gm.entry_gate_name).unwrap_or_default();
+                should_split(gate == "right2")
+            } else {
+                should_split(
+                    (scenes.old == "Slab_01" && scenes.current == "Song_04")
+                        || (scenes.old == "Song_01c" && scenes.current == "Song_01")
+                        || (scenes.old == "Bellway_City" && scenes.current == "Song_20")
+                        || (scenes.old == "Library_13" && scenes.current == "Song_20")
+                        || (scenes.old == "Library_03" && scenes.current == "Song_20")
+                        || (scenes.old == "Arborium_01" && scenes.current == "Song_25")
+                        || (scenes.old == "Song_Enclave" && scenes.current == "Song_25")
+                        || (scenes.old == "Ward_01" && scenes.current == "Song_05")
+                        || (scenes.old == "Cog_Dancers"
+                            && (scenes.current == "Hang_07" || scenes.current == "Song_25"))
+                        || (scenes.old == "Hang_01" && scenes.current == "Song_17")
+                        || (scenes.old == "Hang_06" && scenes.current == "Hang_07")
+                        || (scenes.old == "Cog_10_Destroyed" && scenes.current == "Song_25")
+                        || (scenes.old == "Under_07b" && scenes.current == "Song_01"),
+                )
+            }
+        }
         Split::EnterSongclave => should_split(
             (scenes.old == "Song_Enclave_Tube"
                 || scenes.old == "Song_25"
