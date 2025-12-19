@@ -231,6 +231,10 @@ pub enum Split {
     ///
     /// Splits when the first dialogue box appears after slapping Yarnaby post Cursed Crest-cure
     YarnabySlap,
+    /// Crawfather (Boss)
+    ///
+    /// Splits when defeating the Crawfather
+    Crawfather,
     // endregion: Greymoor
 
     // region: WispThicket
@@ -2308,6 +2312,7 @@ pub fn continuous_splits(split: &Split, e: &Env, store: &mut Store) -> SplitterA
             let convo_level: i32 = mem.deref(&pd.belltown_doctor_convo).unwrap_or_default();
             should_split(convo_level == 3)
         }
+        Split::Crawfather => should_split(mem.deref(&pd.defeated_crawfather).unwrap_or_default()),
         // endregion: Greymoor
 
         // region: WispThicket

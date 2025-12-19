@@ -465,6 +465,7 @@ declare_pointers!(PlayerDataPointers {
     soul_snare_ready: UnityPointer<3> = pdp("soulSnareReady"),
     defeated_seth: UnityPointer<3> = pdp("defeatedSeth"),
     completed_abyss_ascent: UnityPointer<3> = pdp("completedAbyssAscent"),
+    defeated_crawfather: UnityPointer<3> = pdp("defeatedCrowCourt"),
     ballow_moved_to_diving_bell: UnityPointer<3> = pdp("BallowMovedToDivingBell"),
     black_thread_world: UnityPointer<3> = pdp("blackThreadWorld"),
     defeated_coral_drillers: UnityPointer<3> = pdp("defeatedCoralDrillers"),
