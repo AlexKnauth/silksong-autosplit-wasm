@@ -335,6 +335,10 @@ pub enum Split {
     ///
     /// Splits when entering Sinner's Road from Greymoor
     EnterSinnersRoad,
+    /// Sinner's Road Simple Key (Item)
+    ///
+    /// Splits when picking up the Sinner's Road simple key from the Roachkeeper arena
+    SinnersRoadSimpleKey,
     /// Lugoli (Boss)
     ///
     /// Splits after defeating Lugoli
@@ -540,6 +544,10 @@ pub enum Split {
     ///
     /// Splits when entering Songclave
     EnterSongclave,
+    /// Jubilana Simple Key (Item)
+    ///
+    /// Splits when buying the simple key from Jubilana
+    JubilanaSimpleKey,
     /// Trobbio (Boss)
     ///
     /// Splits when killing Trobbio
@@ -2387,6 +2395,9 @@ pub fn continuous_splits(split: &Split, e: &Env, store: &mut Store) -> SplitterA
         // endregion: BlastedSteps
 
         // region: SinnersRoad
+        Split::SinnersRoadSimpleKey => {
+            should_split(mem.deref(&pd.collected_dust_cage_key).unwrap_or_default())
+        }
         Split::Lugoli => should_split(
             mem.deref(&pd.defeated_roach_keeper_chef)
                 .unwrap_or_default(),
@@ -2454,6 +2465,10 @@ pub fn continuous_splits(split: &Split, e: &Env, store: &mut Store) -> SplitterA
         // endregion: WhisperingVaults
 
         // region: ChoralChambers
+        Split::JubilanaSimpleKey => should_split(
+            mem.deref(&pd.merchant_enclave_simple_key)
+                .unwrap_or_default(),
+        ),
         Split::MetMergwin => should_split(mem.deref(&pd.met_gourmand_servant).unwrap_or_default()),
         Split::DeliveredCouriersRasher => {
             should_split(mem.deref(&pd.gourmand_given_meat).unwrap_or_default())
