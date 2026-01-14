@@ -246,6 +246,7 @@ fn pdp(key: &'static str) -> UnityPointer<3> {
 
 declare_pointers!(PlayerDataPointers {
     disable_pause: UnityPointer<3> = pdp("disablePause"),
+    is_inventory_open: UnityPointer<3> = pdp("isInventoryOpen"),
     health: UnityPointer<3> = pdp("health"),
     max_health_base: UnityPointer<3> = pdp("maxHealthBase"),
     heart_pieces: UnityPointer<3> = pdp("heartPieces"),
