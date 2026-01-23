@@ -479,6 +479,8 @@ declare_pointers!(PlayerDataPointers {
     defeated_zap_core_enemy: UnityPointer<3> = pdp("defeatedZapCoreEnemy"),
     defeated_coral_driller_solo: UnityPointer<3> = pdp("defeatedCoralDrillerSolo"),
     defeated_grey_warrior: UnityPointer<3> = pdp("defeatedGreyWarrior"),
+    defeated_lost_garmond: UnityPointer<3> = pdp("garmondBlackThreadDefeated"),
+    encountered_plasmified_zango: UnityPointer<3> = pdp("BlueAssistantEnemyEncountered"),
     encountered_lost_lace: UnityPointer<3> = pdp("EncounteredLostLace"),
     completion_percentage: UnityPointer<3> = pdp("completionPercentage"),
 

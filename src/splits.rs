@@ -157,6 +157,10 @@ pub enum Split {
     ///
     /// Splits on the transition after obtaining Sharpdart
     SharpdartTrans,
+    /// Plasmified Zango Encountered (Boss)
+    ///
+    /// Splits when encountering the Plasmified Zango boss for the first time
+    PlasmifiedZangoEncountered,
     // endregion: Wormways
 
     // region: HuntersMarch
@@ -340,6 +344,10 @@ pub enum Split {
     ///
     /// Splits when killing Last Judge
     LastJudge,
+    /// Lost Garmond (Boss)
+    ///
+    /// Splits when defeating Lost Garmond
+    LostGarmond,
     // endregion: BlastedSteps
 
     // region: SinnersRoad
@@ -691,6 +699,10 @@ pub enum Split {
     // endregion: PutrifiedDucts
 
     // region: TheCradle
+    /// Enter Lace 2 (Transition)
+    ///
+    /// Splits when entering the Lace 2 boss arena
+    EnterLace2,
     /// Lace 2 (Boss)
     ///
     /// Splits when defeating Lace 2 in the Cradle
@@ -2161,6 +2173,9 @@ pub fn transition_splits(split: &Split, scenes: &Pair<&str>, e: &Env) -> Splitte
         // endregion: PutrifiedDucts
 
         // region: TheCradle
+        Split::EnterLace2 => {
+            should_split(scenes.old == "Cog_Dancers" && scenes.current == "Song_Tower_01")
+        }
         Split::PostLace2ArenaTrans => {
             should_split(scenes.old == "Song_Tower_01" && scenes.current == "Tube_Hub")
         }
@@ -2363,6 +2378,10 @@ pub fn continuous_splits(split: &Split, e: &Env, store: &mut Store) -> SplitterA
 
         // region: Wormways
         Split::Sharpdart => should_split(mem.deref(&pd.has_silk_charge).unwrap_or_default()),
+        Split::PlasmifiedZangoEncountered => should_split(
+            mem.deref(&pd.encountered_plasmified_zango)
+                .unwrap_or_default(),
+        ),
         // endregion: Wormways
 
         // region: FarFields
@@ -2435,6 +2454,9 @@ pub fn continuous_splits(split: &Split, e: &Env, store: &mut Store) -> SplitterA
             should_split(mem.deref(&pd.encountered_last_judge).unwrap_or_default())
         }
         Split::LastJudge => should_split(mem.deref(&pd.defeated_last_judge).unwrap_or_default()),
+        Split::LostGarmond => {
+            should_split(mem.deref(&pd.defeated_lost_garmond).unwrap_or_default())
+        }
         // endregion: BlastedSteps
 
         // region: SinnersRoad
