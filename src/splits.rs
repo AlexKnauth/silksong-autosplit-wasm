@@ -257,6 +257,18 @@ pub enum Split {
     ///
     /// Splits when entering Shellwood
     EnterShellwood,
+    /// Sister Splinter Encountered (Boss)
+    ///
+    /// Splits when first encountering Sister Splinter
+    SisterSplinterEncountered,
+    /// Sister Splinter (Boss)
+    ///
+    /// Splits when Sister Splinter is defeated
+    SisterSplinter,
+    /// Sister Splinter (Transition)
+    ///
+    /// Splits on the transition after Sister Splinter is defeated
+    SisterSplinterTrans,
     /// Cling Grip (Skill)
     ///
     /// Splits when obtaining Cling Grip (Wall Jump)
@@ -548,6 +560,10 @@ pub enum Split {
     ///
     /// Splits when buying the simple key from Jubilana
     JubilanaSimpleKey,
+    /// Trobbio Encountered (Boss)
+    ///
+    /// Splits when first encountering Trobbio
+    TrobbioEncountered,
     /// Trobbio (Boss)
     ///
     /// Splits when killing Trobbio
@@ -556,6 +572,18 @@ pub enum Split {
     ///
     /// Splits on the transition after killing Trobbio
     TrobbioTrans,
+    /// Tormented Trobbio Encountered (Boss)
+    ///
+    /// Splits when first encountering Tormented Trobbio
+    TormentedTrobbioEncountered,
+    /// Tormented Trobbio (Boss)
+    ///
+    /// Splits when killing Tormented Trobbio
+    TormentedTrobbio,
+    /// Tormented Trobbio (Transition)
+    ///
+    /// Splits on the transition after killing Tormented Trobbio
+    TormentedTrobbioTrans,
     /// Met Mergwin (NPC)
     ///
     /// Splits after talking to Loyal Mergwin the first time
@@ -1917,6 +1945,9 @@ pub fn transition_splits(split: &Split, scenes: &Pair<&str>, e: &Env) -> Splitte
 
         // region: Shellwood
         Split::ClingGripTrans => should_split(mem.deref(&pd.has_wall_jump).unwrap_or_default()),
+        Split::SisterSplinterTrans => {
+            should_split(mem.deref(&pd.defeated_sister_splinter).unwrap_or_default())
+        }
         Split::EnterShellwood => should_split(
             !scenes.old.starts_with("Shellwood") && scenes.current.starts_with("Shellwood"),
         ),
@@ -2052,6 +2083,11 @@ pub fn transition_splits(split: &Split, scenes: &Pair<&str>, e: &Env) -> Splitte
                 && scenes.current == "Song_Enclave",
         ),
         Split::TrobbioTrans => should_split(mem.deref(&pd.defeated_trobbio).unwrap_or_default()),
+        Split::TormentedTrobbioTrans => should_split(
+            mem.deref(&pd.defeated_tormented_trobbio)
+                .unwrap_or_default(),
+        ),
+
         // endregion: ChoralChambers
 
         // region: Underworks
@@ -2364,6 +2400,13 @@ pub fn continuous_splits(split: &Split, e: &Env, store: &mut Store) -> SplitterA
 
         // region: Shellwood
         Split::ClingGrip => should_split(mem.deref(&pd.has_wall_jump).unwrap_or_default()),
+        Split::SisterSplinterEncountered => should_split(
+            mem.deref(&pd.encountered_sister_splinter)
+                .unwrap_or_default(),
+        ),
+        Split::SisterSplinter => {
+            should_split(mem.deref(&pd.defeated_sister_splinter).unwrap_or_default())
+        }
         Split::ShellwoodBell => {
             should_split(mem.deref(&pd.bell_shrine_shellwood).unwrap_or_default())
         }
@@ -2476,7 +2519,18 @@ pub fn continuous_splits(split: &Split, e: &Env, store: &mut Store) -> SplitterA
         Split::GreatTasteReward => {
             should_split(mem.deref(&pd.got_gourmand_reward).unwrap_or_default())
         }
+        Split::TrobbioEncountered => {
+            should_split(mem.deref(&pd.encountered_trobbio).unwrap_or_default())
+        }
         Split::Trobbio => should_split(mem.deref(&pd.defeated_trobbio).unwrap_or_default()),
+        Split::TormentedTrobbioEncountered => should_split(
+            mem.deref(&pd.encountered_tormented_trobbio)
+                .unwrap_or_default(),
+        ),
+        Split::TormentedTrobbio => should_split(
+            mem.deref(&pd.defeated_tormented_trobbio)
+                .unwrap_or_default(),
+        ),
         //endregion: ChoralChambers
 
         // region: Underworks
