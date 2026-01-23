@@ -468,6 +468,10 @@ pub enum Split {
     ///
     /// Splits when you obtain Faydown Cloak (Double Jump)
     FaydownCloak,
+    /// Faydown Cloak (Transition)
+    ///
+    /// Splits on the transition after obtaining Faydown Cloak
+    FaydownCloakTrans,
     // endregion: MountFay
 
     // region: SandsOfKarak
@@ -1344,8 +1348,12 @@ pub enum Split {
     BeastlingCall,
     /// Silk Soar (Skill)
     ///
-    /// Splits when you obtain Super Jump
+    /// Splits when you obtain Silk Soar (Super Jump)
     SilkSoar,
+    /// Silk Soar (Transition)
+    ///
+    /// Splits on the transition after obtaining Silk Soar
+    SilkSoarTrans,
     /// Elegy of the Deep (Skill)
     ///
     /// Splits when obtaining Elegy of the Deep
@@ -2029,6 +2037,9 @@ pub fn transition_splits(split: &Split, scenes: &Pair<&str>, e: &Env) -> Splitte
         Split::UpperMountFayTrans => {
             should_split(scenes.old == "Peak_01" && scenes.current == "Peak_07")
         }
+        Split::FaydownCloakTrans => {
+            should_split(mem.deref(&pd.has_double_jump).unwrap_or_default())
+        }
         // endregion: MountFay
 
         // region: SandsOfKarak
@@ -2227,6 +2238,7 @@ pub fn transition_splits(split: &Split, scenes: &Pair<&str>, e: &Env) -> Splitte
             (scenes.old == "Song_Tower_Destroyed" && scenes.current == "Cog_09_Destroyed")
                 || (scenes.old == "Song_25" && scenes.current == "Cog_10_Destroyed"),
         ),
+        Split::SilkSoarTrans => should_split(mem.deref(&pd.has_super_jump).unwrap_or_default()),
         Split::EnterSeth => {
             should_split(scenes.old == "Under_27" && scenes.current == "Shellwood_22")
         }
