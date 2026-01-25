@@ -768,6 +768,14 @@ pub fn get_heart_pieces(e: Option<&Env>) -> Option<i32> {
     e?.mem.deref(&e?.pd.heart_pieces).ok()
 }
 
+pub fn get_silk_max(e: Option<&Env>) -> Option<i32> {
+    e?.mem.deref(&e?.pd.silk_max).ok()
+}
+
+pub fn get_silk_spool_parts(e: Option<&Env>) -> Option<i32> {
+    e?.mem.deref(&e?.pd.silk_spool_parts).ok()
+}
+
 pub fn get_at_bench(e: Option<&Env>) -> Option<bool> {
     e?.mem.deref(&e?.pd.at_bench).ok()
 }
