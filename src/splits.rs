@@ -8,9 +8,10 @@ use utf16_lit::utf16;
 
 use crate::{
     silksong_memory::{
-        self, get_at_bench, get_health, get_respawn_scene, is_discontinuity_scene, is_menu, Env,
-        SceneStore, CINEMATIC_STAG_TRAVEL, DEATH_RESPAWN_MARKER_INIT, GAME_STATE_PLAYING,
-        MENU_TITLE, NON_MENU_GAME_STATES, OPENING_SCENES,
+        get_at_bench, get_health, get_heart_pieces, get_max_health_base, get_respawn_scene,
+        get_silk_max, get_silk_spool_parts, is_discontinuity_scene, is_menu, Env, SceneStore,
+        CINEMATIC_STAG_TRAVEL, DEATH_RESPAWN_MARKER_INIT, GAME_STATE_PLAYING, MENU_TITLE,
+        NON_MENU_GAME_STATES, OPENING_SCENES,
     },
     store::Store,
     timer::{should_split, SplitterAction},
@@ -2644,14 +2645,10 @@ pub fn continuous_splits(split: &Split, e: &Env, store: &mut Store) -> SplitterA
         // region: MaskShards
         Split::OnObtainMaskShard => {
             let max_hp_increased = store
-                .get_i32_pair_bang(
-                    "max_health_base",
-                    &silksong_memory::get_max_health_base,
-                    Some(e),
-                )
+                .get_i32_pair_bang("max_health_base", &get_max_health_base, Some(e))
                 .is_some_and(|p| p.increased());
             let shards_increased = store
-                .get_i32_pair_bang("heart_pieces", &silksong_memory::get_heart_pieces, Some(e))
+                .get_i32_pair_bang("heart_pieces", &get_heart_pieces, Some(e))
                 // sanity check: mask shards should go from 3 to 0 on mask completion
                 .is_some_and(|p| p.increased() && p.current < 4);
             should_split(max_hp_increased || shards_increased)
@@ -2681,14 +2678,10 @@ pub fn continuous_splits(split: &Split, e: &Env, store: &mut Store) -> SplitterA
         // region: SpoolFragments
         Split::OnObtainSpoolFragment => {
             let max_silk_increased = store
-                .get_i32_pair_bang("silk_max", &silksong_memory::get_silk_max, Some(e))
+                .get_i32_pair_bang("silk_max", &get_silk_max, Some(e))
                 .is_some_and(|p| p.increased());
             let frags_increased = store
-                .get_i32_pair_bang(
-                    "silk_spool_parts",
-                    &silksong_memory::get_silk_spool_parts,
-                    Some(e),
-                )
+                .get_i32_pair_bang("silk_spool_parts", &get_silk_spool_parts, Some(e))
                 // sanity check: shard count should only ever be 1 (just obtained) or 0 (just completed)
                 .is_some_and(|p| p.increased() && p.current < 2);
             should_split(max_silk_increased || frags_increased)
