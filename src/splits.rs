@@ -410,6 +410,10 @@ pub enum Split {
     ///
     /// Splits on the transition out of the room to complete Trail's End
     TrailsEndTrans,
+    /// Trail's End (Menu)
+    ///
+    /// Splits on the main menu when quitting out of the Trails's End room
+    TrailsEndMenu,
     // endregion: Bilewater
 
     // region: TheSlab
@@ -1863,6 +1867,10 @@ pub fn menu_splits(
                 && store.get_string("respawn_scene").unwrap_or_default() == "Belltown_Shrine",
         ),
         // endregion: Bellhart
+
+        // region: Bilewater
+        Split::TrailsEndMenu => should_split(scenes.changed_from(&"Shadow_24")),
+        // endregion: Bilewater
 
         // else
         _ => should_split(false),
