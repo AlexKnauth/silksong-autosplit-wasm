@@ -1433,6 +1433,10 @@ pub enum Split {
     ///
     /// Splits when the Palestag boss is defeated
     Palestag,
+    /// Palestag (Transition)
+    ///
+    /// Splits on the transition after Palestag is defeated
+    PalestagTrans,
     /// Clover Dancers Encountered (Boss)
     ///
     /// Splits when the Clover Dancers boss fight begins for the first time
@@ -1471,6 +1475,10 @@ pub enum Split {
     ///
     /// Splits after defeating the Forebrothers
     Forebrothers,
+    /// Forebrothers (Transition)
+    ///
+    /// Splits on the transition after defeating the Forebrothers
+    ForebrothersTrans,
     /// Groal (Boss)
     ///
     /// Splits after defeating Groal
@@ -2257,6 +2265,9 @@ pub fn transition_splits(split: &Split, scenes: &Pair<&str>, e: &Env) -> Splitte
             (scenes.old == "Song_Tower_Destroyed" && scenes.current == "Cog_09_Destroyed")
                 || (scenes.old == "Song_25" && scenes.current == "Cog_10_Destroyed"),
         ),
+        Split::ForebrothersTrans => {
+            should_split(mem.deref(&pd.defeated_dock_foremen).unwrap_or_default())
+        }
         Split::SilkSoarTrans => should_split(mem.deref(&pd.has_super_jump).unwrap_or_default()),
         Split::EnterSeth => {
             should_split(scenes.old == "Under_27" && scenes.current == "Shellwood_22")
@@ -2269,6 +2280,9 @@ pub fn transition_splits(split: &Split, scenes: &Pair<&str>, e: &Env) -> Splitte
         }
         Split::EnterVerdaniaMemory => {
             should_split(scenes.old == "Clover_01" && scenes.current == "Clover_01b")
+        }
+        Split::PalestagTrans => {
+            should_split(mem.deref(&pd.defeated_white_cloverstag).unwrap_or_default())
         }
         Split::EnterVerdaniaCastle => {
             should_split(scenes.old == "Clover_04b" && scenes.current == "Clover_10")
