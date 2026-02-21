@@ -32,15 +32,6 @@ Right-click or Control-click for the context menu:
 - Compare Against: Game Time.
 - Hotkeys: Configure the hotkeys you want. The default hotkeys use numpad, so if your computer doesn't have a numpad, configure them differently.
 
-#### Mac requirement: Rosetta
-
-The autosplitter currently requires the game to be running as an Intel / x86_64 process, not an Apple / arm64 process.
-So on Apple Silicon (M1, M2, etc.) Macs, you have to run the game under Rosetta:
-- Right click on `Hollow Knight Silksong.app` in Game Files, `Get Info`,  check the box for `Open using Rosetta`.
-- Next to `Hollow Knight Silksong.app`, put a [`steam_appid.txt`](https://github.com/hk-speedrunning/Silksong-Resources/releases/download/files/steam_appid.txt) file containing the number `1030300`.
-- Open `Hollow Knight Silksong.app` directly from where it is in Game Files, not from your Steam library.
-- Check in Activity Moniter, on the CPU tab, the Kind column should say `Intel` for Silksong, not `Apple`.
-
 ### OBS LiveSplit One (Windows, Linux)
 
 Go to the [OBS LiveSplit One Latest Release](https://github.com/AlexKnauth/obs-livesplit-one/releases/latest) page,
