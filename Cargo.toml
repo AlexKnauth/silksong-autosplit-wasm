@@ -6,7 +6,7 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-asr = { git = "https://github.com/AlexKnauth/asr", branch = "split-index", features = [
+asr = { git = "https://github.com/AlexKnauth/asr", branch = "split-index-arm64", features = [
     "alloc", # Working with allocations.
     "derive", # Defining your own settings structs, converting endianness, and binding to .NET classes.
     # "flags", # Working with bit flags.
