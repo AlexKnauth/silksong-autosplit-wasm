@@ -742,6 +742,10 @@ pub enum Split {
     ///
     /// Splits on the transition after learning Vaultkeepers Melody
     VaultkeepersMelodyTrans,
+    /// Vaultkeepers Melody (Menu)
+    ///
+    /// Splits on the main menu after learning Vaultkeepers Melody
+    VaultkeepersMelodyMenu,
     /// Architects Melody (Melody)
     ///
     /// Splits when learning Architects Melody
@@ -758,6 +762,10 @@ pub enum Split {
     ///
     /// Splits on the transition after learning Conductors Melody
     ConductorsMelodyTrans,
+    /// Conductors Melody (Menu)
+    ///
+    /// Splits on the main menu after learning Conductors Melody
+    ConductorsMelodyMenu,
     /// Unlock Threefold Melody Lift (Event)
     ///
     /// Splits when unlocking the Threefold Melody Lift
@@ -1872,6 +1880,19 @@ pub fn menu_splits(
         Split::TrailsEndMenu => should_split(scenes.changed_from(&"Shadow_24")),
         // endregion: Bilewater
 
+        // region: ThreefoldMelody
+        Split::ConductorsMelodyMenu => should_split(
+            store
+                .get_bool_pair("has_melody_conductor")
+                .is_some_and(|m| m.current),
+        ),
+        Split::VaultkeepersMelodyMenu => should_split(
+            store
+                .get_bool_pair("has_melody_librarian")
+                .is_some_and(|m| m.current),
+        ),
+        // endregion: ThreefoldMelody
+
         // else
         _ => should_split(false),
     }
@@ -2638,11 +2659,27 @@ pub fn continuous_splits(split: &Split, e: &Env, store: &mut Store) -> SplitterA
         Split::VaultkeepersMelody => {
             should_split(mem.deref(&pd.has_melody_librarian).unwrap_or_default())
         }
+        Split::VaultkeepersMelodyMenu => {
+            store.get_bool_pair_bang(
+                "has_melody_librarian",
+                &|e| e?.mem.deref(&e?.pd.has_melody_librarian).ok(),
+                Some(e),
+            );
+            should_split(false)
+        }
         Split::ArchitectsMelody => {
             should_split(mem.deref(&pd.has_melody_architect).unwrap_or_default())
         }
         Split::ConductorsMelody => {
             should_split(mem.deref(&pd.has_melody_conductor).unwrap_or_default())
+        }
+        Split::ConductorsMelodyMenu => {
+            store.get_bool_pair_bang(
+                "has_melody_conductor",
+                &|e| e?.mem.deref(&e?.pd.has_melody_conductor).ok(),
+                Some(e),
+            );
+            should_split(false)
         }
         Split::UnlockedMelodyLift => {
             should_split(mem.deref(&pd.unlocked_melody_lift).unwrap_or_default())
