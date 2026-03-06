@@ -1892,7 +1892,10 @@ pub fn transition_splits(split: &Split, scenes: &Pair<&str>, e: &Env) -> Splitte
         Split::TransitionExcludingDiscontinuities => should_split(
             !(is_discontinuity_scene(scenes.old)
                 || is_discontinuity_scene(scenes.current)
-                || mem.deref(&pd.health).is_ok_and(|h: i32| h == 0)),
+                || mem.deref(&pd.health).is_ok_and(|h: i32| h == 0)
+                || mem
+                    .read_string(&gm.entry_gate_name)
+                    .is_some_and(|e| e == "dreamGate")),
         ),
         // endregion: Start, End, and Menu
 
