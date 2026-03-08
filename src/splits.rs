@@ -235,6 +235,10 @@ pub enum Split {
     ///
     /// Splits when the first dialogue box appears after slapping Yarnaby post Cursed Crest-cure
     YarnabySlap,
+    /// Enter Craw Courtroom (Transition)
+    ///
+    /// Splits when entering the room past the Craw Summons door
+    EnterCrawCourtroom,
     /// Crawfather (Boss)
     ///
     /// Splits when defeating the Crawfather
@@ -1965,6 +1969,9 @@ pub fn transition_splits(split: &Split, scenes: &Pair<&str>, e: &Env) -> Splitte
         }
         Split::EnterHalfwayHomeBasement => {
             should_split(scenes.old == "Halfway_01" && scenes.current == "Ant_08")
+        }
+        Split::EnterCrawCourtroom => {
+            should_split(scenes.old == "Room_CrowCourt" && scenes.current == "Room_CrowCourt_02")
         }
         // endregion: Greymoor
 
