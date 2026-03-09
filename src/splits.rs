@@ -227,6 +227,10 @@ pub enum Split {
     ///
     /// Splits on the transition after obtaining Thread Storm
     ThreadStormTrans,
+    /// Halfway Home Bench (Bench)
+    ///
+    /// Splits when sitting on the bench in Halfway Home
+    BenchHalfwayHome,
     /// Halfway Basement (Transition)
     ///
     /// Splits after entering the basement in Halfway Home
@@ -580,6 +584,11 @@ pub enum Split {
     ///
     /// Splits when buying the simple key from Jubilana
     JubilanaSimpleKey,
+    /// Choral Chambers Covered Bench (Bench)
+    ///
+    /// Splits when sitting on the bench half-covered with a sheet (Song_18),
+    /// above Whiteward, below the Gourmand, across from Jubilana rescue location
+    BenchCoveredChoralChambers,
     /// Trobbio Encountered (Boss)
     ///
     /// Splits when first encountering Trobbio
@@ -2382,7 +2391,18 @@ fn spool_shard_split(e: &Env, shard: i32) -> bool {
             .is_ok_and(|n: i32| n == current_shards))
 }
 
-pub fn continuous_splits(split: &Split, e: &Env, store: &mut Store) -> SplitterAction {
+fn bench_split(store: &mut Store, e: &Env) -> bool {
+    store
+        .get_bool_pair_bang("at_bench", &get_at_bench, Some(e))
+        .is_some_and(|p| p.changed_to(&true))
+}
+
+pub fn continuous_splits(
+    split: &Split,
+    scenes: &Pair<&str>,
+    e: &Env,
+    store: &mut Store,
+) -> SplitterAction {
     let Env { mem, gm, pd } = e;
     let game_state: i32 = mem.deref(&gm.game_state).unwrap_or_default();
     if !NON_MENU_GAME_STATES.contains(&game_state) {
@@ -2391,11 +2411,7 @@ pub fn continuous_splits(split: &Split, e: &Env, store: &mut Store) -> SplitterA
     match split {
         // region: Start, End, and Menu
         Split::ManualSplit => SplitterAction::ManualSplit,
-        Split::BenchAny => should_split(
-            store
-                .get_bool_pair_bang("at_bench", &get_at_bench, Some(e))
-                .is_some_and(|p| p.changed_to(&true)),
-        ),
+        Split::BenchAny => should_split(bench_split(store, e)),
         Split::PlayerDeath => should_split(
             store
                 .get_i32_pair_bang("health", &get_health, Some(e))
@@ -2455,6 +2471,9 @@ pub fn continuous_splits(split: &Split, e: &Env, store: &mut Store) -> SplitterA
         Split::YarnabySlap => {
             let convo_level: i32 = mem.deref(&pd.belltown_doctor_convo).unwrap_or_default();
             should_split(convo_level == 3)
+        }
+        Split::BenchHalfwayHome => {
+            should_split(scenes.current == "Halfway_01" && bench_split(store, e))
         }
         Split::Crawfather => should_split(mem.deref(&pd.defeated_crawfather).unwrap_or_default()),
         // endregion: Greymoor
@@ -2582,6 +2601,9 @@ pub fn continuous_splits(split: &Split, e: &Env, store: &mut Store) -> SplitterA
             mem.deref(&pd.merchant_enclave_simple_key)
                 .unwrap_or_default(),
         ),
+        Split::BenchCoveredChoralChambers => {
+            should_split(scenes.current == "Song_18" && bench_split(store, e))
+        }
         Split::MetMergwin => should_split(mem.deref(&pd.met_gourmand_servant).unwrap_or_default()),
         Split::DeliveredCouriersRasher => {
             should_split(mem.deref(&pd.gourmand_given_meat).unwrap_or_default())
@@ -3268,8 +3290,8 @@ pub fn splits(
     ss: &mut SceneStore,
     store: &mut Store,
 ) -> SplitterAction {
-    let a1 = continuous_splits(split, env, store).or_else(|| {
-        let scenes = ss.pair();
+    let scenes = ss.pair();
+    let a1 = continuous_splits(split, &scenes, env, store).or_else(|| {
         let a2 = if !ss.split_this_transition {
             transition_once_splits(split, &scenes, env)
         } else {
