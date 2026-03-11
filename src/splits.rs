@@ -2397,7 +2397,7 @@ fn bench_split(store: &mut Store, e: &Env) -> bool {
         .is_some_and(|p| p.changed_to(&true))
 }
 
-pub fn continuous_splits(split: &Split, scene: &str, e: &Env, store: &mut Store) -> SplitterAction {
+pub fn continuous_splits(split: &Split, e: &Env, store: &mut Store) -> SplitterAction {
     let Env { mem, gm, pd } = e;
     let game_state: i32 = mem.deref(&gm.game_state).unwrap_or_default();
     if !NON_MENU_GAME_STATES.contains(&game_state) {
@@ -2467,7 +2467,10 @@ pub fn continuous_splits(split: &Split, scene: &str, e: &Env, store: &mut Store)
             let convo_level: i32 = mem.deref(&pd.belltown_doctor_convo).unwrap_or_default();
             should_split(convo_level == 3)
         }
-        Split::BenchHalfwayHome => should_split(scene == "Halfway_01" && bench_split(store, e)),
+        Split::BenchHalfwayHome => should_split(
+            bench_split(store, e)
+                && mem.read_string(&gm.scene_name).unwrap_or_default() == "Halfway_01",
+        ),
         Split::Crawfather => should_split(mem.deref(&pd.defeated_crawfather).unwrap_or_default()),
         // endregion: Greymoor
 
@@ -2594,9 +2597,10 @@ pub fn continuous_splits(split: &Split, scene: &str, e: &Env, store: &mut Store)
             mem.deref(&pd.merchant_enclave_simple_key)
                 .unwrap_or_default(),
         ),
-        Split::BenchChoralChambersBelowDining => {
-            should_split(scene == "Song_18" && bench_split(store, e))
-        }
+        Split::BenchChoralChambersBelowDining => should_split(
+            bench_split(store, e)
+                && mem.read_string(&gm.scene_name).unwrap_or_default() == "Song_18",
+        ),
         Split::MetMergwin => should_split(mem.deref(&pd.met_gourmand_servant).unwrap_or_default()),
         Split::DeliveredCouriersRasher => {
             should_split(mem.deref(&pd.gourmand_given_meat).unwrap_or_default())
@@ -3283,8 +3287,8 @@ pub fn splits(
     ss: &mut SceneStore,
     store: &mut Store,
 ) -> SplitterAction {
-    let scenes = ss.pair();
-    let a1 = continuous_splits(split, &scenes.current, env, store).or_else(|| {
+    let a1 = continuous_splits(split, env, store).or_else(|| {
+        let scenes = ss.pair();
         let a2 = if !ss.split_this_transition {
             transition_once_splits(split, &scenes, env)
         } else {
