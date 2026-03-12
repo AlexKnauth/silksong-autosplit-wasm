@@ -2110,7 +2110,7 @@ pub fn transition_splits(split: &Split, scenes: &Pair<&str>, e: &Env) -> Splitte
 
         // region: GrandGate
         Split::EnterGrandGate => should_split(
-            (scenes.old == "Coral_Judge_Arena" && scenes.current == "Coral_10")
+            (scenes.current == "Coral_10" && scenes.old != "Song_19_entrance")
                 || (scenes.old == "Song_01c" && scenes.current == "Song_19_entrance"),
         ),
         // endregion: GrandGate
