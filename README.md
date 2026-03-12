@@ -55,7 +55,7 @@ Open the OBS Settings from File, Settings:
 - Set a hotkey for `Toggle Timing Method`, and hit Ok.
 - Hit that hotkey once to switch from the default, Real Time, to Game Time.
 
-## Custom Variables: hits, percent
+## Custom Variables: percent, hits, deaths
 
 You can show the completion percent with Edit layout:
 - Plus, Information, Text
@@ -72,6 +72,12 @@ If you have the Hit Counter setting turned on, you can show the number of hits w
   - Custom Variable Name: `hits`
  
 You can also send hits to HitCounterManager via the [LiveSplit.HitCounterManagerConnector](https://github.com/topeterk/LiveSplit.HitCounterManagerConnector) component.
+
+If you have the Death Counter setting turned on, you can show the number of deaths with Edit Layout:
+- Plus, Information, Text
+- Layout settings, Text:
+  - check the box for Custom Variable
+  - Custom Variable Name: `deaths`
 
 ## Compilation
 
