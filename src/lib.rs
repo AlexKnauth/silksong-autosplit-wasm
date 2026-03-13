@@ -477,10 +477,7 @@ impl Settings {
     }
 
     fn set_comparison_hits(comparison_hits: &[i64]) {
-        let l = asr::settings::List::new();
-        for i in comparison_hits {
-            l.push(*i);
-        }
+        let l = settings_list(comparison_hits);
         loop {
             let old = asr::settings::Map::load();
             let new = old.clone();
@@ -492,10 +489,7 @@ impl Settings {
     }
 
     fn set_comparison_deaths(comparison_deaths: &[i64]) {
-        let l = asr::settings::List::new();
-        for i in comparison_deaths {
-            l.push(*i);
-        }
+        let l = settings_list(comparison_deaths);
         loop {
             let old = asr::settings::Map::load();
             let new = old.clone();
@@ -1206,4 +1200,12 @@ fn update_vec_min<T: Ord + Copy>(dst: &mut Vec<T>, src: &[T]) {
             dst.push(src[i]);
         }
     }
+}
+
+fn settings_list<T: asr::settings::AsValue + Copy>(src: &[T]) -> asr::settings::List {
+    let l = asr::settings::List::new();
+    for i in src {
+        l.push(*i);
+    }
+    l
 }
