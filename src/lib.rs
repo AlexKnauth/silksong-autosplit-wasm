@@ -478,22 +478,19 @@ impl Settings {
 
     fn set_comparison_hits(comparison_hits: &[i64]) {
         let l = settings_list(comparison_hits);
-        loop {
-            let old = asr::settings::Map::load();
-            let new = old.clone();
-            new.insert("comparison_hits", &l);
-            if new.store_if_unchanged(&old) {
-                return;
-            }
-        }
+        Settings::insert("comparison_hits", &l);
     }
 
     fn set_comparison_deaths(comparison_deaths: &[i64]) {
         let l = settings_list(comparison_deaths);
+        Settings::insert("comparison_deaths", &l);
+    }
+
+    fn insert<T: asr::settings::AsValue + Copy>(key: &str, value: T) {
         loop {
             let old = asr::settings::Map::load();
             let new = old.clone();
-            new.insert("comparison_deaths", &l);
+            new.insert(key, value);
             if new.store_if_unchanged(&old) {
                 return;
             }
