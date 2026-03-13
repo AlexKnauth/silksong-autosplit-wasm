@@ -466,25 +466,13 @@ impl Settings {
 
     pub fn update_comparison_hits(comparison_hits: &mut Vec<i64>, cumulative_hits: &[i64]) {
         // save cumulative_hits to comparison_hits
-        for i in 0..cumulative_hits.len() {
-            if i < comparison_hits.len() {
-                comparison_hits[i] = cmp::min(comparison_hits[i], cumulative_hits[i]);
-            } else {
-                comparison_hits.push(cumulative_hits[i]);
-            }
-        }
+        update_vec_min(comparison_hits, cumulative_hits);
         Settings::set_comparison_hits(comparison_hits);
     }
 
     pub fn update_comparison_deaths(comparison_deaths: &mut Vec<i64>, cumulative_deaths: &[i64]) {
         // save cumulative_deaths to comparison_deaths
-        for i in 0..cumulative_deaths.len() {
-            if i < comparison_deaths.len() {
-                comparison_deaths[i] = cmp::min(comparison_deaths[i], cumulative_deaths[i]);
-            } else {
-                comparison_deaths.push(cumulative_deaths[i]);
-            }
-        }
+        update_vec_min(comparison_deaths, cumulative_deaths);
         Settings::set_comparison_deaths(comparison_deaths);
     }
 
@@ -1207,5 +1195,15 @@ fn delta_string(i: i64) -> String {
         "0".into()
     } else {
         format!("{:+}", i)
+    }
+}
+
+fn update_vec_min<T: Ord + Copy>(dst: &mut Vec<T>, src: &[T]) {
+    for i in 0..src.len() {
+        if i < dst.len() {
+            dst[i] = cmp::min(dst[i], src[i]);
+        } else {
+            dst.push(src[i]);
+        }
     }
 }
