@@ -353,27 +353,35 @@ impl AutoSplitterState {
                         }
                     }
 
-                    if settings.get_hit_counter() && new_index != old_index {
-                        asr::timer::set_variable_int("segment hits", self.segment_hits[new_i]);
-                        if let Some(c) = self.comparison_hits.get(new_i) {
-                            asr::timer::set_variable_int("comparison hits", *c);
-                            asr::timer::set_variable("delta hits", &delta_string(self.hits - c));
-                        } else {
-                            asr::timer::set_variable("comparison hits", DASH);
-                            asr::timer::set_variable("delta hits", DASH);
+                    if new_index != old_index {
+                        if settings.get_hit_counter() {
+                            asr::timer::set_variable_int("segment hits", self.segment_hits[new_i]);
+                            if let Some(c) = self.comparison_hits.get(new_i) {
+                                asr::timer::set_variable_int("comparison hits", *c);
+                                asr::timer::set_variable(
+                                    "delta hits",
+                                    &delta_string(self.hits - c),
+                                );
+                            } else {
+                                asr::timer::set_variable("comparison hits", DASH);
+                                asr::timer::set_variable("delta hits", DASH);
+                            }
                         }
-                    }
-                    if settings.get_death_counter() && new_index != old_index {
-                        asr::timer::set_variable_int("segment deaths", self.segment_deaths[new_i]);
-                        if let Some(c) = self.comparison_deaths.get(new_i) {
-                            asr::timer::set_variable_int("comparison deaths", *c);
-                            asr::timer::set_variable(
-                                "delta deaths",
-                                &delta_string(self.deaths - c),
+                        if settings.get_death_counter() {
+                            asr::timer::set_variable_int(
+                                "segment deaths",
+                                self.segment_deaths[new_i],
                             );
-                        } else {
-                            asr::timer::set_variable("comparison deaths", DASH);
-                            asr::timer::set_variable("delta deaths", DASH);
+                            if let Some(c) = self.comparison_deaths.get(new_i) {
+                                asr::timer::set_variable_int("comparison deaths", *c);
+                                asr::timer::set_variable(
+                                    "delta deaths",
+                                    &delta_string(self.deaths - c),
+                                );
+                            } else {
+                                asr::timer::set_variable("comparison deaths", DASH);
+                                asr::timer::set_variable("delta deaths", DASH);
+                            }
                         }
                     }
                 }
