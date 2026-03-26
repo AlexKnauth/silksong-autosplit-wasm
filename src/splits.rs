@@ -2349,7 +2349,7 @@ pub fn transition_splits(split: &Split, scenes: &Pair<&str>, e: &Env) -> Splitte
                 && scenes.current.starts_with("Room_Diving_Bell_Abyss"),
         ),
         Split::EnterAbyss => should_split(
-            (scenes.old == "Abyss_03" && scenes.current == "Abyss_02")
+            (scenes.current == "Abyss_02" && scenes.old != "Abyss_02b")
                 || (scenes.old == "Abyss_11" && scenes.current == "Abyss_02b"),
         ),
         Split::ReverseAbyssEscapeTrans => {
