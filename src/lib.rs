@@ -82,6 +82,10 @@ struct AutoSplitterState {
     segment_hits: Vec<i64>,
     cumulative_hits: Vec<i64>,
     comparison_hits: Vec<i64>,
+    deaths: i64,
+    segment_deaths: Vec<i64>,
+    cumulative_deaths: Vec<i64>,
+    comparison_deaths: Vec<i64>,
     last_recoil: bool,
     last_hazard: bool,
     last_health_0: bool,
@@ -102,6 +106,7 @@ impl AutoSplitterState {
         let mut segments_splitted = Vec::new();
         segments_splitted.resize(split_index.unwrap_or_default() as usize, false);
         let comparison_hits = Settings::get_comparison_hits().unwrap_or_default();
+        let comparison_deaths = Settings::get_comparison_deaths().unwrap_or_default();
         AutoSplitterState {
             store,
             timer_state,
@@ -117,6 +122,10 @@ impl AutoSplitterState {
             segment_hits: Vec::new(),
             cumulative_hits: Vec::new(),
             comparison_hits,
+            deaths: 0,
+            segment_deaths: Vec::new(),
+            cumulative_deaths: Vec::new(),
+            comparison_deaths,
             last_recoil: false,
             last_hazard: false,
             last_health_0: false,
@@ -159,6 +168,17 @@ impl AutoSplitterState {
                         }
                     }
                 }
+                if settings.get_death_counter() {
+                    Settings::update_comparison_deaths(
+                        &mut self.comparison_deaths,
+                        &self.cumulative_deaths,
+                    );
+                    if self.timer_state == TimerState::Ended {
+                        if let Some(pb_deaths) = self.comparison_deaths.last() {
+                            asr::timer::set_variable_int("pb deaths", *pb_deaths);
+                        }
+                    }
+                }
                 #[cfg(not(feature = "split-index"))]
                 {
                     self.split_index = None;
@@ -167,6 +187,9 @@ impl AutoSplitterState {
                 self.hits = 0;
                 self.segment_hits.clear();
                 self.cumulative_hits.clear();
+                self.deaths = 0;
+                self.segment_deaths.clear();
+                self.cumulative_deaths.clear();
                 if settings.get_hit_counter() {
                     asr::timer::set_variable_int("hits", self.hits);
                     asr::timer::set_variable_int("segment hits", 0);
@@ -174,8 +197,17 @@ impl AutoSplitterState {
                     asr::timer::set_variable("hits", DASH);
                     asr::timer::set_variable("segment hits", DASH);
                 }
+                if settings.get_death_counter() {
+                    asr::timer::set_variable_int("deaths", self.deaths);
+                    asr::timer::set_variable_int("segment deaths", 0);
+                } else {
+                    asr::timer::set_variable("deaths", DASH);
+                    asr::timer::set_variable("segment deaths", DASH);
+                }
                 asr::timer::set_variable("comparison hits", DASH);
                 asr::timer::set_variable("delta hits", DASH);
+                asr::timer::set_variable("comparison deaths", DASH);
+                asr::timer::set_variable("delta deaths", DASH);
                 asr::timer::set_variable("percent", DASH);
                 self.look_for_teleporting = false;
                 self.last_game_state = GAME_STATE_INACTIVE;
@@ -192,6 +224,7 @@ impl AutoSplitterState {
                 self.split_index = Some(new_index);
                 let new_i = new_index as usize;
                 self.segment_hits.resize(new_i + 1, 0);
+                self.segment_deaths.resize(new_i + 1, 0);
                 if settings.get_hit_counter() {
                     asr::timer::set_variable_int("segment hits", self.segment_hits[new_i]);
                     if let Some(c) = self.comparison_hits.get(new_i) {
@@ -200,6 +233,16 @@ impl AutoSplitterState {
                     } else {
                         asr::timer::set_variable("comparison hits", DASH);
                         asr::timer::set_variable("delta hits", DASH);
+                    }
+                }
+                if settings.get_death_counter() {
+                    asr::timer::set_variable_int("segment deaths", self.segment_deaths[new_i]);
+                    if let Some(c) = self.comparison_deaths.get(new_i) {
+                        asr::timer::set_variable_int("comparison deaths", *c);
+                        asr::timer::set_variable("delta deaths", &delta_string(self.deaths - c));
+                    } else {
+                        asr::timer::set_variable("comparison deaths", DASH);
+                        asr::timer::set_variable("delta deaths", DASH);
                     }
                 }
                 // InitializeGameTime
@@ -243,6 +286,16 @@ impl AutoSplitterState {
                         }
                     }
                 }
+                if settings.get_death_counter() {
+                    if let Some(index) = self.split_index {
+                        let i = index as usize;
+                        self.cumulative_deaths.resize(i, self.deaths);
+                        let cmp_len = self.comparison_deaths.len();
+                        if i < cmp_len {
+                            self.comparison_deaths.drain(0..(cmp_len - i));
+                        }
+                    }
+                }
             }
             _ => {
                 #[cfg(feature = "split-index")]
@@ -256,6 +309,8 @@ impl AutoSplitterState {
                         // Undo
                         self.segment_hits[new_i] +=
                             self.segment_hits.drain((new_i + 1)..).sum::<i64>();
+                        self.segment_deaths[new_i] +=
+                            self.segment_deaths.drain((new_i + 1)..).sum::<i64>();
                         if new_i < self.cumulative_hits.len() {
                             let mut i = new_i;
                             // go back through skipped splits
@@ -265,6 +320,16 @@ impl AutoSplitterState {
                             // segment [i - 1] was not skipped, but segment [i] was skipped or undone,
                             // so remove cumulative_hits from there on
                             self.cumulative_hits.truncate(i);
+                        }
+                        if new_i < self.cumulative_deaths.len() {
+                            let mut i = new_i;
+                            // go back through skipped splits
+                            while 1 <= i && !self.segments_splitted[i - 1] {
+                                i -= 1;
+                            }
+                            // segment [i - 1] was not skipped, but segment [i] was skipped or undone,
+                            // so remove cumulative_deaths from there on
+                            self.cumulative_deaths.truncate(i);
                         }
                         self.segments_splitted.truncate(new_i);
                     } else if new_index > old_index {
@@ -278,21 +343,45 @@ impl AutoSplitterState {
                                 // Split
                                 self.segment_hits.push(0);
                                 self.cumulative_hits.resize(n_i, self.hits);
+                                self.segment_deaths.push(0);
+                                self.cumulative_deaths.resize(n_i, self.hits);
                             } else {
                                 // Skip
                                 self.segment_hits.insert(o_i, 0);
+                                self.segment_deaths.insert(o_i, 0);
                             }
                         }
                     }
 
-                    if settings.get_hit_counter() && new_index != old_index {
-                        asr::timer::set_variable_int("segment hits", self.segment_hits[new_i]);
-                        if let Some(c) = self.comparison_hits.get(new_i) {
-                            asr::timer::set_variable_int("comparison hits", *c);
-                            asr::timer::set_variable("delta hits", &delta_string(self.hits - c));
-                        } else {
-                            asr::timer::set_variable("comparison hits", DASH);
-                            asr::timer::set_variable("delta hits", DASH);
+                    if new_index != old_index {
+                        if settings.get_hit_counter() {
+                            asr::timer::set_variable_int("segment hits", self.segment_hits[new_i]);
+                            if let Some(c) = self.comparison_hits.get(new_i) {
+                                asr::timer::set_variable_int("comparison hits", *c);
+                                asr::timer::set_variable(
+                                    "delta hits",
+                                    &delta_string(self.hits - c),
+                                );
+                            } else {
+                                asr::timer::set_variable("comparison hits", DASH);
+                                asr::timer::set_variable("delta hits", DASH);
+                            }
+                        }
+                        if settings.get_death_counter() {
+                            asr::timer::set_variable_int(
+                                "segment deaths",
+                                self.segment_deaths[new_i],
+                            );
+                            if let Some(c) = self.comparison_deaths.get(new_i) {
+                                asr::timer::set_variable_int("comparison deaths", *c);
+                                asr::timer::set_variable(
+                                    "delta deaths",
+                                    &delta_string(self.deaths - c),
+                                );
+                            } else {
+                                asr::timer::set_variable("comparison deaths", DASH);
+                                asr::timer::set_variable("delta deaths", DASH);
+                            }
                         }
                     }
                 }
@@ -332,6 +421,9 @@ struct Settings {
     /// Hit Counter
     #[default = true]
     hit_counter: bool,
+    /// Death Counter
+    #[default = true]
+    death_counter: bool,
     /// Splits
     #[heading_level = 1]
     splits: UglyList<splits::Split>,
@@ -340,14 +432,18 @@ struct Settings {
 impl StoreGui for Settings {
     fn insert_into(&self, settings_map: &asr::settings::Map) -> bool {
         let a = self.hit_counter.insert_into(settings_map, "hit_counter");
+        let c = self.hit_counter.insert_into(settings_map, "death_counter");
         let b = self.splits.insert_into(settings_map, "splits");
-        a || b
+        a || c || b
     }
 }
 
 impl Settings {
     pub fn get_hit_counter(&self) -> bool {
         self.hit_counter
+    }
+    pub fn get_death_counter(&self) -> bool {
+        self.death_counter
     }
     pub fn get_splits_len(&self) -> usize {
         self.splits.get_list().len()
@@ -371,27 +467,38 @@ impl Settings {
         Some(c.get_list()?.iter().filter_map(|i| i.get_i64()).collect())
     }
 
+    pub fn get_comparison_deaths() -> Option<Vec<i64>> {
+        let c = asr::settings::Map::load().get("comparison_deaths")?;
+        Some(c.get_list()?.iter().filter_map(|i| i.get_i64()).collect())
+    }
+
     pub fn update_comparison_hits(comparison_hits: &mut Vec<i64>, cumulative_hits: &[i64]) {
         // save cumulative_hits to comparison_hits
-        for i in 0..cumulative_hits.len() {
-            if i < comparison_hits.len() {
-                comparison_hits[i] = cmp::min(comparison_hits[i], cumulative_hits[i]);
-            } else {
-                comparison_hits.push(cumulative_hits[i]);
-            }
-        }
+        update_vec_min(comparison_hits, cumulative_hits);
         Settings::set_comparison_hits(comparison_hits);
     }
 
+    pub fn update_comparison_deaths(comparison_deaths: &mut Vec<i64>, cumulative_deaths: &[i64]) {
+        // save cumulative_deaths to comparison_deaths
+        update_vec_min(comparison_deaths, cumulative_deaths);
+        Settings::set_comparison_deaths(comparison_deaths);
+    }
+
     fn set_comparison_hits(comparison_hits: &[i64]) {
-        let l = asr::settings::List::new();
-        for i in comparison_hits {
-            l.push(*i);
-        }
+        let l = settings_list(comparison_hits);
+        Settings::insert("comparison_hits", &l);
+    }
+
+    fn set_comparison_deaths(comparison_deaths: &[i64]) {
+        let l = settings_list(comparison_deaths);
+        Settings::insert("comparison_deaths", &l);
+    }
+
+    fn insert<T: asr::settings::AsValue + Copy>(key: &str, value: T) {
         loop {
             let old = asr::settings::Map::load();
             let new = old.clone();
-            new.insert("comparison_hits", &l);
+            new.insert(key, value);
             if new.store_if_unchanged(&old) {
                 return;
             }
@@ -477,6 +584,11 @@ async fn main() {
     asr::timer::set_variable("pb hits", DASH);
     asr::timer::set_variable("comparison hits", DASH);
     asr::timer::set_variable("delta hits", DASH);
+    asr::timer::set_variable("deaths", DASH);
+    asr::timer::set_variable("segment deaths", DASH);
+    asr::timer::set_variable("pb deaths", DASH);
+    asr::timer::set_variable("comparison deaths", DASH);
+    asr::timer::set_variable("delta deaths", DASH);
     asr::timer::set_variable("percent", DASH);
 
     asr::print_message("Hello, World!");
@@ -484,6 +596,10 @@ async fn main() {
     let mut ticks_since_gui = 0;
     let mut settings = Settings::default_init_register();
     asr::print_message(&format!("hit_counter: {:?}", settings.get_hit_counter()));
+    asr::print_message(&format!(
+        "death_counter: {:?}",
+        settings.get_death_counter()
+    ));
     asr::print_message(&format!("splits: {:?}", settings.get_splits()));
 
     let mut state = AutoSplitterState::new();
@@ -493,11 +609,24 @@ async fn main() {
         asr::timer::set_variable_int("segment hits", 0);
     }
 
+    if settings.get_death_counter() {
+        asr::timer::set_variable_int("deaths", 0);
+        asr::timer::set_variable_int("segment deaths", 0);
+    }
+
     if !state.comparison_hits.is_empty()
         && (state.comparison_hits.len() + 1 == settings.get_splits_len())
     {
         if let Some(pb_hits) = state.comparison_hits.last() {
             asr::timer::set_variable_int("pb hits", *pb_hits);
+        }
+    }
+
+    if !state.comparison_deaths.is_empty()
+        && (state.comparison_deaths.len() + 1 == settings.get_splits_len())
+    {
+        if let Some(pb_deaths) = state.comparison_deaths.last() {
+            asr::timer::set_variable_int("pb deaths", *pb_deaths);
         }
     }
 
@@ -596,6 +725,7 @@ async fn handle_splits(
                         state.timer_state = TimerState::Running;
                         state.split_index = Some(0);
                         state.segment_hits.resize(1, 0);
+                        state.segment_deaths.resize(1, 0);
                         if settings.get_hit_counter() {
                             asr::timer::set_variable_int("segment hits", state.segment_hits[0]);
                             // .first() = .get(0)
@@ -608,6 +738,20 @@ async fn handle_splits(
                             } else {
                                 asr::timer::set_variable("comparison hits", DASH);
                                 asr::timer::set_variable("delta hits", DASH);
+                            }
+                        }
+                        if settings.get_death_counter() {
+                            asr::timer::set_variable_int("segment deaths", state.segment_deaths[0]);
+                            // .first() = .get(0)
+                            if let Some(c) = state.comparison_deaths.first() {
+                                asr::timer::set_variable_int("comparison deaths", *c);
+                                asr::timer::set_variable(
+                                    "delta deaths",
+                                    &delta_string(state.deaths - c),
+                                );
+                            } else {
+                                asr::timer::set_variable("comparison deaths", DASH);
+                                asr::timer::set_variable("delta deaths", DASH);
                             }
                         }
                         // InitializeGameTime
@@ -633,6 +777,12 @@ async fn handle_splits(
                                 &state.cumulative_hits,
                             );
                         }
+                        if settings.get_death_counter() {
+                            Settings::update_comparison_deaths(
+                                &mut state.comparison_deaths,
+                                &state.cumulative_deaths,
+                            );
+                        }
                         asr::timer::reset();
                         state.timer_state = TimerState::NotRunning;
                         state.split_index = None;
@@ -640,6 +790,9 @@ async fn handle_splits(
                         state.hits = 0;
                         state.segment_hits.clear();
                         state.cumulative_hits.clear();
+                        state.deaths = 0;
+                        state.segment_deaths.clear();
+                        state.cumulative_deaths.clear();
                         if settings.get_hit_counter() {
                             asr::timer::set_variable_int("hits", state.hits);
                             asr::timer::set_variable_int("segment hits", 0);
@@ -647,8 +800,17 @@ async fn handle_splits(
                             asr::timer::set_variable("hits", DASH);
                             asr::timer::set_variable("segment hits", DASH);
                         }
+                        if settings.get_death_counter() {
+                            asr::timer::set_variable_int("deaths", state.deaths);
+                            asr::timer::set_variable_int("segment deaths", 0);
+                        } else {
+                            asr::timer::set_variable("deaths", DASH);
+                            asr::timer::set_variable("segment deaths", DASH);
+                        }
                         asr::timer::set_variable("comparison hits", DASH);
                         asr::timer::set_variable("delta hits", DASH);
+                        asr::timer::set_variable("comparison deaths", DASH);
+                        asr::timer::set_variable("delta deaths", DASH);
                         asr::timer::set_variable("percent", DASH);
                         state.look_for_teleporting = false;
                         state.last_game_state = GAME_STATE_INACTIVE;
@@ -666,6 +828,7 @@ async fn handle_splits(
                         state.split_index = Some(old_index + 1);
                         state.segments_splitted.push(false);
                         state.segment_hits.insert(old_i, 0);
+                        state.segment_deaths.insert(old_i, 0);
                         if settings.get_hit_counter() {
                             asr::timer::set_variable_int("segment hits", state.segment_hits[new_i]);
                             if let Some(c) = state.comparison_hits.get(new_i) {
@@ -679,6 +842,22 @@ async fn handle_splits(
                                 asr::timer::set_variable("delta hits", DASH);
                             }
                         }
+                        if settings.get_death_counter() {
+                            asr::timer::set_variable_int(
+                                "segment deaths",
+                                state.segment_deaths[new_i],
+                            );
+                            if let Some(c) = state.comparison_deaths.get(new_i) {
+                                asr::timer::set_variable_int("comparison deaths", *c);
+                                asr::timer::set_variable(
+                                    "delta deaths",
+                                    &delta_string(state.deaths - c),
+                                );
+                            } else {
+                                asr::timer::set_variable("comparison deaths", DASH);
+                                asr::timer::set_variable("delta deaths", DASH);
+                            }
+                        }
                         // no break, allow other actions after a skip or reset
                     }
                     SplitterAction::Split => {
@@ -689,6 +868,8 @@ async fn handle_splits(
                         state.segments_splitted.push(true);
                         state.segment_hits.push(0);
                         state.cumulative_hits.resize(new_i, state.hits);
+                        state.segment_deaths.push(0);
+                        state.cumulative_deaths.resize(new_i, state.deaths);
                         if settings.get_hit_counter() {
                             asr::timer::set_variable_int("segment hits", state.segment_hits[new_i]);
                             if let Some(c) = state.comparison_hits.get(new_i) {
@@ -700,6 +881,22 @@ async fn handle_splits(
                             } else {
                                 asr::timer::set_variable("comparison hits", DASH);
                                 asr::timer::set_variable("delta hits", DASH);
+                            }
+                        }
+                        if settings.get_death_counter() {
+                            asr::timer::set_variable_int(
+                                "segment deaths",
+                                state.segment_deaths[new_i],
+                            );
+                            if let Some(c) = state.comparison_deaths.get(new_i) {
+                                asr::timer::set_variable_int("comparison deaths", *c);
+                                asr::timer::set_variable(
+                                    "delta deaths",
+                                    &delta_string(state.deaths - c),
+                                );
+                            } else {
+                                asr::timer::set_variable("comparison deaths", DASH);
+                                asr::timer::set_variable("delta deaths", DASH);
                             }
                         }
                         break;
@@ -717,6 +914,7 @@ async fn handle_splits(
                             state.split_index = Some(old_index + 1);
                             state.segments_splitted.push(false);
                             state.segment_hits.insert(old_i, 0);
+                            state.segment_deaths.insert(old_i, 0);
                             if settings.get_hit_counter() {
                                 asr::timer::set_variable_int(
                                     "segment hits",
@@ -731,6 +929,22 @@ async fn handle_splits(
                                 } else {
                                     asr::timer::set_variable("comparison hits", DASH);
                                     asr::timer::set_variable("delta hits", DASH);
+                                }
+                            }
+                            if settings.get_death_counter() {
+                                asr::timer::set_variable_int(
+                                    "segment deaths",
+                                    state.segment_deaths[new_i],
+                                );
+                                if let Some(c) = state.comparison_deaths.get(new_i) {
+                                    asr::timer::set_variable_int("comparison deaths", *c);
+                                    asr::timer::set_variable(
+                                        "delta deaths",
+                                        &delta_string(state.deaths - c),
+                                    );
+                                } else {
+                                    asr::timer::set_variable("comparison deaths", DASH);
+                                    asr::timer::set_variable("delta deaths", DASH);
                                 }
                             }
                         }
@@ -859,8 +1073,8 @@ fn load_removal(state: &mut AutoSplitterState, e: &Env) {
 }
 
 fn handle_hits(settings: &Settings, state: &mut AutoSplitterState, e: &Env) {
-    // only count hits if hit counter is true
-    if !settings.get_hit_counter() {
+    // only count hits if hit counter or death counter is true
+    if !(settings.get_hit_counter() || settings.get_death_counter()) {
         return;
     }
     // only count hits if timer is running
@@ -869,6 +1083,37 @@ fn handle_hits(settings: &Settings, state: &mut AutoSplitterState, e: &Env) {
     }
 
     let Env { mem, gm, pd } = e;
+
+    let maybe_health: Option<i32> = mem.deref(&pd.health).ok();
+    let game_state: i32 = mem.deref(&gm.game_state).unwrap_or_default();
+    let health_0 = maybe_health == Some(0) && game_state == GAME_STATE_PLAYING;
+    if !state.last_health_0 && health_0 {
+        if settings.get_hit_counter() {
+            add_hit(state);
+        }
+        if settings.get_death_counter() {
+            add_death(state);
+        }
+        #[cfg(debug_assertions)]
+        asr::print_message(&format!(
+            "hit: {}, death: {}, from health 0",
+            state.hits, state.deaths
+        ));
+    }
+    state.last_health_0 = health_0;
+
+    #[cfg(debug_assertions)]
+    {
+        if maybe_health != state.last_health {
+            asr::print_message(&format!("health: {:?}", maybe_health));
+        }
+        state.last_health = maybe_health;
+    }
+
+    // only count non-death hits if hit counter is true
+    if !settings.get_hit_counter() {
+        return;
+    }
 
     let recoil: bool = mem.deref(&gm.hero_recoil_frozen).unwrap_or_default();
     if !state.last_recoil && recoil {
@@ -885,24 +1130,6 @@ fn handle_hits(settings: &Settings, state: &mut AutoSplitterState, e: &Env) {
         asr::print_message(&format!("hit: {}, from hazard", state.hits));
     }
     state.last_hazard = hazard;
-
-    let maybe_health: Option<i32> = mem.deref(&pd.health).ok();
-    let game_state: i32 = mem.deref(&gm.game_state).unwrap_or_default();
-    let health_0 = maybe_health == Some(0) && game_state == GAME_STATE_PLAYING;
-    if !state.last_health_0 && health_0 {
-        add_hit(state);
-        #[cfg(debug_assertions)]
-        asr::print_message(&format!("hit: {}, from heath 0", state.hits));
-    }
-    state.last_health_0 = health_0;
-
-    #[cfg(debug_assertions)]
-    {
-        if maybe_health != state.last_health {
-            asr::print_message(&format!("health: {:?}", maybe_health));
-        }
-        state.last_health = maybe_health;
-    }
 }
 
 fn add_hit(state: &mut AutoSplitterState) {
@@ -916,6 +1143,20 @@ fn add_hit(state: &mut AutoSplitterState) {
         asr::timer::set_variable("delta hits", &delta_string(state.hits - c));
     } else {
         asr::timer::set_variable("delta hits", DASH);
+    }
+}
+
+fn add_death(state: &mut AutoSplitterState) {
+    state.deaths += 1;
+    asr::timer::set_variable_int("deaths", state.deaths);
+    let i = state.split_index.unwrap_or_default() as usize;
+    state.segment_deaths.resize(i + 1, 0);
+    state.segment_deaths[i] += 1;
+    asr::timer::set_variable_int("segment deaths", state.segment_deaths[i]);
+    if let Some(c) = state.comparison_deaths.get(i) {
+        asr::timer::set_variable("delta deaths", &delta_string(state.deaths - c));
+    } else {
+        asr::timer::set_variable("delta deaths", DASH);
     }
 }
 
@@ -954,4 +1195,22 @@ fn delta_string(i: i64) -> String {
     } else {
         format!("{:+}", i)
     }
+}
+
+fn update_vec_min<T: Ord + Copy>(dst: &mut Vec<T>, src: &[T]) {
+    for i in 0..src.len() {
+        if i < dst.len() {
+            dst[i] = cmp::min(dst[i], src[i]);
+        } else {
+            dst.push(src[i]);
+        }
+    }
+}
+
+fn settings_list<T: asr::settings::AsValue + Copy>(src: &[T]) -> asr::settings::List {
+    let l = asr::settings::List::new();
+    for i in src {
+        l.push(*i);
+    }
+    l
 }
