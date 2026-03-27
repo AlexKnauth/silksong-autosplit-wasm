@@ -421,7 +421,7 @@ impl Widget for PkgVersion {
 #[derive(Gui)]
 struct Settings {
     _pkg_version: PkgVersion,
-    /// Pause GameTime on File Select menu
+    /// Pause GameTime on File Select (Required Off for Glitched)
     #[default = true]
     pause_on_file_select: bool,
     /// Hit Counter
