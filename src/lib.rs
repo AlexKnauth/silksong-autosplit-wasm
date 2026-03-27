@@ -73,6 +73,7 @@ struct AutoSplitterState {
     /// Some: Running, Paused, or Ended
     split_index: Option<u64>,
     segments_splitted: Vec<bool>,
+    black_threaded_file_select: bool,
     look_for_teleporting: bool,
     #[cfg(debug_assertions)]
     last_ui_state: i32,
@@ -113,6 +114,7 @@ impl AutoSplitterState {
             timer_state,
             split_index,
             segments_splitted,
+            black_threaded_file_select: false,
             look_for_teleporting: false,
             #[cfg(debug_assertions)]
             last_ui_state: 0,
@@ -719,6 +721,13 @@ async fn handle_splits(
     ss: &mut SceneStore,
 ) {
     let trans_now = ss.transition_now(env);
+    if trans_now {
+        match ss.pair().current {
+            "Cinematic_Ending_C" => state.black_threaded_file_select = true,
+            "Opening_Sequence_Act3" => state.black_threaded_file_select = false,
+            _ => (),
+        }
+    }
     loop {
         match state.timer_state {
             TimerState::NotRunning => {
@@ -1047,6 +1056,7 @@ fn load_removal(settings: &Settings, state: &mut AutoSplitterState, e: &Env) {
                     && (!next_scene.is_empty())))
             && next_scene != scene_name)
         || (settings.get_pause_on_file_select()
+            && !state.black_threaded_file_select
             && game_state == GAME_STATE_MAIN_MENU
             && ui_state == UI_STATE_MAIN_MENU
             && scene_name == MENU_TITLE
