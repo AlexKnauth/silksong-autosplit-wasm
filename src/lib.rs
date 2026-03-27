@@ -690,6 +690,9 @@ async fn main() {
                         ticks_since_gui = 0;
                     }
                     state.update(&settings, Some(&env));
+                    if is_timer_state_between_runs(state.timer_state) {
+                        scene_store.split_this_transition = false;
+                    }
 
                     // TODO: Do something on every tick.
                     handle_splits(&settings, &mut state, &env, &mut scene_store).await;
