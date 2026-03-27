@@ -728,7 +728,8 @@ impl SceneStore {
                 return false;
             }
             self.last_next = false;
-            self.split_this_transition = false;
+            // avoid double-splitting AnyTransition / TransitionExcludingDiscontinuities
+            // self.split_this_transition = false;
             #[cfg(debug_assertions)]
             asr::print_message(&format!(
                 "prev {} -> curr {}",
