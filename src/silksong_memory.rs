@@ -732,6 +732,7 @@ impl SceneStore {
             if is_menu(&self.prev_scene_name) || is_menu(&self.curr_scene_name) {
                 self.split_this_transition = false;
             }
+            #[cfg(debug_assertions)]
             asr::print_message(&format!(
                 "prev {} -> curr {}",
                 &self.prev_scene_name, &self.curr_scene_name
