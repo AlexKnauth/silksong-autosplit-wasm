@@ -731,6 +731,7 @@ async fn handle_splits(
     loop {
         match state.timer_state {
             TimerState::NotRunning => {
+                ss.split_this_transition = false;
                 // TODO: look up from settings
                 let Some(split) = settings.get_split(0) else {
                     break;
