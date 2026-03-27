@@ -1911,7 +1911,12 @@ pub fn menu_splits(
     }
 }
 
-pub fn transition_splits(split: &Split, scenes: &Pair<&str>, e: &Env) -> SplitterAction {
+pub fn transition_splits(
+    split: &Split,
+    scenes: &Pair<&str>,
+    e: &Env,
+    split_this_transition: bool,
+) -> SplitterAction {
     let Env { mem, pd, gm } = e;
     match split {
         // region: Start, End, and Menu
@@ -1920,11 +1925,12 @@ pub fn transition_splits(split: &Split, scenes: &Pair<&str>, e: &Env) -> Splitte
         }
         Split::EndingSplit => should_split(scenes.current.starts_with("Cinematic_Ending")),
         Split::EndingA => should_split(scenes.current == "Cinematic_Ending_A"),
-        Split::AnyTransition => should_split(true),
+        Split::AnyTransition => should_split(!split_this_transition),
         // TODO: if there's anything like DreamGate in Silksong,
         // should TransitionExcludingDiscontinuities exclude that too?
         Split::TransitionExcludingDiscontinuities => should_split(
-            !(is_discontinuity_scene(scenes.old)
+            !(split_this_transition
+                || is_discontinuity_scene(scenes.old)
                 || is_discontinuity_scene(scenes.current)
                 || mem.deref(&pd.health).is_ok_and(|h: i32| h == 0)
                 || mem
@@ -3336,7 +3342,7 @@ pub fn splits(
                 if is_menu(scenes.old) || is_menu(scenes.current) {
                     menu_splits(split, &scenes, env, store)
                 } else {
-                    transition_splits(split, &scenes, env)
+                    transition_splits(split, &scenes, env, ss.split_this_transition)
                 }
             } else {
                 SplitterAction::Pass
