@@ -690,9 +690,6 @@ async fn main() {
                         ticks_since_gui = 0;
                     }
                     state.update(&settings, Some(&env));
-                    if is_timer_state_between_runs(state.timer_state) {
-                        scene_store.split_this_transition = false;
-                    }
 
                     // TODO: Do something on every tick.
                     handle_splits(&settings, &mut state, &env, &mut scene_store).await;
@@ -734,6 +731,7 @@ async fn handle_splits(
     loop {
         match state.timer_state {
             TimerState::NotRunning => {
+                ss.split_this_transition = false;
                 // TODO: look up from settings
                 let Some(split) = settings.get_split(0) else {
                     break;
