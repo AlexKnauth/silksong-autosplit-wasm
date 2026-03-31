@@ -8,10 +8,10 @@ use utf16_lit::utf16;
 
 use crate::{
     silksong_memory::{
-        get_at_bench, get_health, get_heart_pieces, get_max_health_base, get_respawn_scene,
-        get_silk_max, get_silk_spool_parts, is_discontinuity_scene, is_menu, Env, SceneStore,
-        CINEMATIC_STAG_TRAVEL, DEATH_RESPAWN_MARKER_INIT, GAME_STATE_PLAYING, MENU_TITLE,
-        NON_MENU_GAME_STATES, OPENING_SCENES,
+        get_at_bench, get_health, get_heart_pieces, get_is_maggoted, get_max_health_base,
+        get_respawn_scene, get_silk_max, get_silk_spool_parts, is_discontinuity_scene, is_menu,
+        Env, SceneStore, CINEMATIC_STAG_TRAVEL, DEATH_RESPAWN_MARKER_INIT, GAME_STATE_PLAYING,
+        MENU_TITLE, NON_MENU_GAME_STATES, OPENING_SCENES,
     },
     store::Store,
     timer::{should_split, SplitterAction},
@@ -56,6 +56,10 @@ pub enum Split {
     ///
     /// Splits when player HP is 0
     PlayerDeath,
+    /// Maggots Removed (Event)
+    ///
+    /// Splits when Hornet stops being afflicted by maggot water
+    MaggotsRemoved,
     /// Any Transition (Transition)
     ///
     /// Splits when entering a transition (only one will split per transition)
@@ -2438,6 +2442,11 @@ pub fn continuous_splits(split: &Split, e: &Env, store: &mut Store) -> SplitterA
             store
                 .get_i32_pair_bang("health", &get_health, Some(e))
                 .is_some_and(|p| p.changed_to(&0)),
+        ),
+        Split::MaggotsRemoved => should_split(
+            store
+                .get_bool_pair_bang("hero_is_maggoted", &get_is_maggoted, Some(e))
+                .is_some_and(|p| p.changed_to(&false)),
         ),
         // endregion: Start, End, and Menu
 

@@ -271,6 +271,16 @@ declare_pointers!(GameManagerPointers {
             "recoilFrozen",
         ],
     ),
+    hero_is_maggoted: UnityPointer<4> = UnityPointer::new(
+        "GameManager",
+        0,
+        &[
+            "_instance",
+            "<hero_ctrl>k__BackingField",
+            "cState",
+            "isMaggoted",
+        ],
+    ),
     hero_transition_state: UnityPointer<3> = UnityPointer::new(
         "GameManager",
         0,
@@ -831,6 +841,10 @@ pub fn get_silk_spool_parts(e: Option<&Env>) -> Option<i32> {
 
 pub fn get_at_bench(e: Option<&Env>) -> Option<bool> {
     e?.mem.deref(&e?.pd.at_bench).ok()
+}
+
+pub fn get_is_maggoted(e: Option<&Env>) -> Option<bool> {
+    e?.mem.deref(&e?.gm.hero_is_maggoted).ok()
 }
 
 pub fn get_respawn_scene(e: Option<&Env>) -> Option<String> {
