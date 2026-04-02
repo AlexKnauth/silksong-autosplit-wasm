@@ -30,10 +30,10 @@ use ugly_widget::{
 
 use crate::{
     silksong_memory::{
-        attach_silksong, get_game_state, get_health, is_menu_state_save_profiles, Env,
-        GameManagerPointers, Memory, PlayerDataPointers, SceneStore, GAME_STATE_CUTSCENE,
-        GAME_STATE_ENTERING_LEVEL, GAME_STATE_EXITING_LEVEL, GAME_STATE_INACTIVE,
-        GAME_STATE_LOADING, GAME_STATE_MAIN_MENU, GAME_STATE_PLAYING,
+        attach_silksong, get_any_slot_black_threaded, get_game_state, get_health,
+        is_menu_state_save_profiles, Env, GameManagerPointers, Memory, PlayerDataPointers,
+        SceneStore, GAME_STATE_CUTSCENE, GAME_STATE_ENTERING_LEVEL, GAME_STATE_EXITING_LEVEL,
+        GAME_STATE_INACTIVE, GAME_STATE_LOADING, GAME_STATE_MAIN_MENU, GAME_STATE_PLAYING,
         HERO_TRANSITION_STATE_WAITING_TO_ENTER_LEVEL, MENU_TITLE, NON_MENU_GAME_STATES,
         OPENING_SCENES, QUIT_TO_MENU, UI_STATE_CUTSCENE, UI_STATE_MAIN_MENU, UI_STATE_PAUSED,
         UI_STATE_PLAYING,
@@ -668,6 +668,22 @@ async fn main() {
                 let _: Address64 = mem.deref(&gm.scene_name).unwrap_or_default();
                 let _: i32 = mem.deref(&gm.ui_state_vanilla).unwrap_or_default();
                 let _: i32 = mem.deref(&gm.menu_state_vanilla).unwrap_or_default();
+                let _: i32 = mem.deref(&gm.slot_one_state).unwrap_or_default();
+                let _: i32 = mem
+                    .deref(&gm.slot_one_black_thread_impacts_left)
+                    .unwrap_or_default();
+                let _: i32 = mem.deref(&gm.slot_two_state).unwrap_or_default();
+                let _: i32 = mem
+                    .deref(&gm.slot_two_black_thread_impacts_left)
+                    .unwrap_or_default();
+                let _: i32 = mem.deref(&gm.slot_three_state).unwrap_or_default();
+                let _: i32 = mem
+                    .deref(&gm.slot_three_black_thread_impacts_left)
+                    .unwrap_or_default();
+                let _: i32 = mem.deref(&gm.slot_four_state).unwrap_or_default();
+                let _: i32 = mem
+                    .deref(&gm.slot_four_black_thread_impacts_left)
+                    .unwrap_or_default();
                 let _: Address64 = mem.deref(&pd.version).unwrap_or_default();
                 let _: bool = mem.deref(&pd.is_inventory_open).unwrap_or_default();
                 let _: i32 = mem.deref(&pd.health).unwrap_or_default();
@@ -1057,11 +1073,11 @@ fn load_removal(settings: &Settings, state: &mut AutoSplitterState, e: &Env) {
                     && (!next_scene.is_empty())))
             && next_scene != scene_name)
         || (settings.get_pause_on_file_select()
-            && !state.black_threaded_file_select
             && game_state == GAME_STATE_MAIN_MENU
             && ui_state == UI_STATE_MAIN_MENU
             && scene_name == MENU_TITLE
-            && is_menu_state_save_profiles(menu_state, &version));
+            && is_menu_state_save_profiles(menu_state, &version)
+            && !get_any_slot_black_threaded(Some(e)).unwrap_or(state.black_threaded_file_select));
     if is_game_time_paused {
         asr::timer::pause_game_time();
     } else {
