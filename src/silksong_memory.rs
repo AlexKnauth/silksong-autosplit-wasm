@@ -92,6 +92,8 @@ pub const UI_STATE_CUTSCENE: i32 = 3;
 pub const UI_STATE_PLAYING: i32 = 4;
 pub const UI_STATE_PAUSED: i32 = 5;
 
+pub const SLOT_STATE_BLACK_THREAD_INFECTED: i32 = 9;
+
 /*
 public enum HeroTransitionState
 {
@@ -185,6 +187,44 @@ fn is_version_without_advanced_gamepad_menu(version: &str) -> bool {
     }
 }
 
+fn slot_black_threaded(
+    mem: &Memory,
+    state: &UnityPointer<4>,
+    black_thread_impacts_left: &UnityPointer<4>,
+) -> Option<bool> {
+    let s: i32 = mem.deref(state).ok()?;
+    if s == SLOT_STATE_BLACK_THREAD_INFECTED {
+        let i: i32 = mem.deref(black_thread_impacts_left).ok()?;
+        if i > 0 {
+            return Some(true);
+        }
+    }
+    Some(false)
+}
+
+pub fn get_any_slot_black_threaded(e: Option<&Env>) -> Option<bool> {
+    let Env { mem, gm, .. } = e?;
+    Some(
+        slot_black_threaded(
+            mem,
+            &gm.slot_one_state,
+            &gm.slot_one_black_thread_impacts_left,
+        )? || slot_black_threaded(
+            mem,
+            &gm.slot_two_state,
+            &gm.slot_two_black_thread_impacts_left,
+        )? || slot_black_threaded(
+            mem,
+            &gm.slot_three_state,
+            &gm.slot_three_black_thread_impacts_left,
+        )? || slot_black_threaded(
+            mem,
+            &gm.slot_four_state,
+            &gm.slot_four_black_thread_impacts_left,
+        )?,
+    )
+}
+
 pub fn is_discontinuity_scene(s: &str) -> bool {
     DISCONTINUITY_SCENE_NAMES.contains(&s)
 }
@@ -231,6 +271,46 @@ declare_pointers!(GameManagerPointers {
         "GameManager",
         0,
         &["_instance", "<ui>k__BackingField", "menuState"],
+    ),
+    slot_one_state: UnityPointer<4> = UnityPointer::new(
+        "GameManager",
+        0,
+        &["_instance", "<ui>k__BackingField", "slotOne", "State"],
+    ),
+    slot_one_black_thread_impacts_left: UnityPointer<4> = UnityPointer::new(
+        "GameManager",
+        0,
+        &["_instance", "<ui>k__BackingField", "slotOne", "blackThreadImpactsLeft"],
+    ),
+    slot_two_state: UnityPointer<4> = UnityPointer::new(
+        "GameManager",
+        0,
+        &["_instance", "<ui>k__BackingField", "slotTwo", "State"],
+    ),
+    slot_two_black_thread_impacts_left: UnityPointer<4> = UnityPointer::new(
+        "GameManager",
+        0,
+        &["_instance", "<ui>k__BackingField", "slotTwo", "blackThreadImpactsLeft"],
+    ),
+    slot_three_state: UnityPointer<4> = UnityPointer::new(
+        "GameManager",
+        0,
+        &["_instance", "<ui>k__BackingField", "slotThree", "State"],
+    ),
+    slot_three_black_thread_impacts_left: UnityPointer<4> = UnityPointer::new(
+        "GameManager",
+        0,
+        &["_instance", "<ui>k__BackingField", "slotThree", "blackThreadImpactsLeft"],
+    ),
+    slot_four_state: UnityPointer<4> = UnityPointer::new(
+        "GameManager",
+        0,
+        &["_instance", "<ui>k__BackingField", "slotOne", "State"],
+    ),
+    slot_four_black_thread_impacts_left: UnityPointer<4> = UnityPointer::new(
+        "GameManager",
+        0,
+        &["_instance", "<ui>k__BackingField", "slotFour", "blackThreadImpactsLeft"],
     ),
     accepting_input: UnityPointer<3> = UnityPointer::new(
         "GameManager",
