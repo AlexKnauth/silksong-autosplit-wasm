@@ -204,6 +204,10 @@ pub enum Split {
     ///
     /// Splits when Gurr the Outcast is defeated
     GurrTheOutcast,
+    /// Enter Sprintmaster Cave (Transition)
+    ///
+    /// Splits when entering the room containing Sprintmaster Swift
+    EnterSprintmasterCave,
     // endregion: FarFields
 
     // region: Greymoor
@@ -1994,6 +1998,7 @@ pub fn transition_splits(
             !scenes.old.starts_with("Bone_East") && scenes.current.starts_with("Bone_East"),
         ),
         Split::DriftersCloakTrans => should_split(mem.deref(&pd.has_brolly).unwrap_or_default()),
+        Split::EnterSprintmasterCave => should_split(scenes.changed_to(&"Sprintmaster_Cave")),
         // endregion: FarFields
 
         // region: Greymoor
