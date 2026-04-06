@@ -60,6 +60,10 @@ pub enum Split {
     ///
     /// Splits when Hornet stops being afflicted by maggot water
     MaggotsRemoved,
+    /// Beastling Call Travel (Transition)
+    ///
+    /// Splits when using Beastling Call to fast travel
+    BeastlingCallTravelTrans,
     /// Any Transition (Transition)
     ///
     /// Splits when entering a transition (only one will split per transition)
@@ -1934,8 +1938,12 @@ pub fn transition_splits(
         Split::EndingSplit => should_split(scenes.current.starts_with("Cinematic_Ending")),
         Split::EndingA => should_split(scenes.current == "Cinematic_Ending_A"),
         Split::AnyTransition => should_split(!split_this_transition),
-        // TODO: if there's anything like DreamGate in Silksong,
-        // should TransitionExcludingDiscontinuities exclude that too?
+        Split::BeastlingCallTravelTrans => should_split(
+            scenes.changed()
+                && mem
+                    .read_string(&gm.entry_gate_name)
+                    .is_some_and(|e| e == "door_fastTravelExit"),
+        ),
         Split::TransitionExcludingDiscontinuities => should_split(
             !(split_this_transition
                 || is_discontinuity_scene(scenes.old)
@@ -1943,7 +1951,7 @@ pub fn transition_splits(
                 || mem.deref(&pd.health).is_ok_and(|h: i32| h == 0)
                 || mem
                     .read_string(&gm.entry_gate_name)
-                    .is_some_and(|e| e == "dreamGate")),
+                    .is_some_and(|e| e == "dreamGate" || e == "door_fastTravelExit")),
         ),
         // endregion: Start, End, and Menu
 
