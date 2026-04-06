@@ -171,12 +171,16 @@ pub enum Split {
     /// Enter Hunter's March (Transition)
     ///
     /// Splits on entering a Hunter's March transition with area text
-    /// (includes post-Skarrguard room and tall room)
+    /// (includes post-Skarrgard room and tall room)
     EnterHuntersMarch,
     /// Hunter's March - Post-Middle Arena (Transition)
     ///
     /// Splits on transition to the room after the middle arena in Hunter's March
     HuntersMarchPostMiddleArenaTransition,
+    /// Skarrgard 2 (Mini Boss)
+    ///
+    /// Splits when defeating the Skarrgard encounter guarding rosary strings in Hunter's March (Ant_21)
+    Skarrgard2,
     // endregion: HuntersMarch
 
     // region: FarFields
@@ -204,6 +208,10 @@ pub enum Split {
     ///
     /// Splits when Gurr the Outcast is defeated
     GurrTheOutcast,
+    /// Skarrgard 3 (Mini Boss)
+    ///
+    /// Splits when defeating the Skarrguard beside Karmelita (Bone_East_25)
+    Skarrgard3,
     /// Enter Sprintmaster Cave (Transition)
     ///
     /// Splits when entering the room containing Sprintmaster Swift
@@ -2484,6 +2492,10 @@ pub fn continuous_splits(split: &Split, e: &Env, store: &mut Store) -> SplitterA
         ),
         // endregion: Wormways
 
+        // region: HuntersMarch
+        Split::Skarrgard2 => should_split(mem.deref(&pd.skarrgard_2_defeated).unwrap_or_default()),
+        // endregion: HuntersMarch
+
         // region: FarFields
         Split::DriftersCloak => should_split(mem.deref(&pd.has_brolly).unwrap_or_default()),
         Split::FourthChorus => should_split(mem.deref(&pd.defeated_song_golem).unwrap_or_default()),
@@ -2493,6 +2505,7 @@ pub fn continuous_splits(split: &Split, e: &Env, store: &mut Store) -> SplitterA
         Split::GurrTheOutcast => {
             should_split(mem.deref(&pd.defeated_ant_trapper).unwrap_or_default())
         }
+        Split::Skarrgard3 => should_split(mem.deref(&pd.skarrgard_3_defeated).unwrap_or_default()),
         // endregion: FarFields
 
         // region: Greymoor
