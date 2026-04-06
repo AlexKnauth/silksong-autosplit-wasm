@@ -2451,7 +2451,8 @@ pub fn continuous_splits(split: &Split, e: &Env, store: &mut Store) -> SplitterA
         Split::MaggotsRemoved => should_split(
             store
                 .get_bool_pair_bang("hero_is_maggoted", &get_is_maggoted, Some(e))
-                .is_some_and(|p| p.changed_to(&false)),
+                .is_some_and(|p| p.changed_to(&false))
+                && mem.deref(&pd.health).is_ok_and(|h: i32| h > 0),
         ),
         // endregion: Start, End, and Menu
 
