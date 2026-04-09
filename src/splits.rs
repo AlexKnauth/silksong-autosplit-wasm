@@ -1884,7 +1884,7 @@ pub fn menu_splits(
     scenes: &Pair<&str>,
     _e: &Env,
     store: &mut Store,
-) -> SplitterAction {
+) -> Option<SplitterAction> {
     match split {
         // region: Start, End, and Menu
         Split::Menu => should_split(scenes.current == MENU_TITLE),
@@ -1924,7 +1924,7 @@ pub fn transition_splits(
     scenes: &Pair<&str>,
     e: &Env,
     split_this_transition: bool,
-) -> SplitterAction {
+) -> Option<SplitterAction> {
     let Env { mem, pd, gm } = e;
     match split {
         // region: Start, End, and Menu
@@ -2380,7 +2380,11 @@ pub fn transition_splits(
     }
 }
 
-pub fn transition_once_splits(split: &Split, scenes: &Pair<&str>, e: &Env) -> SplitterAction {
+pub fn transition_once_splits(
+    split: &Split,
+    scenes: &Pair<&str>,
+    e: &Env,
+) -> Option<SplitterAction> {
     let Env { mem, gm, pd } = e;
     match split {
         // region: Start, End, and Menu
@@ -2433,7 +2437,7 @@ fn bench_split(store: &mut Store, e: &Env) -> bool {
         .is_some_and(|p| p.changed_to(&true))
 }
 
-pub fn continuous_splits(split: &Split, e: &Env, store: &mut Store) -> SplitterAction {
+pub fn continuous_splits(split: &Split, e: &Env, store: &mut Store) -> Option<SplitterAction> {
     let Env { mem, gm, pd } = e;
     let game_state: i32 = mem.deref(&gm.game_state).unwrap_or_default();
     if !NON_MENU_GAME_STATES.contains(&game_state) {
@@ -2441,7 +2445,7 @@ pub fn continuous_splits(split: &Split, e: &Env, store: &mut Store) -> SplitterA
     }
     match split {
         // region: Start, End, and Menu
-        Split::ManualSplit => SplitterAction::ManualSplit,
+        Split::ManualSplit => Some(SplitterAction::ManualSplit),
         Split::BenchAny => should_split(bench_split(store, e)),
         Split::PlayerDeath => should_split(
             store
@@ -3344,13 +3348,13 @@ pub fn splits(
     trans_now: bool,
     ss: &mut SceneStore,
     store: &mut Store,
-) -> SplitterAction {
+) -> Option<SplitterAction> {
     let a1 = continuous_splits(split, env, store).or_else(|| {
         let scenes = ss.pair();
         let a2 = if !ss.split_this_transition {
             transition_once_splits(split, &scenes, env)
         } else {
-            SplitterAction::Pass
+            None
         };
         a2.or_else(|| {
             if trans_now {
@@ -3360,11 +3364,11 @@ pub fn splits(
                     transition_splits(split, &scenes, env, ss.split_this_transition)
                 }
             } else {
-                SplitterAction::Pass
+                None
             }
         })
     });
-    if a1 != SplitterAction::Pass {
+    if a1.is_some() {
         ss.split_this_transition = true;
     }
     a1
