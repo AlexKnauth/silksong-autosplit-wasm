@@ -14,7 +14,7 @@ use crate::{
         MENU_TITLE, NON_MENU_GAME_STATES, OPENING_SCENES,
     },
     store::Store,
-    timer::{should_split, SplitterAction},
+    timer::{reached_up_to_split, should_split, SplitterAction},
 };
 
 #[derive(Clone, Debug, Default, Eq, Gui, Ord, PartialEq, PartialOrd, RadioButtonOptions)]
@@ -2741,18 +2741,10 @@ pub fn continuous_splits(split: &Split, e: &Env, store: &mut Store) -> Option<Sp
         // endregion: ThreefoldMelody
 
         // region: NeedleUpgrade
-        Split::NeedleUpgrade1 => {
-            should_split(mem.deref(&pd.nail_upgrades).is_ok_and(|n: i32| n >= 1))
-        }
-        Split::NeedleUpgrade2 => {
-            should_split(mem.deref(&pd.nail_upgrades).is_ok_and(|n: i32| n >= 2))
-        }
-        Split::NeedleUpgrade3 => {
-            should_split(mem.deref(&pd.nail_upgrades).is_ok_and(|n: i32| n >= 3))
-        }
-        Split::NeedleUpgrade4 => {
-            should_split(mem.deref(&pd.nail_upgrades).is_ok_and(|n: i32| n >= 4))
-        }
+        Split::NeedleUpgrade1 => reached_up_to_split(1, mem.deref(&pd.nail_upgrades)),
+        Split::NeedleUpgrade2 => reached_up_to_split(2, mem.deref(&pd.nail_upgrades)),
+        Split::NeedleUpgrade3 => reached_up_to_split(3, mem.deref(&pd.nail_upgrades)),
+        Split::NeedleUpgrade4 => reached_up_to_split(4, mem.deref(&pd.nail_upgrades)),
         // endregion: NeedleUpgrade
 
         // region: MaskShards
@@ -2820,37 +2812,17 @@ pub fn continuous_splits(split: &Split, e: &Env, store: &mut Store) -> Option<Sp
         // endregion SpoolFragments
 
         // region: ToolPouchLevels
-        Split::ToolPouch1 => should_split(
-            mem.deref(&pd.tool_pouch_upgrades)
-                .is_ok_and(|n: i32| n == 1),
-        ),
-        Split::ToolPouch2 => should_split(
-            mem.deref(&pd.tool_pouch_upgrades)
-                .is_ok_and(|n: i32| n == 2),
-        ),
-        Split::ToolPouch3 => should_split(
-            mem.deref(&pd.tool_pouch_upgrades)
-                .is_ok_and(|n: i32| n == 3),
-        ),
-        Split::ToolPouch4 => should_split(
-            mem.deref(&pd.tool_pouch_upgrades)
-                .is_ok_and(|n: i32| n == 4),
-        ),
+        Split::ToolPouch1 => reached_up_to_split(1, mem.deref(&pd.tool_pouch_upgrades)),
+        Split::ToolPouch2 => reached_up_to_split(2, mem.deref(&pd.tool_pouch_upgrades)),
+        Split::ToolPouch3 => reached_up_to_split(3, mem.deref(&pd.tool_pouch_upgrades)),
+        Split::ToolPouch4 => reached_up_to_split(4, mem.deref(&pd.tool_pouch_upgrades)),
         // endregion: ToolPouchLevels
 
         // region: CraftingKitLevels
-        Split::CraftingKit1 => {
-            should_split(mem.deref(&pd.tool_kit_upgrades).is_ok_and(|n: i32| n == 1))
-        }
-        Split::CraftingKit2 => {
-            should_split(mem.deref(&pd.tool_kit_upgrades).is_ok_and(|n: i32| n == 2))
-        }
-        Split::CraftingKit3 => {
-            should_split(mem.deref(&pd.tool_kit_upgrades).is_ok_and(|n: i32| n == 3))
-        }
-        Split::CraftingKit4 => {
-            should_split(mem.deref(&pd.tool_kit_upgrades).is_ok_and(|n: i32| n == 4))
-        }
+        Split::CraftingKit1 => reached_up_to_split(1, mem.deref(&pd.tool_kit_upgrades)),
+        Split::CraftingKit2 => reached_up_to_split(2, mem.deref(&pd.tool_kit_upgrades)),
+        Split::CraftingKit3 => reached_up_to_split(3, mem.deref(&pd.tool_kit_upgrades)),
+        Split::CraftingKit4 => reached_up_to_split(4, mem.deref(&pd.tool_kit_upgrades)),
         // endregion: CraftingKitLevels
 
         // region: Crests
