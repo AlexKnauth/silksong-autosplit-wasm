@@ -46,6 +46,31 @@ asr::async_main!(stable);
 #[cfg(target_os = "unknown")]
 asr::panic_handler!();
 
+// This is copy-pasted from the standard library macro `dbg!`, but modified to output to asr.
+#[allow(unused)]
+macro_rules! adbg {
+    () => {
+        asr::print_message(&alloc::format!("[{}:{}:{}]", file!(), line!(), column!()))
+    };
+    ($val:expr $(,)?) => {
+        match $val {
+            tmp => {
+                asr::print_message(&alloc::format!("[{}:{}:{}] {} = {:#?}",
+                    file!(),
+                    line!(),
+                    column!(),
+                    stringify!($val),
+                    &&tmp as &dyn alloc::fmt::Debug,
+                ));
+                tmp
+            }
+        }
+    };
+    ($($val:expr),+ $(,)?) => {
+        ($(adbg!($val)),+,)
+    };
+}
+
 // --------------------------------------------------------
 
 static MODULE_PATH: &str = module_path!();
