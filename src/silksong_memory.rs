@@ -305,7 +305,7 @@ declare_pointers!(GameManagerPointers {
     slot_four_state: UnityPointer<4> = UnityPointer::new(
         "GameManager",
         0,
-        &["_instance", "<ui>k__BackingField", "slotOne", "State"],
+        &["_instance", "<ui>k__BackingField", "slotFour", "State"],
     ),
     slot_four_black_thread_impacts_left: UnityPointer<4> = UnityPointer::new(
         "GameManager",
