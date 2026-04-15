@@ -466,6 +466,8 @@ declare_pointers!(PlayerDataPointers {
     defeated_first_weaver: UnityPointer<3> = pdp("defeatedFirstWeaver"),
     encountered_ant_trapper: UnityPointer<3> = pdp("encounteredAntTrapper"),
     defeated_ant_trapper: UnityPointer<3> = pdp("defeatedAntTrapper"),
+    skarrgard_2_defeated: UnityPointer<3> = pdp("ant21_InitBattleCompleted"),
+    skarrgard_3_defeated: UnityPointer<3> = pdp("defeatedGuardBoneEast25"),
 
     savedflea_ant_03: UnityPointer<3> = pdp("SavedFlea_Ant_03"),
     savedflea_belltown_04: UnityPointer<3> = pdp("SavedFlea_Belltown_04"),
