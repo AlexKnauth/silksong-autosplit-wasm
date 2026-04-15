@@ -1,27 +1,30 @@
-#[derive(Clone, Debug, Default, Eq, Ord, PartialEq, PartialOrd)]
+use core::cmp::Ordering;
+
+#[derive(Clone, Debug, Eq, Ord, PartialEq, PartialOrd)]
 #[allow(dead_code)]
 pub enum SplitterAction {
-    #[default]
-    Pass,
     Split,
     Skip,
     Reset,
     ManualSplit,
 }
 
-impl SplitterAction {
-    pub fn or_else<F: FnOnce() -> SplitterAction>(self, f: F) -> SplitterAction {
-        match self {
-            SplitterAction::Pass => f(),
-            a => a,
-        }
+pub fn should_split(b: bool) -> Option<SplitterAction> {
+    if b {
+        Some(SplitterAction::Split)
+    } else {
+        None
     }
 }
 
-pub fn should_split(b: bool) -> SplitterAction {
-    if b {
-        SplitterAction::Split
-    } else {
-        SplitterAction::Pass
+/// Splits when equal, skips when greater than expected
+pub fn reached_up_to_split<T: PartialOrd>(
+    expected: T,
+    actual: Result<T, asr::Error>,
+) -> Option<SplitterAction> {
+    match actual.ok()?.partial_cmp(&expected)? {
+        Ordering::Equal => Some(SplitterAction::Split),
+        Ordering::Greater => Some(SplitterAction::Skip),
+        _ => None,
     }
 }

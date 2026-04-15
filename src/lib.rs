@@ -779,7 +779,7 @@ async fn handle_splits(
                 };
                 let a = splits::splits(&split, env, trans_now, ss, &mut state.store);
                 match a {
-                    SplitterAction::Split => {
+                    Some(SplitterAction::Split) => {
                         // Start
                         asr::timer::start();
                         state.timer_state = TimerState::Running;
@@ -830,7 +830,7 @@ async fn handle_splits(
                 };
                 let a = splits::splits(&split, env, trans_now, ss, &mut state.store);
                 match a {
-                    SplitterAction::Reset => {
+                    Some(SplitterAction::Reset) => {
                         if settings.get_hit_counter() {
                             Settings::update_comparison_hits(
                                 &mut state.comparison_hits,
@@ -880,7 +880,7 @@ async fn handle_splits(
                         }
                         // no break, allow other actions after a skip or reset
                     }
-                    SplitterAction::Skip => {
+                    Some(SplitterAction::Skip) => {
                         let old_index = state.split_index.unwrap_or_default();
                         let old_i = old_index as usize;
                         asr::timer::skip_split();
@@ -920,7 +920,7 @@ async fn handle_splits(
                         }
                         // no break, allow other actions after a skip or reset
                     }
-                    SplitterAction::Split => {
+                    Some(SplitterAction::Split) => {
                         let old_index = state.split_index.unwrap_or_default();
                         asr::timer::split();
                         let new_i = old_index as usize + 1;
@@ -961,7 +961,7 @@ async fn handle_splits(
                         }
                         break;
                     }
-                    SplitterAction::ManualSplit => {
+                    Some(SplitterAction::ManualSplit) => {
                         #[cfg(not(feature = "split-index"))]
                         if let Some(old_index) = state.split_index {
                             let old_i = old_index as usize;
