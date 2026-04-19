@@ -104,6 +104,8 @@ struct AutoSplitterState {
     last_ui_state: i32,
     last_game_state: i32,
     #[cfg(debug_assertions)]
+    last_accepting_input: bool,
+    #[cfg(debug_assertions)]
     last_hero_transition_state: i32,
     hits: i64,
     segment_hits: Vec<i64>,
@@ -121,6 +123,8 @@ struct AutoSplitterState {
     last_health: Option<i32>,
     #[cfg(debug_assertions)]
     last_paused: bool,
+    #[cfg(debug_assertions)]
+    last_reasons: Vec<&'static str>,
 }
 
 impl AutoSplitterState {
@@ -145,6 +149,8 @@ impl AutoSplitterState {
             last_ui_state: 0,
             last_game_state: GAME_STATE_INACTIVE,
             #[cfg(debug_assertions)]
+            last_accepting_input: false,
+            #[cfg(debug_assertions)]
             last_hero_transition_state: 0,
             hits: 0,
             segment_hits: Vec::new(),
@@ -162,6 +168,8 @@ impl AutoSplitterState {
             last_health: None,
             #[cfg(debug_assertions)]
             last_paused: false,
+            #[cfg(debug_assertions)]
+            last_reasons: Vec::new(),
         }
     }
 
@@ -242,6 +250,7 @@ impl AutoSplitterState {
                 #[cfg(debug_assertions)]
                 {
                     self.last_paused = false;
+                    self.last_reasons = Vec::new();
                 }
             }
             TimerState::Running if is_timer_state_between_runs(self.timer_state) => {
@@ -877,6 +886,7 @@ async fn handle_splits(
                         #[cfg(debug_assertions)]
                         {
                             state.last_paused = false;
+                            state.last_reasons = Vec::new();
                         }
                         // no break, allow other actions after a skip or reset
                     }
@@ -1125,6 +1135,14 @@ fn load_removal(settings: &Settings, state: &mut AutoSplitterState, e: &Env) {
 
     #[cfg(debug_assertions)]
     {
+        if accepting_input != state.last_accepting_input {
+            asr::print_message(&format!("accepting_input: {}", accepting_input));
+        }
+        state.last_accepting_input = accepting_input;
+    }
+
+    #[cfg(debug_assertions)]
+    {
         if hero_transition_state != state.last_hero_transition_state {
             asr::print_message(&format!("hero_transition_state: {}", hero_transition_state));
         }
@@ -1137,6 +1155,81 @@ fn load_removal(settings: &Settings, state: &mut AutoSplitterState, e: &Env) {
             asr::print_message(&format!("is_game_time_paused: {}", is_game_time_paused));
         }
         state.last_paused = is_game_time_paused;
+        let mut reasons = Vec::new();
+        if state.look_for_teleporting {
+            reasons.push("look_for_teleporting");
+        }
+        if (game_state == GAME_STATE_PLAYING || game_state == GAME_STATE_ENTERING_LEVEL)
+            && ui_state != UI_STATE_PLAYING
+        {
+            reasons.push("game_ui_mismatch");
+        }
+        if game_state != GAME_STATE_PLAYING
+            && game_state != GAME_STATE_CUTSCENE
+            && !accepting_input
+            && !state.mms_room_dupe
+        {
+            reasons.push("not_accepting_input");
+        }
+        if game_state == GAME_STATE_EXITING_LEVEL
+            && scene_load_null
+            && !is_inventory_open
+            && !state.mms_room_dupe
+        {
+            reasons.push("load_null");
+        }
+        if game_state == GAME_STATE_EXITING_LEVEL
+            && scene_load_activation_allowed
+            && !is_inventory_open
+            && !state.mms_room_dupe
+        {
+            reasons.push("load_activation");
+        }
+        if game_state == GAME_STATE_LOADING {
+            reasons.push("game_state_loading");
+        }
+        if hero_transition_state == HERO_TRANSITION_STATE_WAITING_TO_ENTER_LEVEL
+            && !is_inventory_open
+        {
+            reasons.push("hero_transition_state");
+        }
+        if ui_state != UI_STATE_PLAYING
+            && (scene_name != MENU_TITLE && next_scene.is_empty())
+            && next_scene != scene_name
+        {
+            reasons.push("loading_menu_next_empty");
+        }
+        if ui_state != UI_STATE_PLAYING
+            && (scene_name != MENU_TITLE && next_scene == MENU_TITLE)
+            && next_scene != scene_name
+        {
+            reasons.push("loading_menu_next_title");
+        }
+        if ui_state != UI_STATE_PLAYING && (scene_name == QUIT_TO_MENU) && next_scene != scene_name
+        {
+            reasons.push("loading_menu_quit");
+        }
+        if ui_state != UI_STATE_PLAYING
+            && (ui_state != UI_STATE_PAUSED
+                && ui_state != UI_STATE_CUTSCENE
+                && (!next_scene.is_empty()))
+            && next_scene != scene_name
+        {
+            reasons.push("next_scene_ui_state");
+        }
+        if settings.get_pause_on_file_select()
+            && game_state == GAME_STATE_MAIN_MENU
+            && ui_state == UI_STATE_MAIN_MENU
+            && scene_name == MENU_TITLE
+            && is_menu_state_save_profiles(menu_state, &version)
+            && !get_any_slot_black_threaded(Some(e)).unwrap_or(state.black_threaded_file_select)
+        {
+            reasons.push("file_select");
+        }
+        if reasons != state.last_reasons {
+            asr::print_message(&format!("reasons: {:?}", reasons));
+        }
+        state.last_reasons = reasons;
     }
 }
 
