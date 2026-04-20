@@ -1,0 +1,48 @@
+
+[21:52:33][Auto Splitter][INFO] accepting_input: false
+[21:52:33][Auto Splitter][INFO] is_game_time_paused: true
+[21:52:33][Auto Splitter][INFO] reasons: ["not_accepting_input", "file_select"]
+[21:52:36][Auto Splitter][INFO] accepting_input: true
+[21:52:36][Auto Splitter][INFO] reasons: ["file_select"]
+[21:52:39][Auto Splitter][INFO] accepting_input: false
+[21:52:39][Auto Splitter][INFO] reasons: ["not_accepting_input"]
+[21:52:41][Auto Splitter][INFO] game_state: 2
+[21:52:41][Auto Splitter][INFO] reasons: ["not_accepting_input", "game_state_loading"]
+[21:52:42][Auto Splitter][INFO] health: Some(9)
+[21:52:42][Auto Splitter][INFO] next_scene_name: Opening_Sequence_Act3
+[21:52:42][Auto Splitter][INFO] curr Menu_Title -> next Opening_Sequence_Act3
+[21:52:42][Auto Splitter][INFO] game_state: 6
+[21:52:42][Auto Splitter][INFO] hero_transition_state: 1
+[21:52:42][Auto Splitter][INFO] reasons: ["not_accepting_input", "load_activation", "next_scene_ui_state"]
+[21:52:42][Auto Splitter][INFO] curr_scene_name: Opening_Sequence_Act3
+[21:52:42][Auto Splitter][INFO] reasons: ["not_accepting_input", "load_activation"]
+[21:52:42][Auto Splitter][INFO] ui_state: 3
+[21:52:42][Auto Splitter][INFO] accepting_input: true
+[21:52:42][Auto Splitter][INFO] reasons: ["load_activation"]
+[21:53:03][Auto Splitter][INFO] accepting_input: false
+[21:53:03][Auto Splitter][INFO] reasons: ["not_accepting_input", "load_activation"]
+[21:53:20][Auto Splitter][INFO] next_scene_name: Song_Tower_Destroyed
+[21:53:20][Auto Splitter][INFO] curr Opening_Sequence_Act3 -> next Song_Tower_Destroyed
+[21:53:20][Auto Splitter][INFO] game_state: 7
+[21:53:20][Auto Splitter][INFO] is_game_time_paused: false
+[21:53:20][Auto Splitter][INFO] reasons: []
+[21:53:20][Auto Splitter][INFO] curr_scene_name: Song_Tower_Destroyed
+[21:53:20][Auto Splitter][INFO] game_state: 3
+[21:53:20][Auto Splitter][INFO] accepting_input: true
+[21:53:20][Auto Splitter][INFO] is_game_time_paused: true
+[21:53:20][Auto Splitter][INFO] reasons: ["game_ui_mismatch"]
+[21:53:20][Auto Splitter][INFO] ui_state: 4
+[21:53:20][Auto Splitter][INFO] is_game_time_paused: false
+[21:53:20][Auto Splitter][INFO] reasons: []
+[21:53:20][Auto Splitter][INFO] game_state: 4
+[21:53:20][Auto Splitter][INFO] hero_transition_state: 0
+[21:53:33][Auto Splitter][INFO] health: Some(1)
+[21:53:40][Auto Splitter][INFO] health: Some(4)
+[21:53:44][Auto Splitter][INFO] ui_state: 5
+[21:53:44][Auto Splitter][INFO] game_state: 5
+[21:53:44][Auto Splitter][INFO] accepting_input: false
+[21:53:44][Auto Splitter][INFO] is_game_time_paused: true
+[21:53:44][Auto Splitter][INFO] reasons: ["not_accepting_input"]
+[21:53:44][Auto Splitter][INFO] accepting_input: true
+[21:53:44][Auto Splitter][INFO] is_game_time_paused: false
+[21:53:44][Auto Splitter][INFO] reasons: []
