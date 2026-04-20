@@ -1082,9 +1082,11 @@ fn load_removal(settings: &Settings, state: &mut AutoSplitterState, e: &Env) {
             && ui_state != UI_STATE_PLAYING)
         || (game_state != GAME_STATE_PLAYING
             && game_state != GAME_STATE_CUTSCENE
+            && ui_state != UI_STATE_CUTSCENE
             && !accepting_input
             && !state.mms_room_dupe)
         || ((game_state == GAME_STATE_EXITING_LEVEL
+            && ui_state != UI_STATE_CUTSCENE
             && (scene_load_null || scene_load_activation_allowed)
             && !is_inventory_open
             && !state.mms_room_dupe)
