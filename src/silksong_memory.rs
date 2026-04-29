@@ -728,6 +728,7 @@ pub struct SceneStore {
     new_data_curr: bool,
     new_data_next: bool,
     last_next: bool,
+    last_scene_load_activation_allowed: bool,
     pub split_this_transition: bool,
 }
 
@@ -740,6 +741,7 @@ impl SceneStore {
             new_data_curr: false,
             new_data_next: false,
             last_next: true,
+            last_scene_load_activation_allowed: false,
             split_this_transition: false,
         }
     }
@@ -794,6 +796,9 @@ impl SceneStore {
         if scene_load_null || scene_load_activation_allowed {
             self.new_next_scene_name(mem.read_string(&gm.next_scene_name).unwrap_or_default());
         }
+        let new_scene_load_activation_allowed =
+            !self.last_scene_load_activation_allowed && scene_load_activation_allowed;
+        self.last_scene_load_activation_allowed = scene_load_activation_allowed;
 
         if self.new_data_next {
             self.new_data_curr = false;
@@ -831,7 +836,7 @@ impl SceneStore {
             ));
             true
         } else {
-            false
+            new_scene_load_activation_allowed
         }
     }
 }
