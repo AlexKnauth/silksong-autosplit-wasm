@@ -835,8 +835,11 @@ impl SceneStore {
                 &self.prev_scene_name, &self.curr_scene_name
             ));
             true
+        } else if new_scene_load_activation_allowed {
+            self.split_this_transition = false;
+            true
         } else {
-            new_scene_load_activation_allowed
+            false
         }
     }
 }
