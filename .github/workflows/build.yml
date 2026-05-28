@@ -39,6 +39,9 @@ jobs:
           rust-version: '1.95.0'
           targets: wasm32-unknown-unknown
 
+      - name: Install Target
+        run: rustup target add wasm32-unknown-unknown
+
       - name: Build
         run: |
           cargo b --release --locked ${{matrix.features}}
