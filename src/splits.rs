@@ -1929,16 +1929,19 @@ pub fn menu_splits(
 
 pub fn transition_splits(
     split: &Split,
-    scenes: &Pair<&str>,
+    ss: &SceneStore,
     e: &Env,
     split_this_transition: bool,
 ) -> Option<SplitterAction> {
+    let scenes = ss.pair();
     let Env { mem, pd, gm } = e;
     match split {
         // region: Start, End, and Menu
-        Split::StartNewGame => {
-            should_split(OPENING_SCENES.contains(&scenes.old) && scenes.current == "Tut_01")
-        }
+        Split::StartNewGame => should_split(
+            (OPENING_SCENES.contains(&scenes.old)
+                || OPENING_SCENES.contains(&ss.prev_scene_name.as_str()))
+                && scenes.current == "Tut_01",
+        ),
         Split::EndingSplit => should_split(scenes.current.starts_with("Cinematic_Ending")),
         Split::EndingA => should_split(scenes.current == "Cinematic_Ending_A"),
         Split::AnyTransition => should_split(!split_this_transition),
@@ -2420,18 +2423,16 @@ pub fn transition_splits(
     }
 }
 
-pub fn transition_once_splits(
-    split: &Split,
-    scenes: &Pair<&str>,
-    e: &Env,
-) -> Option<SplitterAction> {
+pub fn transition_once_splits(split: &Split, ss: &SceneStore, e: &Env) -> Option<SplitterAction> {
+    let scenes = ss.pair();
     let Env { mem, gm, pd } = e;
     match split {
         // region: Start, End, and Menu
         Split::Act1Start => should_split(
             scenes.current == "Tut_01"
                 && (OPENING_SCENES.contains(&scenes.old)
-                    || (scenes.old == MENU_TITLE
+                    || OPENING_SCENES.contains(&ss.prev_scene_name.as_str())
+                    || ((scenes.old == MENU_TITLE || ss.prev_scene_name == MENU_TITLE)
                         && mem.read_string(&gm.entry_gate_name).unwrap_or_default()
                             == DEATH_RESPAWN_MARKER_INIT))
                 && mem.deref(&pd.disable_pause).is_ok_and(|d: bool| !d)
@@ -3369,7 +3370,7 @@ pub fn splits(
     let a1 = continuous_splits(split, env, store).or_else(|| {
         let scenes = ss.pair();
         let a2 = if !ss.split_this_transition {
-            transition_once_splits(split, &scenes, env)
+            transition_once_splits(split, &ss, env)
         } else {
             None
         };
@@ -3378,7 +3379,7 @@ pub fn splits(
                 if is_menu(scenes.old) || is_menu(scenes.current) {
                     menu_splits(split, &scenes, env, store)
                 } else {
-                    transition_splits(split, &scenes, env, ss.split_this_transition)
+                    transition_splits(split, &ss, env, ss.split_this_transition)
                 }
             } else {
                 None
