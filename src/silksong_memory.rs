@@ -722,7 +722,7 @@ impl<'a> Env<'a> {
 // --------------------------------------------------------
 
 pub struct SceneStore {
-    prev_scene_name: String,
+    pub prev_scene_name: String,
     curr_scene_name: String,
     next_scene_name: String,
     new_data_curr: bool,
