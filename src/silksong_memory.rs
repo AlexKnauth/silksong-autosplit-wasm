@@ -747,7 +747,7 @@ impl SceneStore {
     }
 
     pub fn pair(&self) -> Pair<&str> {
-        if self.last_next {
+        if self.last_next && self.next_scene_name != self.curr_scene_name {
             Pair {
                 old: &self.curr_scene_name,
                 current: &self.next_scene_name,
@@ -836,9 +836,6 @@ impl SceneStore {
             ));
             true
         } else if new_scene_load_activation_allowed {
-            self.new_data_curr = false;
-            self.new_data_next = false;
-            self.last_next = true;
             self.split_this_transition = false;
             #[cfg(debug_assertions)]
             asr::print_message(&format!(
