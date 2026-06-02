@@ -1,6 +1,8 @@
 #![no_std]
 extern crate alloc;
 
+use core::{cmp::max, mem};
+
 #[global_allocator]
 static ALLOC: dlmalloc::GlobalDlmalloc = dlmalloc::GlobalDlmalloc;
 
@@ -335,6 +337,8 @@ impl AutoSplitterState {
                     let new_i = new_index as usize;
                     if new_index < old_index {
                         // Undo
+                        self.segment_hits.resize(max(self.segment_hits.len(), new_i + 1), 0);
+                        self.segment_deaths.resize(max(self.segment_deaths.len(), new_i + 1), 0);
                         self.segment_hits[new_i] +=
                             self.segment_hits.drain((new_i + 1)..).sum::<i64>();
                         self.segment_deaths[new_i] +=
@@ -361,6 +365,9 @@ impl AutoSplitterState {
                         }
                         self.segments_splitted.truncate(new_i);
                     } else if new_index > old_index {
+                        let n = old_index as usize + 1;
+                        self.segment_hits.resize(max(self.segment_hits.len(), n), 0);
+                        self.segment_deaths.resize(max(self.segment_deaths.len(), n), 0);
                         for old_idx in old_index..new_index {
                             let o_i = old_idx as usize;
                             let n_i = o_i + 1;
@@ -887,8 +894,8 @@ async fn handle_splits(
                         let new_i = old_i + 1;
                         state.split_index = Some(old_index + 1);
                         state.segments_splitted.push(false);
-                        state.segment_hits.insert(old_i, 0);
-                        state.segment_deaths.insert(old_i, 0);
+                        resize_insert_penultimate(&mut state.segment_hits, new_i + 1, 0);
+                        resize_insert_penultimate(&mut state.segment_deaths, new_i + 1, 0);
                         if settings.get_hit_counter() {
                             asr::timer::set_variable_int("segment hits", state.segment_hits[new_i]);
                             if let Some(c) = state.comparison_hits.get(new_i) {
@@ -926,9 +933,9 @@ async fn handle_splits(
                         let new_i = old_index as usize + 1;
                         state.split_index = Some(old_index + 1);
                         state.segments_splitted.push(true);
-                        state.segment_hits.push(0);
+                        state.segment_hits.resize(new_i + 1, 0);
                         state.cumulative_hits.resize(new_i, state.hits);
-                        state.segment_deaths.push(0);
+                        state.segment_deaths.resize(new_i + 1, 0);
                         state.cumulative_deaths.resize(new_i, state.deaths);
                         if settings.get_hit_counter() {
                             asr::timer::set_variable_int("segment hits", state.segment_hits[new_i]);
@@ -1264,6 +1271,16 @@ fn delta_string(i: i64) -> String {
         "0".into()
     } else {
         format!("{:+}", i)
+    }
+}
+
+fn resize_insert_penultimate<T: Clone>(v: &mut Vec<T>, new_len: usize, value: T) {
+    if v.len() != new_len {
+        let Some(l) = v.pop() else {
+            return v.resize(new_len, value);
+        };
+        v.resize(new_len.saturating_sub(1), value);
+        v.push(l);
     }
 }
 
