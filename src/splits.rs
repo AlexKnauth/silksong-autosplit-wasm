@@ -1960,10 +1960,10 @@ pub fn transition_splits(
 
         // region: MossLands
         Split::MossMotherTrans => should_split(
-            scenes.changed() && mem.deref(&pd.defeated_moss_mother).unwrap_or_default(),
+            ss.changed() && mem.deref(&pd.defeated_moss_mother).unwrap_or_default(),
         ),
         Split::SilkSpearTrans => {
-            should_split(scenes.changed() && mem.deref(&pd.has_needle_throw).unwrap_or_default())
+            should_split(ss.changed() && mem.deref(&pd.has_needle_throw).unwrap_or_default())
         }
         Split::EnterBoneBottom => should_split(scenes.changed_to(&"Bonetown")),
         Split::EnterMosshome => {
@@ -1976,16 +1976,16 @@ pub fn transition_splits(
 
         // region: Marrow
         Split::BellBeastTrans => {
-            should_split(scenes.changed() && mem.deref(&pd.defeated_bell_beast).unwrap_or_default())
+            should_split(ss.changed() && mem.deref(&pd.defeated_bell_beast).unwrap_or_default())
         }
         // endregion: Marrow
 
         // region: DeepDocks
         Split::SwiftStepTrans => {
-            should_split(scenes.changed() && mem.deref(&pd.has_dash).unwrap_or_default())
+            should_split(ss.changed() && mem.deref(&pd.has_dash).unwrap_or_default())
         }
         Split::Lace1Trans => {
-            should_split(scenes.changed() && mem.deref(&pd.defeated_lace1).unwrap_or_default())
+            should_split(ss.changed() && mem.deref(&pd.defeated_lace1).unwrap_or_default())
         }
         // endregion: DeepDocks
 
@@ -1998,7 +1998,7 @@ pub fn transition_splits(
             should_split(scenes.old == "Crawl_03b" && scenes.current == "Crawl_03")
         }
         Split::SharpdartTrans => {
-            should_split(scenes.changed() && mem.deref(&pd.has_silk_charge).unwrap_or_default())
+            should_split(ss.changed() && mem.deref(&pd.has_silk_charge).unwrap_or_default())
         }
         // endregion: Wormways
 
@@ -2017,7 +2017,7 @@ pub fn transition_splits(
             !scenes.old.starts_with("Bone_East") && scenes.current.starts_with("Bone_East"),
         ),
         Split::DriftersCloakTrans => {
-            should_split(scenes.changed() && mem.deref(&pd.has_brolly).unwrap_or_default())
+            should_split(ss.changed() && mem.deref(&pd.has_brolly).unwrap_or_default())
         }
         Split::EnterSprintmasterCave => should_split(scenes.changed_to(&"Sprintmaster_Cave")),
         // endregion: FarFields
@@ -2027,13 +2027,13 @@ pub fn transition_splits(
             !scenes.old.starts_with("Greymoor") && scenes.current.starts_with("Greymoor"),
         ),
         Split::MoorwingTrans => should_split(
-            scenes.changed()
+            ss.changed()
                 && mem
                     .deref(&pd.defeated_vampire_gnat_boss)
                     .unwrap_or_default(),
         ),
         Split::ThreadStormTrans => {
-            should_split(scenes.changed() && mem.deref(&pd.has_thread_sphere).unwrap_or_default())
+            should_split(ss.changed() && mem.deref(&pd.has_thread_sphere).unwrap_or_default())
         }
         Split::EnterHalfwayHomeBasement => {
             should_split(scenes.old == "Halfway_01" && scenes.current == "Ant_08")
@@ -2063,10 +2063,10 @@ pub fn transition_splits(
 
         // region: Shellwood
         Split::ClingGripTrans => {
-            should_split(scenes.changed() && mem.deref(&pd.has_wall_jump).unwrap_or_default())
+            should_split(ss.changed() && mem.deref(&pd.has_wall_jump).unwrap_or_default())
         }
         Split::SisterSplinterTrans => should_split(
-            scenes.changed() && mem.deref(&pd.defeated_sister_splinter).unwrap_or_default(),
+            ss.changed() && mem.deref(&pd.defeated_sister_splinter).unwrap_or_default(),
         ),
         Split::EnterShellwood => should_split(
             !scenes.old.starts_with("Shellwood") && scenes.current.starts_with("Shellwood"),
@@ -2078,10 +2078,10 @@ pub fn transition_splits(
             should_split(scenes.old == "Coral_19" && scenes.current == "Coral_02")
         }
         Split::GreatConchfliesTrans => should_split(
-            scenes.changed() && mem.deref(&pd.defeated_coral_drillers).unwrap_or_default(),
+            ss.changed() && mem.deref(&pd.defeated_coral_drillers).unwrap_or_default(),
         ),
         Split::NeedleStrikeTrans => {
-            should_split(scenes.changed() && mem.deref(&pd.has_charge_slash).unwrap_or_default())
+            should_split(ss.changed() && mem.deref(&pd.has_charge_slash).unwrap_or_default())
         }
         Split::EnterLastJudge => {
             should_split(scenes.old == "Coral_32" && scenes.current == "Coral_Judge_Arena")
@@ -2121,10 +2121,10 @@ pub fn transition_splits(
             should_split(scenes.old == "Dust_09" && scenes.current == "Organ_01")
         }
         Split::PhantomTrans => {
-            should_split(scenes.changed() && mem.deref(&pd.defeated_phantom).unwrap_or_default())
+            should_split(ss.changed() && mem.deref(&pd.defeated_phantom).unwrap_or_default())
         }
         Split::CrossStitchTrans => {
-            should_split(scenes.changed() && mem.deref(&pd.has_parry).unwrap_or_default())
+            should_split(ss.changed() && mem.deref(&pd.has_parry).unwrap_or_default())
         }
         Split::TrailsEndTrans => {
             should_split(scenes.old == "Shadow_24" && scenes.current == "Shadow_19")
@@ -2141,7 +2141,7 @@ pub fn transition_splits(
             should_split(scenes.old == "Slab_10c" && scenes.current == "Slab_10b")
         }
         Split::RuneRageTrans => {
-            should_split(scenes.changed() && mem.deref(&pd.has_silk_bomb).unwrap_or_default())
+            should_split(ss.changed() && mem.deref(&pd.has_silk_bomb).unwrap_or_default())
         }
         // endregion: TheSlab
 
@@ -2156,7 +2156,7 @@ pub fn transition_splits(
             should_split(scenes.old == "Peak_01" && scenes.current == "Peak_07")
         }
         Split::FaydownCloakTrans => {
-            should_split(scenes.changed() && mem.deref(&pd.has_double_jump).unwrap_or_default())
+            should_split(ss.changed() && mem.deref(&pd.has_double_jump).unwrap_or_default())
         }
         // endregion: MountFay
 
@@ -2170,7 +2170,7 @@ pub fn transition_splits(
             should_split(scenes.old == "Coral_35b" && scenes.current == "Coral_29")
         }
         Split::RagingConchflyTrans => should_split(
-            scenes.changed()
+            ss.changed()
                 && mem
                     .deref(&pd.defeated_coral_driller_solo)
                     .unwrap_or_default(),
@@ -2214,10 +2214,10 @@ pub fn transition_splits(
                 && scenes.current == "Song_Enclave",
         ),
         Split::TrobbioTrans => {
-            should_split(scenes.changed() && mem.deref(&pd.defeated_trobbio).unwrap_or_default())
+            should_split(ss.changed() && mem.deref(&pd.defeated_trobbio).unwrap_or_default())
         }
         Split::TormentedTrobbioTrans => should_split(
-            scenes.changed()
+            ss.changed()
                 && mem
                     .deref(&pd.defeated_tormented_trobbio)
                     .unwrap_or_default(),
@@ -2306,49 +2306,49 @@ pub fn transition_splits(
             should_split(scenes.old == "Tube_Hub" && scenes.current == "Cradle_01")
         }
         Split::PaleNailsTrans => should_split(
-            scenes.changed() && mem.deref(&pd.has_silk_boss_needle).unwrap_or_default(),
+            ss.changed() && mem.deref(&pd.has_silk_boss_needle).unwrap_or_default(),
         ),
         // endregion: TheCradle
 
         // region: ThreefoldMelody
         Split::VaultkeepersMelodyTrans => should_split(
-            scenes.changed() && mem.deref(&pd.has_melody_librarian).unwrap_or_default(),
+            ss.changed() && mem.deref(&pd.has_melody_librarian).unwrap_or_default(),
         ),
         Split::ArchitectsMelodyTrans => should_split(
-            scenes.changed() && mem.deref(&pd.has_melody_architect).unwrap_or_default(),
+            ss.changed() && mem.deref(&pd.has_melody_architect).unwrap_or_default(),
         ),
         Split::ConductorsMelodyTrans => should_split(
-            scenes.changed() && mem.deref(&pd.has_melody_conductor).unwrap_or_default(),
+            ss.changed() && mem.deref(&pd.has_melody_conductor).unwrap_or_default(),
         ),
         // endregion: ThreefoldMelody
 
         // region: Crests
         Split::ReaperCrestTrans => should_split(
-            scenes.changed() && mem.deref(&pd.completed_memory_reaper).unwrap_or_default(),
+            ss.changed() && mem.deref(&pd.completed_memory_reaper).unwrap_or_default(),
         ),
         Split::WandererCrestTrans => should_split(
-            scenes.changed() && mem.deref(&pd.completed_memory_wanderer).unwrap_or_default(),
+            ss.changed() && mem.deref(&pd.completed_memory_wanderer).unwrap_or_default(),
         ),
         Split::BeastCrestTrans => should_split(
-            scenes.changed() && mem.deref(&pd.completed_memory_beast).unwrap_or_default(),
+            ss.changed() && mem.deref(&pd.completed_memory_beast).unwrap_or_default(),
         ),
         Split::ArchitectCrestTrans => should_split(
-            scenes.changed()
+            ss.changed()
                 && mem
                     .deref(&pd.completed_memory_toolmaster)
                     .unwrap_or_default(),
         ),
         Split::WitchCrestTrans => should_split(
-            scenes.changed()
+            ss.changed()
                 && mem
                     .deref(&pd.belltown_doctor_cured_curse)
                     .unwrap_or_default(),
         ),
         Split::ShamanCrestTrans => should_split(
-            scenes.changed() && mem.deref(&pd.completed_memory_shaman).unwrap_or_default(),
+            ss.changed() && mem.deref(&pd.completed_memory_shaman).unwrap_or_default(),
         ),
         Split::SylphsongTrans => should_split(
-            scenes.changed() && mem.deref(&pd.has_bound_crest_upgrader).unwrap_or_default(),
+            ss.changed() && mem.deref(&pd.has_bound_crest_upgrader).unwrap_or_default(),
         ),
         // endregion: Crests
 
@@ -2359,7 +2359,7 @@ pub fn transition_splits(
         // region: Ventrica
         Split::VentricaTrans => {
             let gate = mem.read_string(&gm.entry_gate_name).unwrap_or_default();
-            should_split(gate == "door_tubeEnter" && scenes.changed())
+            should_split(gate == "door_tubeEnter" && ss.changed())
         }
         // endregion: Ventrica
 
@@ -2370,10 +2370,10 @@ pub fn transition_splits(
                 || (scenes.old == "Song_25" && scenes.current == "Cog_10_Destroyed"),
         ),
         Split::ForebrothersTrans => should_split(
-            scenes.changed() && mem.deref(&pd.defeated_dock_foremen).unwrap_or_default(),
+            ss.changed() && mem.deref(&pd.defeated_dock_foremen).unwrap_or_default(),
         ),
         Split::SilkSoarTrans => {
-            should_split(scenes.changed() && mem.deref(&pd.has_super_jump).unwrap_or_default())
+            should_split(ss.changed() && mem.deref(&pd.has_super_jump).unwrap_or_default())
         }
         Split::EnterSeth => {
             should_split(scenes.old == "Under_27" && scenes.current == "Shellwood_22")
@@ -2388,7 +2388,7 @@ pub fn transition_splits(
             should_split(scenes.old == "Clover_01" && scenes.current == "Clover_01b")
         }
         Split::PalestagTrans => should_split(
-            scenes.changed() && mem.deref(&pd.defeated_white_cloverstag).unwrap_or_default(),
+            ss.changed() && mem.deref(&pd.defeated_white_cloverstag).unwrap_or_default(),
         ),
         Split::EnterVerdaniaCastle => {
             should_split(scenes.old == "Clover_04b" && scenes.current == "Clover_10")
