@@ -1959,9 +1959,9 @@ pub fn transition_splits(
         // endregion: Start, End, and Menu
 
         // region: MossLands
-        Split::MossMotherTrans => should_split(
-            ss.changed() && mem.deref(&pd.defeated_moss_mother).unwrap_or_default(),
-        ),
+        Split::MossMotherTrans => {
+            should_split(ss.changed() && mem.deref(&pd.defeated_moss_mother).unwrap_or_default())
+        }
         Split::SilkSpearTrans => {
             should_split(ss.changed() && mem.deref(&pd.has_needle_throw).unwrap_or_default())
         }
@@ -2077,9 +2077,9 @@ pub fn transition_splits(
         Split::EnterBlastedSteps => {
             should_split(scenes.old == "Coral_19" && scenes.current == "Coral_02")
         }
-        Split::GreatConchfliesTrans => should_split(
-            ss.changed() && mem.deref(&pd.defeated_coral_drillers).unwrap_or_default(),
-        ),
+        Split::GreatConchfliesTrans => {
+            should_split(ss.changed() && mem.deref(&pd.defeated_coral_drillers).unwrap_or_default())
+        }
         Split::NeedleStrikeTrans => {
             should_split(ss.changed() && mem.deref(&pd.has_charge_slash).unwrap_or_default())
         }
@@ -2305,33 +2305,33 @@ pub fn transition_splits(
         Split::EnterTheCradle => {
             should_split(scenes.old == "Tube_Hub" && scenes.current == "Cradle_01")
         }
-        Split::PaleNailsTrans => should_split(
-            ss.changed() && mem.deref(&pd.has_silk_boss_needle).unwrap_or_default(),
-        ),
+        Split::PaleNailsTrans => {
+            should_split(ss.changed() && mem.deref(&pd.has_silk_boss_needle).unwrap_or_default())
+        }
         // endregion: TheCradle
 
         // region: ThreefoldMelody
-        Split::VaultkeepersMelodyTrans => should_split(
-            ss.changed() && mem.deref(&pd.has_melody_librarian).unwrap_or_default(),
-        ),
-        Split::ArchitectsMelodyTrans => should_split(
-            ss.changed() && mem.deref(&pd.has_melody_architect).unwrap_or_default(),
-        ),
-        Split::ConductorsMelodyTrans => should_split(
-            ss.changed() && mem.deref(&pd.has_melody_conductor).unwrap_or_default(),
-        ),
+        Split::VaultkeepersMelodyTrans => {
+            should_split(ss.changed() && mem.deref(&pd.has_melody_librarian).unwrap_or_default())
+        }
+        Split::ArchitectsMelodyTrans => {
+            should_split(ss.changed() && mem.deref(&pd.has_melody_architect).unwrap_or_default())
+        }
+        Split::ConductorsMelodyTrans => {
+            should_split(ss.changed() && mem.deref(&pd.has_melody_conductor).unwrap_or_default())
+        }
         // endregion: ThreefoldMelody
 
         // region: Crests
-        Split::ReaperCrestTrans => should_split(
-            ss.changed() && mem.deref(&pd.completed_memory_reaper).unwrap_or_default(),
-        ),
+        Split::ReaperCrestTrans => {
+            should_split(ss.changed() && mem.deref(&pd.completed_memory_reaper).unwrap_or_default())
+        }
         Split::WandererCrestTrans => should_split(
             ss.changed() && mem.deref(&pd.completed_memory_wanderer).unwrap_or_default(),
         ),
-        Split::BeastCrestTrans => should_split(
-            ss.changed() && mem.deref(&pd.completed_memory_beast).unwrap_or_default(),
-        ),
+        Split::BeastCrestTrans => {
+            should_split(ss.changed() && mem.deref(&pd.completed_memory_beast).unwrap_or_default())
+        }
         Split::ArchitectCrestTrans => should_split(
             ss.changed()
                 && mem
@@ -2344,9 +2344,9 @@ pub fn transition_splits(
                     .deref(&pd.belltown_doctor_cured_curse)
                     .unwrap_or_default(),
         ),
-        Split::ShamanCrestTrans => should_split(
-            ss.changed() && mem.deref(&pd.completed_memory_shaman).unwrap_or_default(),
-        ),
+        Split::ShamanCrestTrans => {
+            should_split(ss.changed() && mem.deref(&pd.completed_memory_shaman).unwrap_or_default())
+        }
         Split::SylphsongTrans => should_split(
             ss.changed() && mem.deref(&pd.has_bound_crest_upgrader).unwrap_or_default(),
         ),
@@ -2369,9 +2369,9 @@ pub fn transition_splits(
             (scenes.old == "Song_Tower_Destroyed" && scenes.current == "Cog_09_Destroyed")
                 || (scenes.old == "Song_25" && scenes.current == "Cog_10_Destroyed"),
         ),
-        Split::ForebrothersTrans => should_split(
-            ss.changed() && mem.deref(&pd.defeated_dock_foremen).unwrap_or_default(),
-        ),
+        Split::ForebrothersTrans => {
+            should_split(ss.changed() && mem.deref(&pd.defeated_dock_foremen).unwrap_or_default())
+        }
         Split::SilkSoarTrans => {
             should_split(ss.changed() && mem.deref(&pd.has_super_jump).unwrap_or_default())
         }
