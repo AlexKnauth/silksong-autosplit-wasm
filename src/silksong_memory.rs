@@ -728,6 +728,7 @@ pub struct SceneStore {
     new_data_curr: bool,
     new_data_next: bool,
     last_next: bool,
+    last_changed: bool,
     last_scene_load_activation_allowed: bool,
     pub split_this_transition: bool,
 }
@@ -741,13 +742,14 @@ impl SceneStore {
             new_data_curr: false,
             new_data_next: false,
             last_next: true,
+            last_changed: false,
             last_scene_load_activation_allowed: false,
             split_this_transition: false,
         }
     }
 
     pub fn pair(&self) -> Pair<&str> {
-        if self.last_next {
+        if self.last_next && self.next_scene_name != self.curr_scene_name {
             Pair {
                 old: &self.curr_scene_name,
                 current: &self.next_scene_name,
@@ -758,6 +760,10 @@ impl SceneStore {
                 current: &self.curr_scene_name,
             }
         }
+    }
+
+    pub fn changed(&self) -> bool {
+        self.last_changed && self.pair().changed()
     }
 
     pub fn new_curr_scene_name(&mut self, csn: String) {
@@ -804,6 +810,7 @@ impl SceneStore {
             self.new_data_curr = false;
             self.new_data_next = false;
             self.last_next = true;
+            self.last_changed = true;
             self.split_this_transition = false;
             #[cfg(debug_assertions)]
             asr::print_message(&format!(
@@ -825,6 +832,7 @@ impl SceneStore {
                 return false;
             }
             self.last_next = false;
+            self.last_changed = true;
             // avoid double-splitting AnyTransition / TransitionExcludingDiscontinuities
             if is_menu(&self.prev_scene_name) || is_menu(&self.curr_scene_name) {
                 self.split_this_transition = false;
@@ -836,9 +844,7 @@ impl SceneStore {
             ));
             true
         } else if new_scene_load_activation_allowed {
-            self.new_data_curr = false;
-            self.new_data_next = false;
-            self.last_next = true;
+            self.last_changed = false;
             self.split_this_transition = false;
             #[cfg(debug_assertions)]
             asr::print_message(&format!(
