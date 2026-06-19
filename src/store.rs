@@ -94,7 +94,7 @@ impl ToolCache {
             }
             self.tool = tool_utf16
         } else if !self.i.is_negative() {
-            if let Some(is_unlocked) = read_tool(e.mem, e.pd, self.i) {
+            if let Some(is_unlocked) = read_tool(self.i, e.mem, e.pd) {
                 self.found = is_unlocked;
             }
         }

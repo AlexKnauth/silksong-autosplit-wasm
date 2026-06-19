@@ -912,7 +912,7 @@ pub fn find_tool(tool_utf16: &[u16], mem: &Memory, pd: &PlayerDataPointers) -> O
     None
 }
 
-pub fn read_tool(mem: &Memory, pd: &PlayerDataPointers, i: i32) -> Option<bool> {
+pub fn read_tool(i: i32, mem: &Memory, pd: &PlayerDataPointers) -> Option<bool> {
     let p_entries = mem.deref::<Address64, _>(&pd.tools_entries).ok()?;
 
     let is_unlocked: bool = mem.process.read(p_entries + 0x30 + 0x18 * i).ok()?;
