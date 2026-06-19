@@ -900,9 +900,13 @@ pub fn find_tool(tool_utf16: &[u16], mem: &Memory, pd: &PlayerDataPointers) -> O
             .read_into_slice(p_string + mem.string_list_offsets.string_contents, buf)
             .ok()?;
 
-        if buf == tool_utf16 {
-            return Some(());
+        if buf != tool_utf16 {
+            continue;
         }
+
+        let is_unlocked: bool = mem.process.read(p_entries + 0x30 + 0x18 * i).ok()?;
+
+        return if is_unlocked { Some(()) } else { None };
     }
 
     None
