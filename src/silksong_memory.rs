@@ -870,7 +870,7 @@ pub fn get_tools_version(mem: &Memory, pd: &PlayerDataPointers) -> Option<i32> {
     mem.deref(&pd.tools_version).ok()
 }
 
-pub fn find_tool(tool_utf16: &[u16], mem: &Memory, pd: &PlayerDataPointers) -> Option<()> {
+pub fn find_tool(tool_utf16: &[u16], mem: &Memory, pd: &PlayerDataPointers) -> Option<(i32, bool)> {
     asr::print_message("Scanning tools");
     const MAX_TOOL_ID_LENGTH: usize = 32; // The longest seems to be 20 but I rounded up
 
@@ -906,10 +906,18 @@ pub fn find_tool(tool_utf16: &[u16], mem: &Memory, pd: &PlayerDataPointers) -> O
 
         let is_unlocked: bool = mem.process.read(p_entries + 0x30 + 0x18 * i).ok()?;
 
-        return if is_unlocked { Some(()) } else { None };
+        return Some((i, is_unlocked));
     }
 
     None
+}
+
+pub fn read_tool(mem: &Memory, pd: &PlayerDataPointers, i: i32) -> Option<bool> {
+    let p_entries = mem.deref::<Address64, _>(&pd.tools_entries).ok()?;
+
+    let is_unlocked: bool = mem.process.read(p_entries + 0x30 + 0x18 * i).ok()?;
+
+    Some(is_unlocked)
 }
 
 // --------------------------------------------------------
