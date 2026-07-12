@@ -1327,6 +1327,16 @@
             "HasBeenSelected": false,
             "AmountLeft": 0
           }
+        },
+        {
+          "Name": "Mosscreep Tool 1",
+          "Data": {
+            "IsUnlocked": true,
+            "IsHidden": false,
+            "HasBeenSeen": false,
+            "HasBeenSelected": false,
+            "AmountLeft": 0
+          }
         }
       ]
     },
