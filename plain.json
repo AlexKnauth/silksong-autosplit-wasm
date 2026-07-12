@@ -1317,7 +1317,18 @@
       "savedData": []
     },
     "Tools": {
-      "savedData": []
+      "savedData": [
+        {
+          "Name": "Compass",
+          "Data": {
+            "IsUnlocked": true,
+            "IsHidden": false,
+            "HasBeenSeen": false,
+            "HasBeenSelected": false,
+            "AmountLeft": 0
+          }
+        }
+      ]
     },
     "ToolLiquids": {
       "savedData": []
