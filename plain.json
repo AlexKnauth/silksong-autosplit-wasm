@@ -1321,7 +1321,7 @@
         {
           "Name": "Compass",
           "Data": {
-            "IsUnlocked": true,
+            "IsUnlocked": false,
             "IsHidden": false,
             "HasBeenSeen": false,
             "HasBeenSelected": false,
@@ -1331,7 +1331,7 @@
         {
           "Name": "Mosscreep Tool 1",
           "Data": {
-            "IsUnlocked": true,
+            "IsUnlocked": false,
             "IsHidden": false,
             "HasBeenSeen": false,
             "HasBeenSelected": false,
@@ -1341,7 +1341,7 @@
         {
           "Name": "Bone Necklace",
           "Data": {
-            "IsUnlocked": true,
+            "IsUnlocked": false,
             "IsHidden": false,
             "HasBeenSeen": false,
             "HasBeenSelected": false,
@@ -1351,7 +1351,7 @@
         {
           "Name": "Straight Pin",
           "Data": {
-            "IsUnlocked": true,
+            "IsUnlocked": false,
             "IsHidden": false,
             "HasBeenSeen": false,
             "HasBeenSelected": false,
@@ -1361,7 +1361,7 @@
         {
           "Name": "Rosary Magnet",
           "Data": {
-            "IsUnlocked": true,
+            "IsUnlocked": false,
             "IsHidden": false,
             "HasBeenSeen": false,
             "HasBeenSelected": false,
