@@ -1357,6 +1357,16 @@
             "HasBeenSelected": false,
             "AmountLeft": 12
           }
+        },
+        {
+          "Name": "Rosary Magnet",
+          "Data": {
+            "IsUnlocked": true,
+            "IsHidden": false,
+            "HasBeenSeen": false,
+            "HasBeenSelected": false,
+            "AmountLeft": 0
+          }
         }
       ]
     },
