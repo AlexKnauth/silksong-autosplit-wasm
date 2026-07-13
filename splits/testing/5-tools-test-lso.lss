@@ -13,7 +13,7 @@
     <CustomVariables />
   </Metadata>
   <LayoutPath />
-  <Offset>00:00:00.000000000</Offset>
+  <Offset>00:00:21.760000000</Offset>
   <AttemptCount>14</AttemptCount>
   <AttemptHistory>
     <Attempt id="2" started="11/11/2025 01:30:15" isStartedSynced="False" ended="11/11/2025 01:46:02" isEndedSynced="False">
@@ -575,7 +575,7 @@
     <CustomSettings>
       <Setting id="script_name" type="string" value="silksong_autosplit_wasm" />
       <Setting id="splits" type="list">
-        <Setting type="string" value="StartNewGame" />
+        <Setting type="string" value="Act1Start" />
         <Setting type="string" value="MossMotherTrans" />
         <Setting type="string" value="Compass" />
         <Setting type="string" value="SilkSpear" />
@@ -585,7 +585,7 @@
         <Setting type="string" value="StraightPin" />
         <Setting type="string" value="MagnetiteBrooch" />
       </Setting>
-      <Setting id="splits_0_item" type="string" value="StartNewGame" />
+      <Setting id="splits_0_item" type="string" value="Act1Start" />
       <Setting id="splits_1_item" type="string" value="MossMotherTrans" />
       <Setting id="hit_counter" type="bool">True</Setting>
       <Setting id="splits_insert_0" type="bool">False</Setting>
