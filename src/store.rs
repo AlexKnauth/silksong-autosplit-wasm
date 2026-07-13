@@ -9,7 +9,7 @@ use asr::{
 
 #[cfg(feature = "split-index")]
 use crate::silksong_memory::get_timer_current_split_index;
-use crate::silksong_memory::{find_tool, get_timer_state, get_tools_version, Env};
+use crate::silksong_memory::{find_tool, get_timer_state, get_tools_version, read_tool, Env};
 
 struct StoreValue<A: 'static> {
     watcher: Watcher<A>,
@@ -43,6 +43,7 @@ impl<A: Clone + Eq> StoreValue<A> {
 pub struct ToolCache {
     version: Option<i32>,
     tool: &'static [u16],
+    i: i32,
     found: bool,
 }
 
@@ -51,6 +52,7 @@ impl ToolCache {
         ToolCache {
             version: None,
             tool: &[],
+            i: -1,
             found: false,
         }
     }
@@ -83,8 +85,18 @@ impl ToolCache {
             return false;
         }
         if self.tool != tool_utf16 {
-            self.found = find_tool(tool_utf16, e.mem, e.pd).is_some();
+            if let Some((i, is_unlocked)) = find_tool(tool_utf16, e.mem, e.pd) {
+                self.i = i;
+                self.found = is_unlocked;
+            } else {
+                self.i = -1;
+                self.found = false;
+            }
             self.tool = tool_utf16
+        } else if !self.i.is_negative() {
+            if let Some(is_unlocked) = read_tool(self.i, e.mem, e.pd) {
+                self.found = is_unlocked;
+            }
         }
         self.found
     }
