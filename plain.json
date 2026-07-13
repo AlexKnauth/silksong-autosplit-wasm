@@ -1347,6 +1347,16 @@
             "HasBeenSelected": false,
             "AmountLeft": 0
           }
+        },
+        {
+          "Name": "Straight Pin",
+          "Data": {
+            "IsUnlocked": true,
+            "IsHidden": false,
+            "HasBeenSeen": false,
+            "HasBeenSelected": false,
+            "AmountLeft": 12
+          }
         }
       ]
     },
