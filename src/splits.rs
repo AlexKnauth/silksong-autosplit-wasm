@@ -3386,7 +3386,7 @@ pub fn splits(
     let a1 = continuous_splits(split, env, store).or_else(|| {
         let scenes = ss.pair();
         let a2 = if !ss.split_this_transition {
-            transition_once_splits(split, &ss, env)
+            transition_once_splits(split, ss, env)
         } else {
             None
         };
@@ -3395,7 +3395,7 @@ pub fn splits(
                 if is_menu(scenes.old) || is_menu(scenes.current) {
                     menu_splits(split, &scenes, env, store)
                 } else {
-                    transition_splits(split, &ss, env, store, ss.split_this_transition)
+                    transition_splits(split, ss, env, store, ss.split_this_transition)
                 }
             } else {
                 None
