@@ -515,6 +515,10 @@ pub enum Split {
     ///
     /// Splits when entering Sands of Karak
     EnterSandsOfKarak,
+    /// Karak Simple Key Exit (Transition)
+    ///
+    /// Splits on the transition out of the Simple Key and Bench room on the right side of Sands of Karak
+    KarakSimpleKeyExit,
     /// Enter Voltnest (Transition)
     ///
     /// Splits when entering the Voltnest subregion
@@ -2165,6 +2169,10 @@ pub fn transition_splits(
             (scenes.old == "Coral_25" && scenes.current == "Coral_23")
                 || (scenes.old == "Coral_35" && scenes.current == "Coral_35b")
                 || (scenes.old == "Coral_38" && scenes.current == "Coral_26"),
+        ),
+        Split::KarakSimpleKeyExit => should_split(
+            scenes.old.eq_ignore_ascii_case("bellshrine_coral")
+                || (scenes.current == "Coral_38" && !scenes.starts_with("Coral_")),
         ),
         Split::EnterVoltnest => {
             should_split(scenes.old == "Coral_35b" && scenes.current == "Coral_29")
