@@ -115,6 +115,10 @@ pub enum Split {
     ///
     /// Splits on the transition after defeating the Bell Beast
     BellBeastTrans,
+    /// Bell Beast Arena Exit (Transition)
+    ///
+    /// Splits on any transition out of the Bell Beast arena, after waking up from the silk heart sequence
+    BellBeastArenaExit,
     /// Marrow Bell (Event)
     ///
     /// Splits when ringing the Marrow Bell Shrine
@@ -485,6 +489,10 @@ pub enum Split {
     ///
     /// Splits on the transition after obtaining Rune Rage
     RuneRageTrans,
+    /// First Sinner Arena Exit (Transition)
+    ///
+    /// Splits on the transition out of the First Sinner's boss arena, after waking up from the memory sequence
+    FirstSinnerArenaExit,
     // endregion: TheSlab
 
     // region: MountFay
@@ -670,6 +678,10 @@ pub enum Split {
     /// Splits when completing the High Halls Arena
     #[alias = "HighHallsGauntlet"]
     HighHallsArena,
+    /// High Halls Arena Exit (Transition)
+    ///
+    /// Splits on the transition out of High Halls Arena left to Conductor Ballador
+    HighHallsArenaExit,
     /// Enter Second Sentinel (Transition)
     ///
     /// Splits when entering the arena for the Second Sentinel boss fight
@@ -710,6 +722,10 @@ pub enum Split {
     ///
     /// Splits when The Unravelled is defeated
     TheUnravelled,
+    /// The Unravelled Arena Exit (Transition)
+    ///
+    /// Splits on the transition out of The Unravelled arena down to the Underworks, after waking up from the silk heart sequence
+    TheUnravelledArenaExit,
     // endregion: Whiteward
 
     // region: Memorium
@@ -1978,6 +1994,11 @@ pub fn transition_splits(
         Split::BellBeastTrans => {
             should_split(ss.changed() && mem.deref(&pd.defeated_bell_beast).unwrap_or_default())
         }
+        Split::BellBeastArenaExit => should_split(
+            mem.deref(&pd.defeated_bell_beast).unwrap_or_default()
+                && scenes.old == "Bone_05"
+                && scenes.current != "Memory_Silk_Heart_BellBeast",
+        ),
         // endregion: Marrow
 
         // region: DeepDocks
@@ -2143,6 +2164,11 @@ pub fn transition_splits(
         Split::RuneRageTrans => {
             should_split(ss.changed() && mem.deref(&pd.has_silk_bomb).unwrap_or_default())
         }
+        Split::FirstSinnerArenaExit => should_split(
+            mem.deref(&pd.defeated_first_weaver).unwrap_or_default()
+                && scenes.old == "Slab_10b"
+                && scenes.current == "Slab_10c",
+        ),
         // endregion: TheSlab
 
         // region: MountFay
@@ -2263,6 +2289,9 @@ pub fn transition_splits(
         Split::EnterHighHallsArena => {
             should_split(scenes.old == "Hang_06" && scenes.current == "Hang_04")
         }
+        Split::HighHallsArenaExit => {
+            should_split(scenes.old == "Hang_04" && scenes.current == "Hang_12")
+        }
         Split::EnterSecondSentinel => {
             should_split(scenes.old == "Hang_08" && scenes.current == "Hang_17b")
         }
@@ -2279,6 +2308,11 @@ pub fn transition_splits(
                     || scenes.current == "Ward_05"
                     || scenes.current == "Ward_04"
                     || scenes.current == "Ward_03"),
+        ),
+        Split::TheUnravelledArenaExit => should_split(
+            mem.deref(&pd.ward_boss_defeated).unwrap_or_default()
+                && scenes.old == "Ward_02"
+                && scenes.current == "Under_08",
         ),
         // endregion: Whiteward
 
