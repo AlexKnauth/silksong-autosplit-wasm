@@ -1870,6 +1870,14 @@ pub enum Split {
     ///
     /// Splits when obtaining the Wreath of Purity
     WreathofPurity,
+    /// Straight Pin (Transition)
+    ///
+    /// Splits on the transition after obtaining the Straight Pin
+    StraightPinTrans,
+    /// Pimpillo (Transition)
+    ///
+    /// Splits on the transition after obtaining the Pimpillo
+    PimpilloTrans,
     // endregion: Tools
 }
 
@@ -1931,6 +1939,7 @@ pub fn transition_splits(
     split: &Split,
     ss: &SceneStore,
     e: &Env,
+    store: &mut Store,
     split_this_transition: bool,
 ) -> Option<SplitterAction> {
     let scenes = ss.pair();
@@ -2417,6 +2426,11 @@ pub fn transition_splits(
             should_split(scenes.old == "Abyss_05" && scenes.current == "Last_Dive")
         }
         // endregion: Abyss
+
+        // region: Tools
+        Split::StraightPinTrans => should_split(store.has_tool(&utf16!("Straight Pin"), e)),
+        Split::PimpilloTrans => should_split(store.has_tool(&utf16!("Pimpilo"), e)),
+        // endregion: Tools
 
         // else
         _ => should_split(false),
@@ -3379,7 +3393,7 @@ pub fn splits(
                 if is_menu(scenes.old) || is_menu(scenes.current) {
                     menu_splits(split, &scenes, env, store)
                 } else {
-                    transition_splits(split, &ss, env, ss.split_this_transition)
+                    transition_splits(split, &ss, env, store, ss.split_this_transition)
                 }
             } else {
                 None
