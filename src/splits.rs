@@ -2428,8 +2428,10 @@ pub fn transition_splits(
         // endregion: Abyss
 
         // region: Tools
-        Split::StraightPinTrans => should_split(store.has_tool(&utf16!("Straight Pin"), e)),
-        Split::PimpilloTrans => should_split(store.has_tool(&utf16!("Pimpilo"), e)),
+        Split::StraightPinTrans => {
+            should_split(ss.changed() && store.has_tool(&utf16!("Straight Pin"), e))
+        }
+        Split::PimpilloTrans => should_split(ss.changed() && store.has_tool(&utf16!("Pimpilo"), e)),
         // endregion: Tools
 
         // else
