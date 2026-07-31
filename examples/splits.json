@@ -301,6 +301,12 @@
   },
   {
     "alias": null,
+    "description": "Enter Halfway Home (Transition)",
+    "key": "EnterHalfwayHome",
+    "tooltip": "Splits on entering Halfway Home"
+  },
+  {
+    "alias": null,
     "description": "Halfway Home Bench (Bench)",
     "key": "BenchHalfwayHome",
     "tooltip": "Splits when sitting on the bench in Halfway Home"
@@ -436,6 +442,12 @@
     "description": "Great Conchflies (Transition)",
     "key": "GreatConchfliesTrans",
     "tooltip": "Splits on the transition after defeating the Great Conchflies boss"
+  },
+  {
+    "alias": null,
+    "description": "Enter Great Conchflies (Transition)",
+    "key": "EnterGreatConchflies",
+    "tooltip": "Splits on the transition entering the Great Conchflies boss arena"
   },
   {
     "alias": null,
