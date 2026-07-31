@@ -597,6 +597,7 @@ declare_pointers!(PlayerDataPointers {
     defeated_bone_flyer_giant_golem_scene: UnityPointer<3> = pdp("defeatedBoneFlyerGiantGolemScene"),
     caravan_troupe_location: UnityPointer<3> = pdp("CaravanTroupeLocation"),
     belltown_relic_dealer_gave_relic: UnityPointer<3> = pdp("BelltownRelicDealerGaveRelic"),
+    visited_ward: UnityPointer<3> = pdp("visitedWard"),
     collected_ward_key: UnityPointer<3> = pdp("collectedWardKey"),
     collected_ward_boss_key: UnityPointer<3> = pdp("collectedWardBossKey"),
     ward_boss_encountered: UnityPointer<3> = pdp("wardBossEncountered"),

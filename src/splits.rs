@@ -697,6 +697,10 @@ pub enum Split {
     ///
     /// Splits when taking any transition further into Whiteward past the elevator
     PostWhitewardElevatorTrans,
+    /// Seen Whiteward (Area)
+    ///
+    /// Splits when entering Whiteward area text first appears
+    SeenWhiteward,
     /// Collected Whiteward Key (Item)
     ///
     /// Splits when you collect the Whiteward Key
@@ -2755,6 +2759,7 @@ pub fn continuous_splits(split: &Split, e: &Env, store: &mut Store) -> Option<Sp
         //endregion: HighHalls
 
         // region: Whiteward
+        Split::SeenWhiteward => should_split(mem.deref(&pd.visited_ward).unwrap_or_default()),
         Split::CollectedWhitewardKey => {
             should_split(mem.deref(&pd.collected_ward_key).unwrap_or_default())
         }
