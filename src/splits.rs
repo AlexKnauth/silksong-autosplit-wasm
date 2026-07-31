@@ -2081,9 +2081,7 @@ pub fn transition_splits(
         Split::ThreadStormTrans => {
             should_split(ss.changed() && mem.deref(&pd.has_thread_sphere).unwrap_or_default())
         }
-        Split::EnterHalfwayHome => {
-            should_split(ss.changed() && scenes.current == "Halfway_01")
-        }
+        Split::EnterHalfwayHome => should_split(ss.changed() && scenes.current == "Halfway_01"),
         Split::EnterHalfwayHomeBasement => {
             should_split(scenes.old == "Halfway_01" && scenes.current == "Ant_08")
         }
