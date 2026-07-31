@@ -249,7 +249,7 @@ pub enum Split {
     ThreadStormTrans,
     /// Enter Halfway Home (Transition)
     ///
-    /// Splits after entering Halfway Home
+    /// Splits on entering Halfway Home
     EnterHalfwayHome,
     /// Halfway Home Bench (Bench)
     ///
