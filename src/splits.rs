@@ -2118,7 +2118,8 @@ pub fn transition_splits(
         // region: BlastedSteps
         Split::EnterBlastedSteps => {
             should_split((scenes.old == "Coral_19" && scenes.current == "Coral_02")
-            || (scenes.old == "Bellway_08" && scenes.current == "Coral_03"))
+            || (scenes.old == "Bellway_08" && scenes.current == "Coral_03")
+            || (scenes.old == "Bellway_08" && scenes.current == "Coral_35"))
         }
         Split::GreatConchfliesTrans => {
             should_split(ss.changed() && mem.deref(&pd.defeated_coral_drillers).unwrap_or_default())
