@@ -439,6 +439,12 @@
   },
   {
     "alias": null,
+    "description": "Enter Great Conchflies (Transition)",
+    "key": "EnterGreatConchflies",
+    "tooltip": "Splits on the transition entering the Great Conchflies boss arena"
+  },
+  {
+    "alias": null,
     "description": "Needle Strike (Skill)",
     "key": "NeedleStrike",
     "tooltip": "Splits when obtaining Needle Strike (Charge Slash)"
