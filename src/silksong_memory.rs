@@ -815,7 +815,7 @@ impl SceneStore {
             #[cfg(debug_assertions)]
             asr::print_message(&format!(
                 "curr {} -> next {}",
-                &self.curr_scene_name, &self.next_scene_name
+                self.curr_scene_name, self.next_scene_name
             ));
             true
         } else if self.new_data_curr {
@@ -840,7 +840,7 @@ impl SceneStore {
             #[cfg(debug_assertions)]
             asr::print_message(&format!(
                 "prev {} -> curr {}",
-                &self.prev_scene_name, &self.curr_scene_name
+                self.prev_scene_name, self.curr_scene_name
             ));
             true
         } else if new_scene_load_activation_allowed {
@@ -849,7 +849,7 @@ impl SceneStore {
             #[cfg(debug_assertions)]
             asr::print_message(&format!(
                 "curr {} =? next {}",
-                &self.curr_scene_name, &self.next_scene_name
+                self.curr_scene_name, self.next_scene_name
             ));
             true
         } else {
