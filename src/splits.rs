@@ -2172,7 +2172,7 @@ pub fn transition_splits(
         ),
         Split::KarakSimpleKeyExit => should_split(
             scenes.old.eq_ignore_ascii_case("bellshrine_coral")
-                || (scenes.current == "Coral_38" && !scenes.starts_with("Coral_")),
+                || (scenes.current == "Coral_38" && !scenes.old.starts_with("Coral_")),
         ),
         Split::EnterVoltnest => {
             should_split(scenes.old == "Coral_35b" && scenes.current == "Coral_29")
