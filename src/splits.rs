@@ -2118,14 +2118,13 @@ pub fn transition_splits(
         // region: BlastedSteps
         Split::EnterBlastedSteps => {
             should_split((scenes.old == "Coral_19" && scenes.current == "Coral_02")
-            || (scenes.old == "Bellway_08" && scenes.current == "Coral_03")
-            || (scenes.old == "Bellway_08" && scenes.current == "Coral_35"))
+            || (scenes.old == "Bellway_08" && scenes.current == "Coral_03"))
         }
         Split::GreatConchfliesTrans => {
             should_split(ss.changed() && mem.deref(&pd.defeated_coral_drillers).unwrap_or_default())
         }
         Split::EnterGreatConchflies => {
-            should_split((scenes.old == "Coral_11b" || scenes.old == "Coral_03") && scenes.current == "Coral_11")
+            should_split(ss.changed() && scenes.current == "Coral_11")
         }
         Split::NeedleStrikeTrans => {
             should_split(ss.changed() && mem.deref(&pd.has_charge_slash).unwrap_or_default())
