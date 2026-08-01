@@ -11,6 +11,7 @@ json:
 
 examples/splits.json: src/splits.rs examples/splits.rs
 	cargo run --example splits --target $$(rustc -vV | sed -n 's|host: ||p')
+	jq --indent 4 . "examples/splits.json" > "examples/splits.json.tmp" && mv "examples/splits.json.tmp" "examples/splits.json"
 
 fmt:
 	cargo fmt
@@ -20,3 +21,4 @@ clippy:
 
 clean:
 	rm splits/*/*.tmp
+	rm examples/splits.json.tmp
