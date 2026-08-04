@@ -2559,6 +2559,25 @@ fn bench_split(store: &mut Store, e: &Env) -> bool {
         .is_some_and(|p| p.changed_to(&true))
 }
 
+/// Splits based on a delta ("just increased") over player-inventory data - e.g. Collectables
+/// pickups. These do NOT go through continuous_splits' game_state gate: item-get popups can
+/// pause the game for a tick right when the pickup registers, and Store's Pair-watcher
+/// "interested" bookkeeping would otherwise get pruned and rebaselined during that pause,
+/// silently losing the exact transition being tracked. Add new OnObtainX-style splits here,
+/// not in continuous_splits, so they don't need this gate worked around by hand each time.
+pub fn on_obtain_item_splits(split: &Split, e: &Env, store: &mut Store) -> Option<SplitterAction> {
+    match split {
+        // region: Collectables
+        Split::MemoryLocket => should_split(
+            store
+                .get_i32_pair_bang("memory_locket_amount", &get_memory_locket_amount, Some(e))
+                .is_some_and(|p| p.increased()),
+        ),
+        // endregion: Collectables
+        _ => None,
+    }
+}
+
 pub fn continuous_splits(split: &Split, e: &Env, store: &mut Store) -> Option<SplitterAction> {
     let Env { mem, gm, pd } = e;
     let game_state: i32 = mem.deref(&gm.game_state).unwrap_or_default();
@@ -3437,14 +3456,6 @@ pub fn continuous_splits(split: &Split, e: &Env, store: &mut Store) -> Option<Sp
         Split::ThiefsMark => should_split(store.has_tool(&utf16!("Thief Charm"), e)),
         // endregion Tools
 
-        // region: Collectables
-        Split::MemoryLocket => should_split(
-            store
-                .get_i32_pair_bang("memory_locket_amount", &get_memory_locket_amount, Some(e))
-                .is_some_and(|p| p.increased()),
-        ),
-        // endregion: Collectables
-
         // else
         _ => should_split(false),
     }
@@ -3457,23 +3468,25 @@ pub fn splits(
     ss: &mut SceneStore,
     store: &mut Store,
 ) -> Option<SplitterAction> {
-    let a1 = continuous_splits(split, env, store).or_else(|| {
-        let scenes = ss.pair();
-        let a2 = if !ss.split_this_transition {
-            transition_once_splits(split, ss, env)
-        } else {
-            None
-        };
-        a2.or_else(|| {
-            if trans_now {
-                if is_menu(scenes.old) || is_menu(scenes.current) {
-                    menu_splits(split, &scenes, env, store)
-                } else {
-                    transition_splits(split, ss, env, store, ss.split_this_transition)
-                }
+    let a1 = on_obtain_item_splits(split, env, store).or_else(|| {
+        continuous_splits(split, env, store).or_else(|| {
+            let scenes = ss.pair();
+            let a2 = if !ss.split_this_transition {
+                transition_once_splits(split, ss, env)
             } else {
                 None
-            }
+            };
+            a2.or_else(|| {
+                if trans_now {
+                    if is_menu(scenes.old) || is_menu(scenes.current) {
+                        menu_splits(split, &scenes, env, store)
+                    } else {
+                        transition_splits(split, ss, env, store, ss.split_this_transition)
+                    }
+                } else {
+                    None
+                }
+            })
         })
     });
     if a1.is_some() {

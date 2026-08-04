@@ -1086,7 +1086,13 @@ pub fn get_memory_locket_amount(e: Option<&Env>) -> Option<i32> {
     let Env { mem, pd, .. } = e?;
     // "Memory Locket" is the in-game display name; the Collectables dictionary key is the
     // internal id "Crest Socket Unlocker" - confirmed against the live debug log.
-    let (_, amount) = find_collectable(&utf16!("Crest Socket Unlocker"), mem, pd)?;
+    // Not-found means "not picked up yet", i.e. 0 - NOT None/unknown. An item with no dictionary
+    // entry until first pickup would otherwise never get a valid `old` baseline to compare
+    // against: the first successful read would BE the pickup itself, and a Pair's first-ever
+    // observation always baselines with no history, so `increased()` could never fire.
+    let amount = find_collectable(&utf16!("Crest Socket Unlocker"), mem, pd)
+        .map(|(_, amount)| amount)
+        .unwrap_or(0);
     Some(amount)
 }
 

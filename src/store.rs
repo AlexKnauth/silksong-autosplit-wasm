@@ -215,7 +215,7 @@ impl Store {
     // item whose amount changed since the last scan - independent of any active Split.
     #[cfg(debug_assertions)]
     fn log_collectable_changes(&mut self, e: Option<&Env>) {
-        let Some(Env { pd, mem, .. }) = e else {
+        let Some(Env { pd, mem, gm }) = e else {
             return;
         };
         let new_version: Option<i32> = mem.deref(&pd.collectables_version).ok();
@@ -228,6 +228,8 @@ impl Store {
             return;
         };
 
+        let game_state: Option<i32> = mem.deref(&gm.game_state).ok();
+
         for (name, amount) in &entries {
             let prev = self
                 .collectables_log_snapshot
@@ -237,8 +239,8 @@ impl Store {
             if amount != &prev {
                 let verb = if *amount > prev { "gained" } else { "lost" };
                 asr::print_message(&format!(
-                    "Collectable \"{}\" {}: {} -> {}",
-                    name, verb, prev, amount
+                    "Collectable \"{}\" {}: {} -> {} (game_state={:?})",
+                    name, verb, prev, amount, game_state
                 ));
             }
         }
