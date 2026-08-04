@@ -14,6 +14,7 @@ use asr::{
     Address64, Process,
 };
 use bytemuck::CheckedBitPattern;
+use utf16_lit::utf16;
 
 // --------------------------------------------------------
 
@@ -1074,6 +1075,19 @@ pub fn get_max_health_base(e: Option<&Env>) -> Option<i32> {
 
 pub fn get_heart_pieces(e: Option<&Env>) -> Option<i32> {
     e?.mem.deref(&e?.pd.heart_pieces).ok()
+}
+
+// Each Collectables item that needs "just increased" detection gets its own dedicated getter
+// like this one, routed through Store::get_i32_pair_bang (see Split::MemoryLocket in splits.rs) -
+// NOT a shared single-slot cache. A shared cache keyed only by item name can't tell two separate
+// occurrences of the same item-based Split apart (e.g. the same collectable split reused later
+// in the list), and ends up comparing against stale history from the wrong occurrence.
+pub fn get_memory_locket_amount(e: Option<&Env>) -> Option<i32> {
+    let Env { mem, pd, .. } = e?;
+    // "Memory Locket" is the in-game display name; the Collectables dictionary key is the
+    // internal id "Crest Socket Unlocker" - confirmed against the live debug log.
+    let (_, amount) = find_collectable(&utf16!("Crest Socket Unlocker"), mem, pd)?;
+    Some(amount)
 }
 
 pub fn get_silk_max(e: Option<&Env>) -> Option<i32> {

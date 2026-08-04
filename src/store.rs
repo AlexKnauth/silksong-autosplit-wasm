@@ -109,17 +109,15 @@ impl ToolCache {
     }
 }
 
+// Plain current-value cache, shaped like ToolCache - only for "currently own > 0" style checks.
+// Do NOT add increase/delta ("just picked up") tracking here: a single slot keyed only by item
+// name can't distinguish two separate occurrences of the same item-based Split later in a run
+// (see get_memory_locket_amount in silksong_memory.rs for that instead, routed through
+// Store::get_i32_pair_bang like OnObtainMaskShard).
 pub struct CollectableCache {
     version: Option<i32>,
-    // The item name this cache's amount/prev_amount history belongs to. Only changes when the
-    // caller queries a different item - a Collectables version bump does NOT clear this, so
-    // history survives across re-scans (see `stale`).
     item: &'static [u16],
-    // Set on a Collectables version bump (or construction): the cached index `i` may no longer
-    // be valid and must be re-derived via a full find_collectable scan before it's trusted again.
-    stale: bool,
     i: i32,
-    prev_amount: i32,
     amount: i32,
 }
 
@@ -128,9 +126,7 @@ impl CollectableCache {
         CollectableCache {
             version: None,
             item: &[],
-            stale: true,
             i: -1,
-            prev_amount: 0,
             amount: 0,
         }
     }
@@ -139,13 +135,13 @@ impl CollectableCache {
         match e {
             None => {
                 self.version = None;
-                self.stale = true;
+                self.item = &[]
             }
             Some(Env { pd, mem, .. }) => {
                 let new = get_collectables_version(mem, pd);
                 if self.version != new {
                     self.version = new;
-                    self.stale = true;
+                    self.item = &[]
                 }
             }
         }
@@ -157,21 +153,12 @@ impl CollectableCache {
         }
     }
 
-    /// Returns the current amount owned for `item_utf16`. Also updates the previous-amount
-    /// history used by `increased`, so calling this directly instead of through `increased`
-    /// still keeps that history correct.
     pub fn get_amount(&mut self, item_utf16: &'static [u16], e: &Env) -> i32 {
         self.update_version(Some(e));
-        let item_switched = self.item != item_utf16;
-        self.prev_amount = self.amount;
-        if item_switched {
-            self.item = item_utf16;
-            self.stale = true;
-        }
         if self.version.is_none() {
-            self.i = -1;
-            self.amount = 0;
-        } else if self.stale {
+            return 0;
+        }
+        if self.item != item_utf16 {
             if let Some((i, amount)) = find_collectable(item_utf16, e.mem, e.pd) {
                 self.i = i;
                 self.amount = amount;
@@ -179,38 +166,13 @@ impl CollectableCache {
                 self.i = -1;
                 self.amount = 0;
             }
-            self.stale = false;
+            self.item = item_utf16
         } else if !self.i.is_negative() {
             if let Some(amount) = read_collectable(self.i, e.mem, e.pd) {
                 self.amount = amount;
             }
         }
-        if item_switched {
-            // No meaningful history when comparing against a different item's amount.
-            self.prev_amount = self.amount;
-        }
-        #[cfg(debug_assertions)]
-        if self.amount != self.prev_amount {
-            let name = String::from_utf16_lossy(item_utf16);
-            let verb = if self.amount > self.prev_amount {
-                "gained"
-            } else {
-                "lost"
-            };
-            asr::print_message(&format!(
-                "Collectable \"{}\" {}: {} -> {}",
-                name, verb, self.prev_amount, self.amount
-            ));
-        }
         self.amount
-    }
-
-    /// True on the tick the amount owned for `item_utf16` goes up (e.g. picking up a
-    /// Collectable), false otherwise - mirrors `Pair::increased()` for a value that isn't
-    /// otherwise tracked via `Store`'s generic `i32s` watcher map.
-    pub fn increased(&mut self, item_utf16: &'static [u16], e: &Env) -> bool {
-        self.get_amount(item_utf16, e);
-        self.amount > self.prev_amount
     }
 }
 
@@ -316,10 +278,6 @@ impl Store {
 
     pub fn has_collectable(&mut self, item_utf16: &'static [u16], e: &Env) -> bool {
         self.collectables.get_amount(item_utf16, e) > 0
-    }
-
-    pub fn collectable_increased(&mut self, item_utf16: &'static [u16], e: &Env) -> bool {
-        self.collectables.increased(item_utf16, e)
     }
 
     pub fn get_bool_pair(&mut self, key: &str) -> Option<Pair<bool>> {

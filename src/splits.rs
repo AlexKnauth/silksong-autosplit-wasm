@@ -9,9 +9,10 @@ use utf16_lit::utf16;
 use crate::{
     silksong_memory::{
         get_at_bench, get_health, get_heart_pieces, get_is_maggoted, get_max_health_base,
-        get_respawn_scene, get_silk_max, get_silk_spool_parts, is_discontinuity_scene, is_menu,
-        Env, SceneStore, CINEMATIC_STAG_TRAVEL, DEATH_RESPAWN_MARKER_INIT, GAME_STATE_PLAYING,
-        MENU_TITLE, NON_MENU_GAME_STATES, OPENING_SCENES,
+        get_memory_locket_amount, get_respawn_scene, get_silk_max, get_silk_spool_parts,
+        is_discontinuity_scene, is_menu, Env, SceneStore, CINEMATIC_STAG_TRAVEL,
+        DEATH_RESPAWN_MARKER_INIT, GAME_STATE_PLAYING, MENU_TITLE, NON_MENU_GAME_STATES,
+        OPENING_SCENES,
     },
     store::Store,
     timer::{reached_up_to_split, should_split, SplitterAction},
@@ -3437,9 +3438,11 @@ pub fn continuous_splits(split: &Split, e: &Env, store: &mut Store) -> Option<Sp
         // endregion Tools
 
         // region: Collectables
-        Split::MemoryLocket => {
-            should_split(store.collectable_increased(&utf16!("Crest Socket Unlocker"), e))
-        }
+        Split::MemoryLocket => should_split(
+            store
+                .get_i32_pair_bang("memory_locket_amount", &get_memory_locket_amount, Some(e))
+                .is_some_and(|p| p.increased()),
+        ),
         // endregion: Collectables
 
         // else
