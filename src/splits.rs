@@ -1917,7 +1917,7 @@ pub enum Split {
     /// Memory Locket (Obtain)
     ///
     /// Splits when obtaining a Memory Locket
-    MemoryLocket,
+    OnObtainMemoryLocket,
     // endregion: Collectables
 }
 
@@ -2559,16 +2559,12 @@ fn bench_split(store: &mut Store, e: &Env) -> bool {
         .is_some_and(|p| p.changed_to(&true))
 }
 
-/// Splits based on a delta ("just increased") over player-inventory data - e.g. Collectables
-/// pickups. These do NOT go through continuous_splits' game_state gate: item-get popups can
-/// pause the game for a tick right when the pickup registers, and Store's Pair-watcher
-/// "interested" bookkeeping would otherwise get pruned and rebaselined during that pause,
-/// silently losing the exact transition being tracked. Add new OnObtainX-style splits here,
-/// not in continuous_splits, so they don't need this gate worked around by hand each time.
+// Delta ("just increased") splits on inventory data - kept outside continuous_splits' game_state
+// gate, since item-get popups can pause the game for a tick and would otherwise lose the change.
 pub fn on_obtain_item_splits(split: &Split, e: &Env, store: &mut Store) -> Option<SplitterAction> {
     match split {
         // region: Collectables
-        Split::MemoryLocket => should_split(
+        Split::OnObtainMemoryLocket => should_split(
             store
                 .get_i32_pair_bang("memory_locket_amount", &get_memory_locket_amount, Some(e))
                 .is_some_and(|p| p.increased()),

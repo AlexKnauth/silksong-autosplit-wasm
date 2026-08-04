@@ -109,11 +109,6 @@ impl ToolCache {
     }
 }
 
-// Plain current-value cache, shaped like ToolCache - only for "currently own > 0" style checks.
-// Do NOT add increase/delta ("just picked up") tracking here: a single slot keyed only by item
-// name can't distinguish two separate occurrences of the same item-based Split later in a run
-// (see get_memory_locket_amount in silksong_memory.rs for that instead, routed through
-// Store::get_i32_pair_bang like OnObtainMaskShard).
 pub struct CollectableCache {
     version: Option<i32>,
     item: &'static [u16],
@@ -185,8 +180,7 @@ pub struct Store {
     strings: BTreeMap<&'static str, StoreValue<String>>,
     tools: ToolCache,
     collectables: CollectableCache,
-    // DEBUG-ONLY: last-seen (name -> amount) for every Collectables entry, so any change can be
-    // logged regardless of which Split (if any) is currently active. See `log_collectable_changes`.
+    // DEBUG-ONLY: last-seen amount per Collectables entry, for log_collectable_changes below.
     #[cfg(debug_assertions)]
     collectables_log_version: Option<i32>,
     #[cfg(debug_assertions)]
@@ -211,8 +205,7 @@ impl Store {
         }
     }
 
-    // DEBUG-ONLY: on a Collectables version bump, scans every entry and prints one line per
-    // item whose amount changed since the last scan - independent of any active Split.
+    // DEBUG-ONLY: logs every Collectables amount change, independent of the active Split.
     #[cfg(debug_assertions)]
     fn log_collectable_changes(&mut self, e: Option<&Env>) {
         let Some(Env { pd, mem, gm }) = e else {

@@ -928,8 +928,7 @@ pub fn read_tool(i: i32, mem: &Memory, pd: &PlayerDataPointers) -> Option<bool> 
 
 // --------------------------------------------------------
 pub fn get_collectables_version(mem: &Memory, pd: &PlayerDataPointers) -> Option<i32> {
-    let version = mem.deref(&pd.collectables_version).ok();
-    version
+    mem.deref(&pd.collectables_version).ok()
 }
 
 pub fn find_collectable(item_utf16: &[u16], mem: &Memory, pd: &PlayerDataPointers) -> Option<(i32, i32)> {
@@ -1077,19 +1076,9 @@ pub fn get_heart_pieces(e: Option<&Env>) -> Option<i32> {
     e?.mem.deref(&e?.pd.heart_pieces).ok()
 }
 
-// Each Collectables item that needs "just increased" detection gets its own dedicated getter
-// like this one, routed through Store::get_i32_pair_bang (see Split::MemoryLocket in splits.rs) -
-// NOT a shared single-slot cache. A shared cache keyed only by item name can't tell two separate
-// occurrences of the same item-based Split apart (e.g. the same collectable split reused later
-// in the list), and ends up comparing against stale history from the wrong occurrence.
+// Each collectable needing "just increased" detection gets its own dedicated getter
 pub fn get_memory_locket_amount(e: Option<&Env>) -> Option<i32> {
     let Env { mem, pd, .. } = e?;
-    // "Memory Locket" is the in-game display name; the Collectables dictionary key is the
-    // internal id "Crest Socket Unlocker" - confirmed against the live debug log.
-    // Not-found means "not picked up yet", i.e. 0 - NOT None/unknown. An item with no dictionary
-    // entry until first pickup would otherwise never get a valid `old` baseline to compare
-    // against: the first successful read would BE the pickup itself, and a Pair's first-ever
-    // observation always baselines with no history, so `increased()` could never fire.
     let amount = find_collectable(&utf16!("Crest Socket Unlocker"), mem, pd)
         .map(|(_, amount)| amount)
         .unwrap_or(0);
