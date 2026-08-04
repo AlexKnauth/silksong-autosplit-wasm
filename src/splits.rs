@@ -1911,6 +1911,13 @@ pub enum Split {
     /// Splits on the transition after obtaining the Pimpillo
     PimpilloTrans,
     // endregion: Tools
+
+    // region: Collectables
+    /// Memory Locket (Obtain)
+    ///
+    /// Splits when obtaining a Memory Locket
+    MemoryLocket,
+    // endregion: Collectables
 }
 
 impl StoreWidget for Split {
@@ -3428,6 +3435,12 @@ pub fn continuous_splits(split: &Split, e: &Env, store: &mut Store) -> Option<Sp
         Split::SilkspeedAnklets => should_split(store.has_tool(&utf16!("Sprintmaster"), e)),
         Split::ThiefsMark => should_split(store.has_tool(&utf16!("Thief Charm"), e)),
         // endregion Tools
+
+        // region: Collectables
+        Split::MemoryLocket => {
+            should_split(store.collectable_increased(&utf16!("Crest Socket Unlocker"), e))
+        }
+        // endregion: Collectables
 
         // else
         _ => should_split(false),

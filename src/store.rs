@@ -1,3 +1,5 @@
+#[cfg(debug_assertions)]
+use alloc::format;
 use alloc::{
     collections::BTreeMap,
     string::{String, ToString},
@@ -9,7 +11,12 @@ use asr::{
 
 #[cfg(feature = "split-index")]
 use crate::silksong_memory::get_timer_current_split_index;
-use crate::silksong_memory::{find_tool, get_timer_state, get_tools_version, read_tool, Env};
+#[cfg(debug_assertions)]
+use crate::silksong_memory::scan_all_collectables;
+use crate::silksong_memory::{
+    find_collectable, find_tool, get_collectables_version, get_timer_state, get_tools_version,
+    read_collectable, read_tool, Env,
+};
 
 struct StoreValue<A: 'static> {
     watcher: Watcher<A>,
@@ -102,6 +109,111 @@ impl ToolCache {
     }
 }
 
+pub struct CollectableCache {
+    version: Option<i32>,
+    // The item name this cache's amount/prev_amount history belongs to. Only changes when the
+    // caller queries a different item - a Collectables version bump does NOT clear this, so
+    // history survives across re-scans (see `stale`).
+    item: &'static [u16],
+    // Set on a Collectables version bump (or construction): the cached index `i` may no longer
+    // be valid and must be re-derived via a full find_collectable scan before it's trusted again.
+    stale: bool,
+    i: i32,
+    prev_amount: i32,
+    amount: i32,
+}
+
+impl CollectableCache {
+    fn new() -> Self {
+        CollectableCache {
+            version: None,
+            item: &[],
+            stale: true,
+            i: -1,
+            prev_amount: 0,
+            amount: 0,
+        }
+    }
+
+    fn update_version(&mut self, e: Option<&Env>) {
+        match e {
+            None => {
+                self.version = None;
+                self.stale = true;
+            }
+            Some(Env { pd, mem, .. }) => {
+                let new = get_collectables_version(mem, pd);
+                if self.version != new {
+                    self.version = new;
+                    self.stale = true;
+                }
+            }
+        }
+    }
+
+    pub fn update_validity(&mut self, e: Option<&Env>) {
+        if !self.item.is_empty() {
+            self.update_version(e)
+        }
+    }
+
+    /// Returns the current amount owned for `item_utf16`. Also updates the previous-amount
+    /// history used by `increased`, so calling this directly instead of through `increased`
+    /// still keeps that history correct.
+    pub fn get_amount(&mut self, item_utf16: &'static [u16], e: &Env) -> i32 {
+        self.update_version(Some(e));
+        let item_switched = self.item != item_utf16;
+        self.prev_amount = self.amount;
+        if item_switched {
+            self.item = item_utf16;
+            self.stale = true;
+        }
+        if self.version.is_none() {
+            self.i = -1;
+            self.amount = 0;
+        } else if self.stale {
+            if let Some((i, amount)) = find_collectable(item_utf16, e.mem, e.pd) {
+                self.i = i;
+                self.amount = amount;
+            } else {
+                self.i = -1;
+                self.amount = 0;
+            }
+            self.stale = false;
+        } else if !self.i.is_negative() {
+            if let Some(amount) = read_collectable(self.i, e.mem, e.pd) {
+                self.amount = amount;
+            }
+        }
+        if item_switched {
+            // No meaningful history when comparing against a different item's amount.
+            self.prev_amount = self.amount;
+        }
+        #[cfg(debug_assertions)]
+        if self.amount != self.prev_amount {
+            let name = String::from_utf16_lossy(item_utf16);
+            let verb = if self.amount > self.prev_amount {
+                "gained"
+            } else {
+                "lost"
+            };
+            asr::print_message(&format!(
+                "Collectable \"{}\" {}: {} -> {}",
+                name, verb, self.prev_amount, self.amount
+            ));
+        }
+        self.amount
+    }
+
+    /// True on the tick the amount owned for `item_utf16` goes up (e.g. picking up a
+    /// Collectable), false otherwise - mirrors `Pair::increased()` for a value that isn't
+    /// otherwise tracked via `Store`'s generic `i32s` watcher map.
+    pub fn increased(&mut self, item_utf16: &'static [u16], e: &Env) -> bool {
+        self.get_amount(item_utf16, e);
+        self.amount > self.prev_amount
+    }
+}
+
 pub struct Store {
     timer_state: StoreValue<TimerState>,
     #[cfg(feature = "split-index")]
@@ -110,6 +222,13 @@ pub struct Store {
     i32s: BTreeMap<&'static str, StoreValue<i32>>,
     strings: BTreeMap<&'static str, StoreValue<String>>,
     tools: ToolCache,
+    collectables: CollectableCache,
+    // DEBUG-ONLY: last-seen (name -> amount) for every Collectables entry, so any change can be
+    // logged regardless of which Split (if any) is currently active. See `log_collectable_changes`.
+    #[cfg(debug_assertions)]
+    collectables_log_version: Option<i32>,
+    #[cfg(debug_assertions)]
+    collectables_log_snapshot: BTreeMap<String, i32>,
 }
 
 impl Store {
@@ -122,7 +241,47 @@ impl Store {
             i32s: BTreeMap::new(),
             strings: BTreeMap::new(),
             tools: ToolCache::new(),
+            collectables: CollectableCache::new(),
+            #[cfg(debug_assertions)]
+            collectables_log_version: None,
+            #[cfg(debug_assertions)]
+            collectables_log_snapshot: BTreeMap::new(),
         }
+    }
+
+    // DEBUG-ONLY: on a Collectables version bump, scans every entry and prints one line per
+    // item whose amount changed since the last scan - independent of any active Split.
+    #[cfg(debug_assertions)]
+    fn log_collectable_changes(&mut self, e: Option<&Env>) {
+        let Some(Env { pd, mem, .. }) = e else {
+            return;
+        };
+        let new_version: Option<i32> = mem.deref(&pd.collectables_version).ok();
+        if self.collectables_log_version == new_version {
+            return;
+        }
+        self.collectables_log_version = new_version;
+
+        let Some(entries) = scan_all_collectables(mem, pd) else {
+            return;
+        };
+
+        for (name, amount) in &entries {
+            let prev = self
+                .collectables_log_snapshot
+                .get(name)
+                .copied()
+                .unwrap_or(0);
+            if amount != &prev {
+                let verb = if *amount > prev { "gained" } else { "lost" };
+                asr::print_message(&format!(
+                    "Collectable \"{}\" {}: {} -> {}",
+                    name, verb, prev, amount
+                ));
+            }
+        }
+
+        self.collectables_log_snapshot = entries.into_iter().collect();
     }
 
     pub fn get_timer_state_pair(&mut self) -> Option<Pair<TimerState>> {
@@ -149,6 +308,18 @@ impl Store {
 
     pub fn has_tool(&mut self, tool_utf16: &'static [u16], e: &Env) -> bool {
         self.tools.has_tool(tool_utf16, e)
+    }
+
+    pub fn get_collectable_amount(&mut self, item_utf16: &'static [u16], e: &Env) -> i32 {
+        self.collectables.get_amount(item_utf16, e)
+    }
+
+    pub fn has_collectable(&mut self, item_utf16: &'static [u16], e: &Env) -> bool {
+        self.collectables.get_amount(item_utf16, e) > 0
+    }
+
+    pub fn collectable_increased(&mut self, item_utf16: &'static [u16], e: &Env) -> bool {
+        self.collectables.increased(item_utf16, e)
     }
 
     pub fn get_bool_pair(&mut self, key: &str) -> Option<Pair<bool>> {
@@ -213,6 +384,9 @@ impl Store {
         #[cfg(feature = "split-index")]
         self.split_index.update(env);
         self.tools.update_validity(env);
+        self.collectables.update_validity(env);
+        #[cfg(debug_assertions)]
+        self.log_collectable_changes(env);
         for v in self.bools.values_mut() {
             if v.update(env) {
                 v.interested = false;
