@@ -9,7 +9,7 @@ use utf16_lit::utf16;
 use crate::{
     silksong_memory::{
         get_at_bench, get_health, get_heart_pieces, get_is_maggoted, get_max_health_base,
-        get_memory_locket_amount, get_respawn_scene, get_silk_max, get_silk_spool_parts,
+        get_respawn_scene, get_silk_max, get_silk_spool_parts,
         is_discontinuity_scene, is_menu, Env, SceneStore, CINEMATIC_STAG_TRAVEL,
         DEATH_RESPAWN_MARKER_INIT, GAME_STATE_PLAYING, MENU_TITLE, NON_MENU_GAME_STATES,
         OPENING_SCENES,
@@ -1918,6 +1918,16 @@ pub enum Split {
     ///
     /// Splits when obtaining a Memory Locket
     OnObtainMemoryLocket,
+
+    /// Cogheart Piece (Obtain)
+    ///
+    /// Splits when obtaining a Cogheart Piece
+    OnObtainCogheartPiece,
+
+    /// Crafmetal (Obtain)
+    ///
+    /// Splits when obtaining a Crafmetal
+    OnObtainCraftmetal,
     // endregion: Collectables
 }
 
@@ -2559,16 +2569,26 @@ fn bench_split(store: &mut Store, e: &Env) -> bool {
         .is_some_and(|p| p.changed_to(&true))
 }
 
+fn obtained_collectable(store: &mut Store, item_utf16: &'static [u16], e: &Env) -> bool {
+    store
+        .get_collectable_pair(item_utf16, Some(e))
+        .is_some_and(|p| p.increased())
+}
+
 // Delta ("just increased") splits on inventory data - kept outside continuous_splits' game_state
 // gate, since item-get popups can pause the game for a tick and would otherwise lose the change.
 pub fn on_obtain_item_splits(split: &Split, e: &Env, store: &mut Store) -> Option<SplitterAction> {
     match split {
         // region: Collectables
-        Split::OnObtainMemoryLocket => should_split(
-            store
-                .get_i32_pair_bang("memory_locket_amount", &get_memory_locket_amount, Some(e))
-                .is_some_and(|p| p.increased()),
-        ),
+        Split::OnObtainMemoryLocket => {
+            should_split(obtained_collectable(store, &utf16!("Crest Socket Unlocker"), e))
+        }
+        Split::OnObtainCogheartPiece => {
+            should_split(obtained_collectable(store, &utf16!("Cog Heart Pieces"), e))
+        }
+        Split::OnObtainCraftmetal => {
+            should_split(obtained_collectable(store, &utf16!("Tool Metal"), e))
+        }
         // endregion: Collectables
         _ => None,
     }

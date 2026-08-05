@@ -13,10 +13,7 @@ use asr::{
 use crate::silksong_memory::get_timer_current_split_index;
 #[cfg(debug_assertions)]
 use crate::silksong_memory::scan_all_collectables;
-use crate::silksong_memory::{
-    find_collectable, find_tool, get_collectables_version, get_timer_state, get_tools_version,
-    read_collectable, read_tool, Env,
-};
+use crate::silksong_memory::{find_collectable, find_tool, get_timer_state, get_tools_version, read_tool, Env};
 
 struct StoreValue<A: 'static> {
     watcher: Watcher<A>,
@@ -109,66 +106,9 @@ impl ToolCache {
     }
 }
 
-pub struct CollectableCache {
-    version: Option<i32>,
-    item: &'static [u16],
-    i: i32,
-    amount: i32,
-}
-
-impl CollectableCache {
-    fn new() -> Self {
-        CollectableCache {
-            version: None,
-            item: &[],
-            i: -1,
-            amount: 0,
-        }
-    }
-
-    fn update_version(&mut self, e: Option<&Env>) {
-        match e {
-            None => {
-                self.version = None;
-                self.item = &[]
-            }
-            Some(Env { pd, mem, .. }) => {
-                let new = get_collectables_version(mem, pd);
-                if self.version != new {
-                    self.version = new;
-                    self.item = &[]
-                }
-            }
-        }
-    }
-
-    pub fn update_validity(&mut self, e: Option<&Env>) {
-        if !self.item.is_empty() {
-            self.update_version(e)
-        }
-    }
-
-    pub fn get_amount(&mut self, item_utf16: &'static [u16], e: &Env) -> i32 {
-        self.update_version(Some(e));
-        if self.version.is_none() {
-            return 0;
-        }
-        if self.item != item_utf16 {
-            if let Some((i, amount)) = find_collectable(item_utf16, e.mem, e.pd) {
-                self.i = i;
-                self.amount = amount;
-            } else {
-                self.i = -1;
-                self.amount = 0;
-            }
-            self.item = item_utf16
-        } else if !self.i.is_negative() {
-            if let Some(amount) = read_collectable(self.i, e.mem, e.pd) {
-                self.amount = amount;
-            }
-        }
-        self.amount
-    }
+struct CollectableWatcher {
+    watcher: Watcher<i32>,
+    interested: bool,
 }
 
 pub struct Store {
@@ -179,7 +119,7 @@ pub struct Store {
     i32s: BTreeMap<&'static str, StoreValue<i32>>,
     strings: BTreeMap<&'static str, StoreValue<String>>,
     tools: ToolCache,
-    collectables: CollectableCache,
+    collectables: BTreeMap<&'static [u16], CollectableWatcher>,
     // DEBUG-ONLY: last-seen amount per Collectables entry, for log_collectable_changes below.
     #[cfg(debug_assertions)]
     collectables_log_version: Option<i32>,
@@ -197,7 +137,7 @@ impl Store {
             i32s: BTreeMap::new(),
             strings: BTreeMap::new(),
             tools: ToolCache::new(),
-            collectables: CollectableCache::new(),
+            collectables: BTreeMap::new(),
             #[cfg(debug_assertions)]
             collectables_log_version: None,
             #[cfg(debug_assertions)]
@@ -267,12 +207,21 @@ impl Store {
         self.tools.has_tool(tool_utf16, e)
     }
 
-    pub fn get_collectable_amount(&mut self, item_utf16: &'static [u16], e: &Env) -> i32 {
-        self.collectables.get_amount(item_utf16, e)
-    }
-
-    pub fn has_collectable(&mut self, item_utf16: &'static [u16], e: &Env) -> bool {
-        self.collectables.get_amount(item_utf16, e) > 0
+    pub fn get_collectable_pair(&mut self, item_utf16: &'static [u16], e: Option<&Env>) -> Option<Pair<i32>> {
+        let entry = self.collectables.entry(item_utf16).or_insert_with(|| {
+            let mut watcher = Watcher::new();
+            if let Some(Env { mem, pd, .. }) = e {
+                if let Some((_, amount)) = find_collectable(item_utf16, mem, pd) {
+                    watcher.update_infallible(amount);
+                }
+            }
+            CollectableWatcher {
+                watcher,
+                interested: true,
+            }
+        });
+        entry.interested = true;
+        entry.watcher.pair
     }
 
     pub fn get_bool_pair(&mut self, key: &str) -> Option<Pair<bool>> {
@@ -337,7 +286,7 @@ impl Store {
         #[cfg(feature = "split-index")]
         self.split_index.update(env);
         self.tools.update_validity(env);
-        self.collectables.update_validity(env);
+        self.collectables.retain(|_, v| v.interested);
         #[cfg(debug_assertions)]
         self.log_collectable_changes(env);
         for v in self.bools.values_mut() {
@@ -353,6 +302,15 @@ impl Store {
         for v in self.strings.values_mut() {
             if v.update(env) {
                 v.interested = false;
+            }
+        }
+        for (item, v) in self.collectables.iter_mut() {
+            if let Some(Env { mem, pd, .. }) = env {
+                if let Some((_, amount)) = find_collectable(item, mem, pd) {
+                    if v.watcher.update_infallible(amount).changed() {
+                        v.interested = false;
+                    }
+                }
             }
         }
     }

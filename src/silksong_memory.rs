@@ -14,7 +14,6 @@ use asr::{
     Address64, Process,
 };
 use bytemuck::CheckedBitPattern;
-use utf16_lit::utf16;
 
 // --------------------------------------------------------
 
@@ -927,10 +926,6 @@ pub fn read_tool(i: i32, mem: &Memory, pd: &PlayerDataPointers) -> Option<bool> 
 }
 
 // --------------------------------------------------------
-pub fn get_collectables_version(mem: &Memory, pd: &PlayerDataPointers) -> Option<i32> {
-    mem.deref(&pd.collectables_version).ok()
-}
-
 pub fn find_collectable(item_utf16: &[u16], mem: &Memory, pd: &PlayerDataPointers) -> Option<(i32, i32)> {
     const MAX_ITEM_ID_LENGTH: usize = 32;
     const COLLECTABLE_ENTRY_STRIDE: i32 = 0x20;
@@ -979,20 +974,6 @@ pub fn find_collectable(item_utf16: &[u16], mem: &Memory, pd: &PlayerDataPointer
     }
 
     None
-}
-
-pub fn read_collectable(i: i32, mem: &Memory, pd: &PlayerDataPointers) -> Option<i32> {
-    const COLLECTABLE_ENTRY_STRIDE: i32 = 0x20;
-    const COLLECTABLE_AMOUNT_OFFSET: i32 = 0x30;
-
-    let p_entries = mem.deref::<Address64, _>(&pd.collectables_entries).ok()?;
-
-    let amount: i32 = mem
-        .process
-        .read(p_entries + COLLECTABLE_AMOUNT_OFFSET + COLLECTABLE_ENTRY_STRIDE * i)
-        .ok()?;
-
-    Some(amount)
 }
 
 // DEBUG-ONLY: full dump of every Collectables entry (name + Amount), so callers can notice a
@@ -1074,15 +1055,6 @@ pub fn get_max_health_base(e: Option<&Env>) -> Option<i32> {
 
 pub fn get_heart_pieces(e: Option<&Env>) -> Option<i32> {
     e?.mem.deref(&e?.pd.heart_pieces).ok()
-}
-
-// Each collectable needing "just increased" detection gets its own dedicated getter
-pub fn get_memory_locket_amount(e: Option<&Env>) -> Option<i32> {
-    let Env { mem, pd, .. } = e?;
-    let amount = find_collectable(&utf16!("Crest Socket Unlocker"), mem, pd)
-        .map(|(_, amount)| amount)
-        .unwrap_or(0);
-    Some(amount)
 }
 
 pub fn get_silk_max(e: Option<&Env>) -> Option<i32> {
