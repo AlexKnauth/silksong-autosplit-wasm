@@ -9,10 +9,9 @@ use utf16_lit::utf16;
 use crate::{
     silksong_memory::{
         get_at_bench, get_health, get_heart_pieces, get_is_maggoted, get_max_health_base,
-        get_respawn_scene, get_silk_max, get_silk_spool_parts,
-        is_discontinuity_scene, is_menu, Env, SceneStore, CINEMATIC_STAG_TRAVEL,
-        DEATH_RESPAWN_MARKER_INIT, GAME_STATE_PLAYING, MENU_TITLE, NON_MENU_GAME_STATES,
-        OPENING_SCENES,
+        get_respawn_scene, get_silk_max, get_silk_spool_parts, is_discontinuity_scene, is_menu,
+        Env, SceneStore, CINEMATIC_STAG_TRAVEL, DEATH_RESPAWN_MARKER_INIT, GAME_STATE_PLAYING,
+        MENU_TITLE, NON_MENU_GAME_STATES, OPENING_SCENES,
     },
     store::Store,
     timer::{reached_up_to_split, should_split, SplitterAction},
@@ -2580,9 +2579,11 @@ fn obtained_collectable(store: &mut Store, item_utf16: &'static [u16], e: &Env) 
 pub fn on_obtain_item_splits(split: &Split, e: &Env, store: &mut Store) -> Option<SplitterAction> {
     match split {
         // region: Collectables
-        Split::OnObtainMemoryLocket => {
-            should_split(obtained_collectable(store, &utf16!("Crest Socket Unlocker"), e))
-        }
+        Split::OnObtainMemoryLocket => should_split(obtained_collectable(
+            store,
+            &utf16!("Crest Socket Unlocker"),
+            e,
+        )),
         Split::OnObtainCogheartPiece => {
             should_split(obtained_collectable(store, &utf16!("Cog Heart Pieces"), e))
         }

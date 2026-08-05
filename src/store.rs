@@ -13,7 +13,9 @@ use asr::{
 use crate::silksong_memory::get_timer_current_split_index;
 #[cfg(debug_assertions)]
 use crate::silksong_memory::scan_all_collectables;
-use crate::silksong_memory::{find_collectable, find_tool, get_timer_state, get_tools_version, read_tool, Env};
+use crate::silksong_memory::{
+    find_collectable, find_tool, get_timer_state, get_tools_version, read_tool, Env,
+};
 
 struct StoreValue<A: 'static> {
     watcher: Watcher<A>,
@@ -207,7 +209,11 @@ impl Store {
         self.tools.has_tool(tool_utf16, e)
     }
 
-    pub fn get_collectable_pair(&mut self, item_utf16: &'static [u16], e: Option<&Env>) -> Option<Pair<i32>> {
+    pub fn get_collectable_pair(
+        &mut self,
+        item_utf16: &'static [u16],
+        e: Option<&Env>,
+    ) -> Option<Pair<i32>> {
         let entry = self.collectables.entry(item_utf16).or_insert_with(|| {
             let mut watcher = Watcher::new();
             if let Some(Env { mem, pd, .. }) = e {

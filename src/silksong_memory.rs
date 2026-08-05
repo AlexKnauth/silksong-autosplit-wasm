@@ -926,7 +926,11 @@ pub fn read_tool(i: i32, mem: &Memory, pd: &PlayerDataPointers) -> Option<bool> 
 }
 
 // --------------------------------------------------------
-pub fn find_collectable(item_utf16: &[u16], mem: &Memory, pd: &PlayerDataPointers) -> Option<(i32, i32)> {
+pub fn find_collectable(
+    item_utf16: &[u16],
+    mem: &Memory,
+    pd: &PlayerDataPointers,
+) -> Option<(i32, i32)> {
     const MAX_ITEM_ID_LENGTH: usize = 32;
     const COLLECTABLE_ENTRY_STRIDE: i32 = 0x20;
     const COLLECTABLE_KEY_OFFSET: i32 = 0x28;
@@ -1014,7 +1018,10 @@ pub fn scan_all_collectables(mem: &Memory, pd: &PlayerDataPointers) -> Option<Ve
 
         let w: Vec<u16> = mem
             .process
-            .read_vec(p_string + mem.string_list_offsets.string_contents, len_string as usize)
+            .read_vec(
+                p_string + mem.string_list_offsets.string_contents,
+                len_string as usize,
+            )
             .ok()?;
 
         let Ok(name) = String::from_utf16(&w) else {
