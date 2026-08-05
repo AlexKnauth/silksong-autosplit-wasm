@@ -147,7 +147,6 @@ impl Store {
         }
     }
 
-    // DEBUG-ONLY: logs every Collectables amount change, independent of the active Split.
     #[cfg(debug_assertions)]
     fn log_collectable_changes(&mut self, e: Option<&Env>) {
         let Some(Env { pd, mem, gm }) = e else {

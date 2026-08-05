@@ -980,8 +980,6 @@ pub fn find_collectable(
     None
 }
 
-// DEBUG-ONLY: full dump of every Collectables entry (name + Amount), so callers can notice a
-// change on any item, not just the one a particular Split happens to be watching.
 #[cfg(debug_assertions)]
 pub fn scan_all_collectables(mem: &Memory, pd: &PlayerDataPointers) -> Option<Vec<(String, i32)>> {
     const COLLECTABLE_ENTRY_STRIDE: i32 = 0x20;
