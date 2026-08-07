@@ -1916,15 +1916,15 @@ pub enum Split {
     // region: Collectables
     /// Cogheart Piece 1 (Collectable)
     ///
-    /// Splits when the Cogheart Piece count reaches 1
+    /// Splits when player picks up the first Cogheart Piece
     CogheartPiece1,
     /// Cogheart Piece 2 (Collectable)
     ///
-    /// Splits when the Cogheart Piece count reaches 2
+    /// Splits when player picks up the second Cogheart Piece
     CogheartPiece2,
     /// Cogheart Piece 3 (Collectable)
     ///
-    /// Splits when the Cogheart Piece count reaches 3
+    /// Splits when player picks up the third Cogheart Piece
     CogheartPiece3,
     // endregion: Collectables
 }
