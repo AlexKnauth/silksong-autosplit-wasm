@@ -28,3 +28,16 @@ pub fn reached_up_to_split<T: PartialOrd>(
         _ => None,
     }
 }
+
+/// Same as `reached_up_to_split`, but for callers that already have an `Option<T>`
+/// (e.g. a scan-based lookup like `find_collectable`) rather than a `Result`.
+pub fn reached_up_to_split_opt<T: PartialOrd>(
+    expected: T,
+    actual: Option<T>,
+) -> Option<SplitterAction> {
+    match actual?.partial_cmp(&expected)? {
+        Ordering::Equal => Some(SplitterAction::Split),
+        Ordering::Greater => Some(SplitterAction::Skip),
+        _ => None,
+    }
+}
