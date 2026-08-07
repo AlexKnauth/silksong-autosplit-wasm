@@ -15,7 +15,7 @@ use crate::{
         OPENING_SCENES,
     },
     store::Store,
-    timer::{reached_up_to_split, should_split, SplitterAction},
+    timer::{reached_up_to_split, reached_up_to_split_opt, should_split, SplitterAction},
 };
 
 #[derive(Clone, Debug, Default, Eq, Gui, Ord, PartialEq, PartialOrd, RadioButtonOptions)]
@@ -2567,11 +2567,12 @@ fn bench_split(store: &mut Store, e: &Env) -> bool {
         .is_some_and(|p| p.changed_to(&true))
 }
 
-fn cogheart_piece_split(e: &Env, amount: i32) -> bool {
+fn cogheart_piece_split(e: &Env, amount: i32) -> Option<SplitterAction> {
     if e.mem.deref(&e.pd.woke_song_chevalier).unwrap_or_default() {
-        return false;
+        return Some(SplitterAction::Skip);
     }
-    find_collectable(&utf16!("Cog Heart Pieces"), e.mem, e.pd).is_some_and(|(_, n)| n == amount)
+    let current = find_collectable(&utf16!("Cog Heart Pieces"), e.mem, e.pd).map(|(_, n)| n);
+    reached_up_to_split_opt(amount, current)
 }
 
 pub fn continuous_splits(split: &Split, e: &Env, store: &mut Store) -> Option<SplitterAction> {
@@ -3453,9 +3454,9 @@ pub fn continuous_splits(split: &Split, e: &Env, store: &mut Store) -> Option<Sp
         // endregion Tools
 
         // region: Collectables
-        Split::CogheartPiece1 => should_split(cogheart_piece_split(e, 1)),
-        Split::CogheartPiece2 => should_split(cogheart_piece_split(e, 2)),
-        Split::CogheartPiece3 => should_split(cogheart_piece_split(e, 3)),
+        Split::CogheartPiece1 => cogheart_piece_split(e, 1),
+        Split::CogheartPiece2 => cogheart_piece_split(e, 2),
+        Split::CogheartPiece3 => cogheart_piece_split(e, 3),
         // endregion: Collectables
 
         // else
