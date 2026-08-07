@@ -8,10 +8,11 @@ use utf16_lit::utf16;
 
 use crate::{
     silksong_memory::{
-        get_at_bench, get_health, get_heart_pieces, get_is_maggoted, get_max_health_base,
-        get_respawn_scene, get_silk_max, get_silk_spool_parts, is_discontinuity_scene, is_menu,
-        Env, SceneStore, CINEMATIC_STAG_TRAVEL, DEATH_RESPAWN_MARKER_INIT, GAME_STATE_PLAYING,
-        MENU_TITLE, NON_MENU_GAME_STATES, OPENING_SCENES,
+        find_collectable, get_at_bench, get_health, get_heart_pieces, get_is_maggoted,
+        get_max_health_base, get_respawn_scene, get_silk_max, get_silk_spool_parts,
+        is_discontinuity_scene, is_menu, Env, SceneStore, CINEMATIC_STAG_TRAVEL,
+        DEATH_RESPAWN_MARKER_INIT, GAME_STATE_PLAYING, MENU_TITLE, NON_MENU_GAME_STATES,
+        OPENING_SCENES,
     },
     store::Store,
     timer::{reached_up_to_split, should_split, SplitterAction},
@@ -1911,6 +1912,21 @@ pub enum Split {
     /// Splits on the transition after obtaining the Pimpillo
     PimpilloTrans,
     // endregion: Tools
+
+    // region: Collectables
+    /// Cogheart Piece 1 (Collectable)
+    ///
+    /// Splits when the Cogheart Piece count reaches 1
+    CogheartPiece1,
+    /// Cogheart Piece 2 (Collectable)
+    ///
+    /// Splits when the Cogheart Piece count reaches 2
+    CogheartPiece2,
+    /// Cogheart Piece 3 (Collectable)
+    ///
+    /// Splits when the Cogheart Piece count reaches 3
+    CogheartPiece3,
+    // endregion: Collectables
 }
 
 impl StoreWidget for Split {
@@ -2549,6 +2565,13 @@ fn bench_split(store: &mut Store, e: &Env) -> bool {
     store
         .get_bool_pair_bang("at_bench", &get_at_bench, Some(e))
         .is_some_and(|p| p.changed_to(&true))
+}
+
+fn cogheart_piece_split(e: &Env, amount: i32) -> bool {
+    if e.mem.deref(&e.pd.woke_song_chevalier).unwrap_or_default() {
+        return false;
+    }
+    find_collectable(&utf16!("Cog Heart Pieces"), e.mem, e.pd).is_some_and(|(_, n)| n == amount)
 }
 
 pub fn continuous_splits(split: &Split, e: &Env, store: &mut Store) -> Option<SplitterAction> {
@@ -3428,6 +3451,12 @@ pub fn continuous_splits(split: &Split, e: &Env, store: &mut Store) -> Option<Sp
         Split::SilkspeedAnklets => should_split(store.has_tool(&utf16!("Sprintmaster"), e)),
         Split::ThiefsMark => should_split(store.has_tool(&utf16!("Thief Charm"), e)),
         // endregion Tools
+
+        // region: Collectables
+        Split::CogheartPiece1 => should_split(cogheart_piece_split(e, 1)),
+        Split::CogheartPiece2 => should_split(cogheart_piece_split(e, 2)),
+        Split::CogheartPiece3 => should_split(cogheart_piece_split(e, 3)),
+        // endregion: Collectables
 
         // else
         _ => should_split(false),

@@ -632,6 +632,8 @@ declare_pointers!(PlayerDataPointers {
     tools_version: UnityPointer<5> = UnityPointer::new("GameManager", 0, &["_instance", "playerData", "Tools", "0x18", "0x4c"]),
     // _instance.playerData.Tools.RuntimeData._entries
     tools_entries: UnityPointer<5> = UnityPointer::new("GameManager", 0, &["_instance", "playerData", "Tools", "0x18", "0x18"]),
+    // _instance.playerData.Collectables.RuntimeData._entries
+    collectables_entries: UnityPointer<5> = UnityPointer::new("GameManager", 0, &["_instance", "playerData", "Collectables", "0x18", "0x18"]),
 });
 
 // --------------------------------------------------------
@@ -919,6 +921,62 @@ pub fn read_tool(i: i32, mem: &Memory, pd: &PlayerDataPointers) -> Option<bool> 
     let is_unlocked: bool = mem.process.read(p_entries + 0x30 + 0x18 * i).ok()?;
 
     Some(is_unlocked)
+}
+
+// --------------------------------------------------------
+
+pub fn find_collectable(
+    item_utf16: &[u16],
+    mem: &Memory,
+    pd: &PlayerDataPointers,
+) -> Option<(i32, i32)> {
+    const MAX_ITEM_ID_LENGTH: usize = 32;
+    const COLLECTABLE_ENTRY_STRIDE: i32 = 0x20;
+    const COLLECTABLE_KEY_OFFSET: i32 = 0x28;
+    const COLLECTABLE_AMOUNT_OFFSET: i32 = 0x30;
+
+    let buf = &mut [0; MAX_ITEM_ID_LENGTH][..item_utf16.len()];
+
+    let p_entries = mem.deref::<Address64, _>(&pd.collectables_entries).ok()?;
+
+    let len_entries = mem.process.read::<i32>(p_entries + 0x18).ok()?;
+
+    if len_entries > 131 {
+        return None;
+    }
+
+    for i in 0..len_entries {
+        let p_string: Address64 = mem
+            .process
+            .read(p_entries + COLLECTABLE_KEY_OFFSET + COLLECTABLE_ENTRY_STRIDE * i)
+            .ok()?;
+
+        let len_string: i32 = mem
+            .process
+            .read(p_string + mem.string_list_offsets.string_len)
+            .ok()?;
+
+        if len_string != item_utf16.len() as i32 {
+            continue;
+        }
+
+        mem.process
+            .read_into_slice(p_string + mem.string_list_offsets.string_contents, buf)
+            .ok()?;
+
+        if buf != item_utf16 {
+            continue;
+        }
+
+        let amount: i32 = mem
+            .process
+            .read(p_entries + COLLECTABLE_AMOUNT_OFFSET + COLLECTABLE_ENTRY_STRIDE * i)
+            .ok()?;
+
+        return Some((i, amount));
+    }
+
+    None
 }
 
 // --------------------------------------------------------
