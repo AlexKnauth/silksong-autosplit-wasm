@@ -14,14 +14,16 @@ use crate::silksong_memory::{
     read_collectable, read_tool, Env,
 };
 
+type StoreGetter<A> = &'static dyn Fn(Option<&Env>) -> Option<A>;
+
 struct StoreValue<A: 'static> {
     watcher: Watcher<A>,
     interested: bool,
-    get: &'static dyn Fn(Option<&Env>) -> Option<A>,
+    get: StoreGetter<A>,
 }
 
 impl<A: Clone + Eq> StoreValue<A> {
-    fn new(get: &'static dyn Fn(Option<&Env>) -> Option<A>, env: Option<&Env>) -> Self {
+    fn new(get: StoreGetter<A>, env: Option<&Env>) -> Self {
         let mut watcher = Watcher::new();
         if let Some(value) = get(env) {
             watcher.update_infallible(value);
@@ -242,7 +244,7 @@ impl Store {
     pub fn get_bool_pair_bang(
         &mut self,
         key: &'static str,
-        get: &'static dyn Fn(Option<&Env>) -> Option<bool>,
+        get: StoreGetter<bool>,
         env: Option<&Env>,
     ) -> Option<Pair<bool>> {
         if !self.bools.contains_key(key) {
@@ -254,7 +256,7 @@ impl Store {
     pub fn get_i32_pair_bang(
         &mut self,
         key: &'static str,
-        get: &'static dyn Fn(Option<&Env>) -> Option<i32>,
+        get: StoreGetter<i32>,
         env: Option<&Env>,
     ) -> Option<Pair<i32>> {
         if !self.i32s.contains_key(key) {
@@ -266,7 +268,7 @@ impl Store {
     pub fn get_string_bang(
         &mut self,
         key: &'static str,
-        get: &'static dyn Fn(Option<&Env>) -> Option<String>,
+        get: StoreGetter<String>,
         env: Option<&Env>,
     ) -> Option<String> {
         if !self.strings.contains_key(key) {
