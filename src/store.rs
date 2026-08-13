@@ -14,7 +14,7 @@ use crate::silksong_memory::{
     read_collectable, read_tool, Env,
 };
 
-type StoreGetter<A> = &'static dyn Fn(Option<&Env>) -> Option<A>;
+type StoreGetter<A> = &'static dyn Fn(Option<&Env>, &mut Store) -> Option<A>;
 
 struct StoreValue<A: 'static> {
     watcher: Watcher<A>,
@@ -23,9 +23,14 @@ struct StoreValue<A: 'static> {
 }
 
 impl<A: Clone + Eq> StoreValue<A> {
-    fn new(get: StoreGetter<A>, env: Option<&Env>) -> Self {
+    fn empty(get: StoreGetter<A>) -> Self {
+        let watcher = Watcher::new();
+        StoreValue { watcher, interested: true, get }
+    }
+
+    fn new(get: StoreGetter<A>, env: Option<&Env>, store: &mut Store) -> Self {
         let mut watcher = Watcher::new();
-        if let Some(value) = get(env) {
+        if let Some(value) = get(env, store) {
             watcher.update_infallible(value);
         }
         StoreValue {
@@ -36,8 +41,8 @@ impl<A: Clone + Eq> StoreValue<A> {
     }
 
     /// Produces true if the value changed, false otherwise
-    fn update(&mut self, env: Option<&Env>) -> bool {
-        if let Some(value) = (self.get)(env) {
+    fn update(&mut self, env: Option<&Env>, store: &mut Store) -> bool {
+        if let Some(value) = (self.get)(env, store) {
             self.watcher.update_infallible(value).changed()
         } else {
             false
@@ -181,16 +186,20 @@ pub struct Store {
 
 impl Store {
     pub fn new() -> Self {
-        Self {
-            timer_state: StoreValue::new(&get_timer_state, None),
+        let mut store = Self {
+            timer_state: StoreValue::empty(&get_timer_state),
             #[cfg(feature = "split-index")]
-            split_index: StoreValue::new(&get_timer_current_split_index, None),
+            split_index: StoreValue::empty(&get_timer_current_split_index),
             bools: BTreeMap::new(),
             i32s: BTreeMap::new(),
             strings: BTreeMap::new(),
             tools: ToolCache::new(),
             collectables: CollectableCache::new(),
-        }
+        };
+        store.timer_state.update(None, &mut store);
+        #[cfg(feature = "split-index")]
+        store.split_index.update(None, &mut store);
+        store
     }
 
     pub fn get_timer_state_pair(&mut self) -> Option<Pair<TimerState>> {
@@ -248,7 +257,8 @@ impl Store {
         env: Option<&Env>,
     ) -> Option<Pair<bool>> {
         if !self.bools.contains_key(key) {
-            self.bools.insert(key, StoreValue::new(get, env));
+            let v = StoreValue::new(get, env, self);
+            self.bools.insert(key, v);
         }
         self.get_bool_pair(key)
     }
@@ -260,7 +270,8 @@ impl Store {
         env: Option<&Env>,
     ) -> Option<Pair<i32>> {
         if !self.i32s.contains_key(key) {
-            self.i32s.insert(key, StoreValue::new(get, env));
+            let v = StoreValue::new(get, env, self);
+            self.i32s.insert(key, v);
         }
         self.get_i32_pair(key)
     }
@@ -272,7 +283,8 @@ impl Store {
         env: Option<&Env>,
     ) -> Option<String> {
         if !self.strings.contains_key(key) {
-            self.strings.insert(key, StoreValue::new(get, env));
+            let v = StoreValue::new(get, env, self);
+            self.strings.insert(key, v);
         }
         self.get_string(key)
     }

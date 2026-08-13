@@ -15,6 +15,8 @@ use asr::{
 };
 use bytemuck::CheckedBitPattern;
 
+use crate::store::Store;
+
 // --------------------------------------------------------
 
 static SILKSONG_NAMES: [&str; 2] = [
@@ -996,48 +998,48 @@ pub fn read_collectable(i: i32, mem: &Memory, pd: &PlayerDataPointers) -> Option
 
 // --------------------------------------------------------
 
-pub fn get_timer_state(_: Option<&Env>) -> Option<TimerState> {
+pub fn get_timer_state(_: Option<&Env>, _: &mut Store) -> Option<TimerState> {
     Some(asr::timer::state())
 }
 
 #[cfg(feature = "split-index")]
-pub fn get_timer_current_split_index(_: Option<&Env>) -> Option<Option<u64>> {
+pub fn get_timer_current_split_index(_: Option<&Env>, _: &mut Store) -> Option<Option<u64>> {
     Some(asr::timer::current_split_index())
 }
 
-pub fn get_game_state(e: Option<&Env>) -> Option<i32> {
+pub fn get_game_state(e: Option<&Env>, _: &mut Store) -> Option<i32> {
     e?.mem.deref(&e?.gm.game_state).ok()
 }
 
-pub fn get_health(e: Option<&Env>) -> Option<i32> {
+pub fn get_health(e: Option<&Env>, _: &mut Store) -> Option<i32> {
     e?.mem.deref(&e?.pd.health).ok()
 }
 
-pub fn get_max_health_base(e: Option<&Env>) -> Option<i32> {
+pub fn get_max_health_base(e: Option<&Env>, _: &mut Store) -> Option<i32> {
     e?.mem.deref(&e?.pd.max_health_base).ok()
 }
 
-pub fn get_heart_pieces(e: Option<&Env>) -> Option<i32> {
+pub fn get_heart_pieces(e: Option<&Env>, _: &mut Store) -> Option<i32> {
     e?.mem.deref(&e?.pd.heart_pieces).ok()
 }
 
-pub fn get_silk_max(e: Option<&Env>) -> Option<i32> {
+pub fn get_silk_max(e: Option<&Env>, _: &mut Store) -> Option<i32> {
     e?.mem.deref(&e?.pd.silk_max).ok()
 }
 
-pub fn get_silk_spool_parts(e: Option<&Env>) -> Option<i32> {
+pub fn get_silk_spool_parts(e: Option<&Env>, _: &mut Store) -> Option<i32> {
     e?.mem.deref(&e?.pd.silk_spool_parts).ok()
 }
 
-pub fn get_at_bench(e: Option<&Env>) -> Option<bool> {
+pub fn get_at_bench(e: Option<&Env>, _: &mut Store) -> Option<bool> {
     e?.mem.deref(&e?.pd.at_bench).ok()
 }
 
-pub fn get_is_maggoted(e: Option<&Env>) -> Option<bool> {
+pub fn get_is_maggoted(e: Option<&Env>, _: &mut Store) -> Option<bool> {
     e?.mem.deref(&e?.gm.hero_is_maggoted).ok()
 }
 
-pub fn get_respawn_scene(e: Option<&Env>) -> Option<String> {
+pub fn get_respawn_scene(e: Option<&Env>, _: &mut Store) -> Option<String> {
     let Env { mem, pd, gm } = e?;
     if !is_game_state_non_menu(mem.deref(&gm.game_state).ok()?) {
         return None;

@@ -2873,7 +2873,7 @@ pub fn continuous_splits(split: &Split, e: &Env, store: &mut Store) -> Option<Sp
         Split::ConductorsMelodyMenu => {
             store.get_bool_pair_bang(
                 "has_melody_conductor",
-                &|e| e?.mem.deref(&e?.pd.has_melody_conductor).ok(),
+                &|e, _| e?.mem.deref(&e?.pd.has_melody_conductor).ok(),
                 Some(e),
             );
             should_split(false)
