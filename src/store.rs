@@ -133,6 +133,8 @@ impl CollectableCache {
                 self.version = None;
                 self.item = &[];
                 self.i = -1;
+                self.amount.pair = None;
+                self.interested = false;
             }
             Some(Env { pd, mem, .. }) => {
                 let new = get_collectables_version(mem, pd);
@@ -140,6 +142,8 @@ impl CollectableCache {
                     self.version = new;
                     self.item = &[];
                     self.i = -1;
+                    self.amount.pair = None;
+                    self.interested = false;
                 }
             }
         }
