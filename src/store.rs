@@ -157,6 +157,8 @@ impl CollectableCache {
                 self.i = -1;
                 self.amount.pair = None;
             }
+        } else {
+            self.amount.pair = None;
         }
         self.interested = false;
     }
@@ -167,6 +169,8 @@ impl CollectableCache {
             self.i = -1;
             self.amount.pair = None;
             self.item = item_utf16;
+            self.update_amount(e);
+        } else if self.amount.pair.is_none() {
             self.update_amount(e);
         }
         self.amount.pair.as_ref()
