@@ -112,7 +112,7 @@ pub struct CollectableCache {
     version: Option<i32>,
     item: &'static [u16],
     i: i32,
-    amount: Option<i32>,
+    amount: Watcher<i32>,
 }
 
 impl CollectableCache {
@@ -121,7 +121,7 @@ impl CollectableCache {
             version: None,
             item: &[],
             i: -1,
-            amount: None,
+            amount: Watcher::new(),
         }
     }
 
@@ -153,16 +153,17 @@ impl CollectableCache {
         if self.item != item_utf16 {
             if let Some((i, amount)) = find_collectable(item_utf16, e.mem, e.pd) {
                 self.i = i;
-                self.amount = Some(amount);
+                self.amount.pair = None;
+                self.amount.update_infallible(amount);
             } else {
                 self.i = -1;
-                self.amount = None;
+                self.amount.pair = None;
             }
             self.item = item_utf16
         } else if !self.i.is_negative() {
-            self.amount = read_collectable(self.i, e.mem, e.pd);
+            self.amount.update(read_collectable(self.i, e.mem, e.pd));
         }
-        self.amount
+        Some(self.amount.pair?.current)
     }
 }
 
