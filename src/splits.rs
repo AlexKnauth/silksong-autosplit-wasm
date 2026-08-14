@@ -1925,6 +1925,10 @@ pub enum Split {
     ///
     /// Splits when player picks up the third Cogheart Piece
     CogheartPiece3,
+    /// Cogheart Piece (Obtain)
+    ///
+    /// Splits when obtaining a Cogheart Piece
+    OnObtainCogheartPiece,
     // endregion: Collectables
 }
 
@@ -3456,6 +3460,11 @@ pub fn continuous_splits(split: &Split, e: &Env, store: &mut Store) -> Option<Sp
         Split::CogheartPiece1 => cogheart_piece_split(e, store, 1),
         Split::CogheartPiece2 => cogheart_piece_split(e, store, 2),
         Split::CogheartPiece3 => cogheart_piece_split(e, store, 3),
+        Split::OnObtainCogheartPiece => should_split(
+            store
+                .get_collectable_pair(&utf16!("Cog Heart Pieces"), e)
+                .is_some_and(|p| p.increased()),
+        ),
         // endregion: Collectables
 
         // else

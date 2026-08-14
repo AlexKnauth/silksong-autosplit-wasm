@@ -236,6 +236,14 @@ impl Store {
         self.collectables.get_amount(item_utf16, e)
     }
 
+    pub fn get_collectable_pair(
+        &mut self,
+        item_utf16: &'static [u16],
+        e: &Env,
+    ) -> Option<&Pair<i32>> {
+        self.collectables.get_amount_pair(item_utf16, e)
+    }
+
     pub fn get_bool_pair(&mut self, key: &str) -> Option<Pair<bool>> {
         let v = self.bools.get_mut(key)?;
         v.interested = true;
