@@ -129,22 +129,27 @@ impl CollectableCache {
 
     fn update_amount(&mut self, e: &Env) {
         let new = get_collectables_version(e.mem, e.pd);
-        if self.version != new {
-            self.version = new;
-            self.i = -1;
-        }
-        if self.version.is_none() {
+        if new.is_none() {
+            self.version = None;
             self.i = -1;
             self.amount.pair = None;
-        } else if self.i.is_negative() {
+        } else if self.version != new {
+            self.version = new;
             if let Some((i, amount)) = find_collectable(self.item, e.mem, e.pd) {
                 self.i = i;
                 self.amount.update_infallible(amount);
             } else {
-                self.amount.pair = None;
+                // entry does not exist, assume amount 0
+                self.i = -1;
+                self.amount.update_infallible(0);
             }
         } else {
-            self.amount.update(read_collectable(self.i, e.mem, e.pd));
+            if !self.i.is_negative() {
+                self.amount.update(read_collectable(self.i, e.mem, e.pd));
+            } else {
+                // entry does not exist, assume amount 0
+                self.amount.update_infallible(0);
+            }
         }
     }
 
