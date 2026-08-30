@@ -1929,6 +1929,66 @@ pub enum Split {
     ///
     /// Splits when obtaining a Cogheart Piece
     OnObtainCogheartPiece,
+    /// Memory Locket (Obtain)
+    ///
+    /// Splits when obtaining a Memory Locket
+    OnObtainMemoryLocket,
+    /// Craftmetal (Obtain)
+    ///
+    /// Splits when obtaining a Craftmetal
+    OnObtainCraftmetal,
+    /// Crustnut (Collectable)
+    ///
+    /// Splits when player picks up the Crustnut
+    Crustnut,
+    /// Mossberry Stew (Collectable)
+    ///
+    /// Splits when player picks up the Mossberry Stew
+    MossberryStew,
+    /// Vintage Nectar (Collectable)
+    ///
+    /// Splits when player picks up the Vintage Nectar
+    VintageNectar,
+    /// Pickled Muckmaggot (Collectable)
+    ///
+    /// Splits when player picks up the Pickled Muckmaggot
+    PickledMuckmaggot,
+    /// Pale Oil 1 (Collectable)
+    ///
+    /// Splits when player picks up the first Pale Oil
+    PaleOil1,
+    /// Pale Oil 2 (Collectable)
+    ///
+    /// Splits when player picks up the second Pale Oil
+    PaleOil2,
+    /// Pale Oil 3 (Collectable)
+    ///
+    /// Splits when player picks up the third Pale Oil
+    PaleOil3,
+    /// Ruined Tool (Collectable)
+    ///
+    /// Splits when player picks up the Ruined Tool
+    RuinedTool,
+    /// Twisted Bud (Collectable)
+    ///
+    /// Splits when player picks up the Twisted Bud
+    TwistedBud,
+    /// Steel Spines (Collectable)
+    ///
+    /// Splits when player picks up the Steel Spines
+    SteelSpines,
+    /// Maidens Soul (Collectable)
+    ///
+    /// Splits when player picks up the Maiden's Soul
+    MaidensSoul,
+    /// Hermits Soul (Collectable)
+    ///
+    /// Splits when player picks up the Hermit's Soul
+    HermitsSoul,
+    /// Seekers Soul (Collectable)
+    ///
+    /// Splits when player picks up the Seeker's Soul
+    SeekersSoul,
     // endregion: Collectables
 }
 
@@ -2576,6 +2636,25 @@ fn cogheart_piece_split(e: &Env, store: &mut Store, amount: i32) -> Option<Split
     }
     let current = store.get_collectable_amount(&utf16!("Cog Heart Pieces"), e);
     reached_up_to_split(amount, current)
+}
+
+fn collectable_present_split(
+    e: &Env,
+    store: &mut Store,
+    item_utf16: &'static [u16],
+) -> Option<SplitterAction> {
+    should_split(
+        store
+            .get_collectable_amount(item_utf16, e)
+            .is_some_and(|n| n != 0),
+    )
+}
+
+fn pale_oil_split(e: &Env, store: &mut Store, amount: i32) -> Option<SplitterAction> {
+    let nail_upgrades: i32 = e.mem.deref(&e.pd.nail_upgrades).unwrap_or_default();
+    let used = (nail_upgrades - 1).max(0);
+    let current = store.get_collectable_amount(&utf16!("Pale_Oil"), e);
+    reached_up_to_split(amount, current.map(|c| c + used))
 }
 
 pub fn continuous_splits(split: &Split, e: &Env, store: &mut Store) -> Option<SplitterAction> {
@@ -3465,6 +3544,37 @@ pub fn continuous_splits(split: &Split, e: &Env, store: &mut Store) -> Option<Sp
                 .get_collectable_pair(&utf16!("Cog Heart Pieces"), e)
                 .is_some_and(|p| p.increased()),
         ),
+        Split::OnObtainMemoryLocket => should_split(
+            store
+                .get_collectable_pair(&utf16!("Crest Socket Unlocker"), e)
+                .is_some_and(|p| p.increased()),
+        ),
+        Split::OnObtainCraftmetal => should_split(
+            store
+                .get_collectable_pair(&utf16!("Tool Metal"), e)
+                .is_some_and(|p| p.increased()),
+        ),
+        Split::Crustnut => collectable_present_split(e, store, &utf16!("Coral Ingredient")),
+        Split::MossberryStew => collectable_present_split(e, store, &utf16!("Mossberry Stew")),
+        Split::VintageNectar => collectable_present_split(e, store, &utf16!("Vintage Nectar")),
+        Split::PickledMuckmaggot => {
+            collectable_present_split(e, store, &utf16!("Pickled Roach Egg"))
+        }
+        Split::PaleOil1 => pale_oil_split(e, store, 1),
+        Split::PaleOil2 => pale_oil_split(e, store, 2),
+        Split::PaleOil3 => pale_oil_split(e, store, 3),
+        Split::RuinedTool => collectable_present_split(e, store, &utf16!("Broken SilkShot")),
+        Split::TwistedBud => collectable_present_split(e, store, &utf16!("Wood Witch Item")),
+        Split::SteelSpines => {
+            collectable_present_split(e, store, &utf16!("Extractor Machine Pins"))
+        }
+        Split::MaidensSoul => {
+            collectable_present_split(e, store, &utf16!("Snare Soul Churchkeeper"))
+        }
+        Split::HermitsSoul => {
+            collectable_present_split(e, store, &utf16!("Snare Soul Bell Hermit"))
+        }
+        Split::SeekersSoul => collectable_present_split(e, store, &utf16!("Snare Soul Swamp Bug")),
         // endregion: Collectables
 
         // else
