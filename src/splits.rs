@@ -1989,6 +1989,10 @@ pub enum Split {
     ///
     /// Splits when player picks up the Seeker's Soul
     SeekersSoul,
+    /// Twisted Bud (Transition)
+    /// 
+    /// Splits on the transition after obtaining the Twisted Bud
+    TwistedBudTrans,
     // endregion: Collectables
 }
 
@@ -2569,6 +2573,12 @@ pub fn transition_splits(
         }
         Split::PimpilloTrans => should_split(ss.changed() && store.has_tool(&utf16!("Pimpilo"), e)),
         // endregion: Tools
+
+        // region: Collectables
+        Split::TwistedBudTrans => {
+           should_split(ss.changed() && store.get_collectable_amount(&utf16!("Wood Witch Item"), e).is_some_and(|n| n != 0))
+        }
+        // endregion: Collectables
 
         // else
         _ => should_split(false),
