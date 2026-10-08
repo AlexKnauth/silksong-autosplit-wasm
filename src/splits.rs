@@ -1973,6 +1973,10 @@ pub enum Split {
     ///
     /// Splits when player picks up the Twisted Bud
     TwistedBud,
+    /// Twisted Bud (Transition)
+    /// 
+    /// Splits on the transition after obtaining the Twisted Bud
+    TwistedBudTrans,
     /// Steel Spines (Collectable)
     ///
     /// Splits when player picks up the Steel Spines
@@ -1989,10 +1993,6 @@ pub enum Split {
     ///
     /// Splits when player picks up the Seeker's Soul
     SeekersSoul,
-    /// Twisted Bud (Transition)
-    /// 
-    /// Splits on the transition after obtaining the Twisted Bud
-    TwistedBudTrans,
     // endregion: Collectables
 }
 
