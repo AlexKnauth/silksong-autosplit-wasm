@@ -1974,7 +1974,7 @@ pub enum Split {
     /// Splits when player picks up the Twisted Bud
     TwistedBud,
     /// Twisted Bud (Transition)
-    /// 
+    ///
     /// Splits on the transition after obtaining the Twisted Bud
     TwistedBudTrans,
     /// Steel Spines (Collectable)
@@ -2575,9 +2575,12 @@ pub fn transition_splits(
         // endregion: Tools
 
         // region: Collectables
-        Split::TwistedBudTrans => {
-           should_split(ss.changed() && store.get_collectable_amount(&utf16!("Wood Witch Item"), e).is_some_and(|n| n != 0))
-        }
+        Split::TwistedBudTrans => should_split(
+            ss.changed()
+                && store
+                    .get_collectable_amount(&utf16!("Wood Witch Item"), e)
+                    .is_some_and(|n| n != 0),
+        ),
         // endregion: Collectables
 
         // else
