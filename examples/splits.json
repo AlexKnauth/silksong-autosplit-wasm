@@ -2701,6 +2701,12 @@
     },
     {
         "alias": null,
+        "description": "Twisted Bud (Transition)",
+        "key": "TwistedBudTrans",
+        "tooltip": "Splits on the transition after obtaining the Twisted Bud"
+    },
+    {
+        "alias": null,
         "description": "Steel Spines (Collectable)",
         "key": "SteelSpines",
         "tooltip": "Splits when player picks up the Steel Spines"
