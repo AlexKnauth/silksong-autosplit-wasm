@@ -446,7 +446,10 @@ impl Widget for PkgVersion {
 #[derive(Gui)]
 struct Settings {
     _pkg_version: PkgVersion,
-    /// Pause GameTime on File Select (Required Off for Glitched)
+    /// Pause GameTime on Main Menu (Required Off for Glitched)
+    ///
+    /// Pauses GameTime on all screens of the Main Menu
+    /// except for Black-threaded File Select
     #[default = true]
     pause_on_file_select: bool,
     /// Hit Counter
@@ -470,7 +473,8 @@ impl StoreGui for Settings {
 }
 
 impl Settings {
-    pub fn get_pause_on_file_select(&self) -> bool {
+    /// Pause GameTime on Main Menu (Required Off for Glitched)
+    pub fn get_pause_on_main_menu(&self) -> bool {
         self.pause_on_file_select
     }
     pub fn get_hit_counter(&self) -> bool {
@@ -1115,12 +1119,13 @@ fn load_removal(settings: &Settings, state: &mut AutoSplitterState, e: &Env) {
                     && ui_state != UI_STATE_CUTSCENE
                     && (!next_scene.is_empty())))
             && next_scene != scene_name)
-        || (settings.get_pause_on_file_select()
+        || (settings.get_pause_on_main_menu()
             && game_state == GAME_STATE_MAIN_MENU
             && ui_state == UI_STATE_MAIN_MENU
             && scene_name == MENU_TITLE
-            && is_menu_state_save_profiles(menu_state, &version)
-            && !get_any_slot_black_threaded(Some(e)).unwrap_or(state.black_threaded_file_select));
+            && !(is_menu_state_save_profiles(menu_state, &version)
+                && get_any_slot_black_threaded(Some(e))
+                    .unwrap_or(state.black_threaded_file_select)));
     if is_game_time_paused {
         asr::timer::pause_game_time();
     } else {
