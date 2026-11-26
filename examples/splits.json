@@ -139,6 +139,12 @@
     },
     {
         "alias": null,
+        "description": "Enter Deep Docks (Transition)",
+        "key": "EnterDeepDocks",
+        "tooltip": "Splits on entering Deep Docks"
+    },
+    {
+        "alias": null,
         "description": "Swift Step (Skill)",
         "key": "SwiftStep",
         "tooltip": "Splits when obtaining Swift Step (Dash/Sprint)"
