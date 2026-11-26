@@ -2117,8 +2117,10 @@ pub fn transition_splits(
         Split::EnterDeepDocks => {
             should_split(
                 (scenes.current == "Dock_08" && !scenes.old.starts_with("Dock")) // Marrow, both normal and arena
-                || (scenes.current == "Bone_East_01" && !scenes.old.starts_with("Dock_05")) // Hunter's March, Bellshrine, Bellway
-                || (scenes.current == "Dock_04" && !starts_with_any(scenes.old, &["Bone_East_13", "Dock_10"])) // Bellshrine, Abyss
+                || (scenes.current == "Bone_East_01" && !starts_with_any(scenes.old, &["Dock_05", "Bone_East_12"])) // Hunter's March, Bellway
+                || (scenes.current == "Bone_East_12" && !starts_with_any(scenes.old, &["Bone_East_01", "Room_Forge"])) // Bellshrine
+                || (scenes.current == "Dock_04" && !starts_with_any(scenes.old, &["Room_Forge", "Bone_East_13", "Dock_10"])) // Abyss Climb
+                || (scenes.current == "Dock_12" && !scenes.old.starts_with("Dock_11")) // Abyss Diving Bell
                 || (scenes.current == "Dock_03" && !starts_with_any(scenes.old, &["Dock_02", "Dock_03c", "Dock_03d"])), // Warding Bell
             )
         }
