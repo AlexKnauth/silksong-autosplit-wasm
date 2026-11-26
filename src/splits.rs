@@ -10,8 +10,8 @@ use crate::{
     silksong_memory::{
         get_at_bench, get_health, get_heart_pieces, get_is_maggoted, get_max_health_base,
         get_respawn_scene, get_silk_max, get_silk_spool_parts, is_discontinuity_scene, is_menu,
-        Env, SceneStore, CINEMATIC_STAG_TRAVEL, DEATH_RESPAWN_MARKER_INIT, GAME_STATE_PLAYING,
-        MENU_TITLE, NON_MENU_GAME_STATES, OPENING_SCENES,
+        starts_with_any, Env, SceneStore, CINEMATIC_STAG_TRAVEL, DEATH_RESPAWN_MARKER_INIT,
+        GAME_STATE_PLAYING, MENU_TITLE, NON_MENU_GAME_STATES, OPENING_SCENES,
     },
     store::Store,
     timer::{reached_up_to_split, should_split, SplitterAction},
@@ -126,6 +126,10 @@ pub enum Split {
     // endregion: Marrow
 
     // region: DeepDocks
+    /// Enter Deep Docks (Transition)
+    ///
+    /// Splits on entering Deep Docks
+    EnterDeepDocks,
     /// Swift Step (Skill)
     ///
     /// Splits when obtaining Swift Step (Dash/Sprint)
@@ -2110,6 +2114,16 @@ pub fn transition_splits(
         // endregion: Marrow
 
         // region: DeepDocks
+        Split::EnterDeepDocks => {
+            should_split(
+                (scenes.current == "Dock_08" && !scenes.old.starts_with("Dock")) // Marrow, both normal and arena
+                || (scenes.current == "Bone_East_01" && !starts_with_any(scenes.old, &["Dock_05", "Bone_East_12"])) // Hunter's March, Bellway
+                || (scenes.current == "Bone_East_12" && !starts_with_any(scenes.old, &["Bone_East_01", "Room_Forge"])) // Bellshrine
+                || (scenes.current == "Dock_04" && !starts_with_any(scenes.old, &["Room_Forge", "Bone_East_13", "Dock_10"])) // Abyss Climb
+                || (scenes.current == "Dock_12" && !scenes.old.starts_with("Dock_11")) // Abyss Diving Bell
+                || (scenes.current == "Dock_03" && !starts_with_any(scenes.old, &["Dock_02", "Dock_03c", "Dock_03d"])), // Warding Bell
+            )
+        }
         Split::SwiftStepTrans => {
             should_split(ss.changed() && mem.deref(&pd.has_dash).unwrap_or_default())
         }
