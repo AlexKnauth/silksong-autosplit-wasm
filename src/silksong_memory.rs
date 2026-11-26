@@ -234,7 +234,7 @@ fn is_game_state_non_menu(gs: i32) -> bool {
 }
 
 pub fn starts_with_any(full: &str, prefixes: &[&str]) -> bool {
-    prefixes.into_iter().any(|prefix| full.starts_with(prefix))
+    prefixes.iter().any(|prefix| full.starts_with(prefix))
 }
 
 // --------------------------------------------------------
