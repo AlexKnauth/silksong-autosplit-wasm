@@ -669,6 +669,10 @@ pub enum Split {
     // endregion: ChoralChambers
 
     // region: Underworks
+    /// Enter Underworks (Transition)
+    ///
+    /// Splits when entering Underworks
+    EnterUnderworks,
     /// Clawline (Skill)
     ///
     /// Splits when obtaining Clawline (Harpoon Dash)
@@ -2381,6 +2385,14 @@ pub fn transition_splits(
         // endregion: ChoralChambers
 
         // region: Underworks
+        Split::EnterUnderworks => should_split(
+            (scenes.current == "Under_02" && !starts_with_any(scenes.old, &["Under_03", "Under_07", "Under_14", "Under_16"])) // Grand Gate
+            || (scenes.current == "Under_07c" && !scenes.old.starts_with("Under_02")) // West Choral Chambers
+            || (scenes.current == "Under_06" && !starts_with_any(scenes.old, &["Under_07", "Under_05"])) // The Unravelled
+            || (scenes.current == "Under_23" && !scenes.old.starts_with("Under_05")) // Wisp Thicket
+            || (scenes.current == "Under_17" && !starts_with_any(scenes.old, &["Under_13", "Under_18", "Under_20"])) // Architect
+            || (scenes.current == "Under_13" && !starts_with_any(scenes.old, &["Under_10", "Under_11", "Under_17", "Under_18", "Under_19", "Under_21"])), // Ventrica
+        ),
         Split::PostClawlineArenaTrans => {
             let gate = mem.read_string(&gm.entry_gate_name).unwrap_or_default();
             should_split(
