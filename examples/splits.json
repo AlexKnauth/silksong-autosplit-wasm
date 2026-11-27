@@ -853,6 +853,12 @@
     },
     {
         "alias": null,
+        "description": "Enter Underworks (Transition)",
+        "key": "EnterUnderworks",
+        "tooltip": "Splits when entering Underworks"
+    },
+    {
+        "alias": null,
         "description": "Clawline (Skill)",
         "key": "Clawline",
         "tooltip": "Splits when obtaining Clawline (Harpoon Dash)"
